@@ -1,0 +1,126 @@
+﻿{
+	"version": 3,
+	"configurePresets": [
+		// windows 配置
+		{
+			"name": "windows_base",
+			"hidden": true,
+			"generator": "Ninja",
+			"binaryDir": "${sourceDir}/out/build/${presetName}",
+			"installDir": "${sourceDir}/out/install/${presetName}",
+			"cacheVariables": {
+				"cpp_lib_build_scripts_path": "$env{cpp_lib_build_scripts_path}",
+				"platform": "msys",
+				"CMAKE_C_COMPILER": "C:/msys64/ucrt64/bin/gcc.exe",
+				"CMAKE_CXX_COMPILER": "C:/msys64/ucrt64/bin/g++.exe",
+				"CMAKE_C_FLAGS": "-Wall -Wextra -Wno-unused-parameter",
+				"CMAKE_CXX_FLAGS": "-Wall -Wextra -Wno-unused-parameter",
+				"CMAKE_POSITION_INDEPENDENT_CODE": true,
+				"CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS": true
+			},
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Windows"
+			},
+			"vendor": {
+				"microsoft.com/VisualStudioSettings/CMake/1.0": {
+					"intelliSenseMode": "linux-gcc-x64"
+				}
+			}
+		},
+		{
+			"name": "x64-debug",
+			"displayName": "x64 Debug",
+			"inherits": "windows_base",
+			"architecture": {
+				"value": "x64",
+				"strategy": "external"
+			},
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug"
+			}
+		},
+		{
+			"name": "x64-release",
+			"displayName": "x64 Release",
+			"inherits": "x64-debug",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release"
+			}
+		},
+		{
+			"name": "x86-debug",
+			"displayName": "x86 Debug",
+			"inherits": "windows_base",
+			"architecture": {
+				"value": "x86",
+				"strategy": "external"
+			},
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug"
+			}
+		},
+		{
+			"name": "x86-release",
+			"displayName": "x86 Release",
+			"inherits": "x86-debug",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release"
+			}
+		},
+
+
+
+
+
+
+		// linux 配置
+		{
+			"name": "linux_base",
+			"hidden": true,
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Linux"
+			},
+			"cacheVariables": {
+				"cpp_lib_build_scripts_path": "$env{HOME}/cpp-lib-build-scripts"
+			},
+			"vendor": {
+				"microsoft.com/VisualStudioSettings/CMake/1.0": {
+					"intelliSenseMode": "linux-gcc-x64",
+					"sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
+				}
+			}
+		},
+		{
+			"name": "linux-debug",
+			"displayName": "Linux Debug",
+			"inherits": "linux_base",
+			"generator": "Ninja",
+			"binaryDir": "${sourceDir}/out/build/${presetName}",
+			"installDir": "${sourceDir}/out/install/${presetName}",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug",
+				"CMAKE_C_COMPILER": "gcc",
+				"CMAKE_CXX_COMPILER": "g++",
+				"platform": "linux"
+			}
+		},
+		{
+			"name": "linux-arm-debug",
+			"displayName": "Linux Arm Debug",
+			"inherits": "linux_base",
+			"generator": "Ninja",
+			"binaryDir": "${sourceDir}/out/build/${presetName}",
+			"installDir": "${sourceDir}/out/install/${presetName}",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug",
+				"CMAKE_C_COMPILER": "$env{HOME}/install/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc",
+				"CMAKE_CXX_COMPILER": "$env{HOME}/install/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-g++",
+				"platform": "arm-none-linux-gnueabihf"
+			}
+		}
+	]
+}
