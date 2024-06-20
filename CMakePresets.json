@@ -1,16 +1,15 @@
 ﻿{
 	"version": 3,
 	"configurePresets": [
-		// windows 配置
 		{
-			"name": "windows_base",
+			"name": "windows-base",
 			"hidden": true,
 			"generator": "Ninja",
-			"binaryDir": "${sourceDir}/out/build/${presetName}",
-			"installDir": "${sourceDir}/out/install/${presetName}",
+			"binaryDir": "${sourceDir}/jc_build",
 			"cacheVariables": {
 				"cpp_lib_build_scripts_path": "$env{cpp_lib_build_scripts_path}",
 				"platform": "msys",
+				"BUILD_SHARED_LIBS": true,
 				"CMAKE_C_COMPILER": "C:/msys64/ucrt64/bin/gcc.exe",
 				"CMAKE_CXX_COMPILER": "C:/msys64/ucrt64/bin/g++.exe",
 				"CMAKE_C_FLAGS": "-Wall -Wextra -Wno-unused-parameter",
@@ -30,9 +29,9 @@
 			}
 		},
 		{
-			"name": "x64-debug",
-			"displayName": "x64 Debug",
-			"inherits": "windows_base",
+			"name": "msys-debug",
+			"displayName": "msys-debug",
+			"inherits": "windows-base",
 			"architecture": {
 				"value": "x64",
 				"strategy": "external"
@@ -42,84 +41,58 @@
 			}
 		},
 		{
-			"name": "x64-release",
-			"displayName": "x64 Release",
-			"inherits": "x64-debug",
+			"name": "msys-release",
+			"displayName": "msys-release",
+			"inherits": "windows-base",
+			"architecture": {
+				"value": "x64",
+				"strategy": "external"
+			},
 			"cacheVariables": {
 				"CMAKE_BUILD_TYPE": "Release"
 			}
 		},
 		{
-			"name": "x86-debug",
-			"displayName": "x86 Debug",
-			"inherits": "windows_base",
-			"architecture": {
-				"value": "x86",
-				"strategy": "external"
+			"name": "arm-none-eabi-cortex-m3-base",
+			"hidden": true,
+			"generator": "Ninja",
+			"binaryDir": "${sourceDir}/jc_build",
+			"cacheVariables": {
+				"option_install_headers": true,
+				"cpp_lib_build_scripts_path": "$env{cpp_lib_build_scripts_path}",
+				"platform": "arm-none-eabi-cortex-m3",
+				"BUILD_SHARED_LIBS": false,
+				"CMAKE_SYSTEM_PROCESSOR": "arm",
+				"CMAKE_SYSTEM_ARCH": "armv7-m",
+				"CMAKE_SYSTEM_NAME": "Generic",
+				"CMAKE_C_COMPILER": "arm-none-eabi-gcc.exe",
+				"CMAKE_CXX_COMPILER": "arm-none-eabi-g++.exe",
+				"CMAKE_ASM_COMPILER": "arm-none-eabi-gcc.exe",
+				"CMAKE_LINKER": "arm-none-eabi-ld.exe",
+				"CMAKE_OBJCOPY": "arm-none-eabi-objcopy.exe",
+				"CMAKE_SIZE": "arm-none-eabi-size.exe",
+				"CMAKE_STRIP": "arm-none-eabi-ld.exe"
 			},
+			"vendor": {
+				"microsoft.com/VisualStudioSettings/CMake/1.0": {
+					"intelliSenseMode": "linux-gcc-arm"
+				}
+			}
+		},
+		{
+			"name": "arm-none-eabi-cortex-m3-debug",
+			"displayName": "arm-none-eabi-cortex-m3-debug",
+			"inherits": "arm-none-eabi-cortex-m3-base",
 			"cacheVariables": {
 				"CMAKE_BUILD_TYPE": "Debug"
 			}
 		},
 		{
-			"name": "x86-release",
-			"displayName": "x86 Release",
-			"inherits": "x86-debug",
+			"name": "arm-none-eabi-cortex-m3-release",
+			"displayName": "arm-none-eabi-cortex-m3-release",
+			"inherits": "arm-none-eabi-cortex-m3-base",
 			"cacheVariables": {
 				"CMAKE_BUILD_TYPE": "Release"
-			}
-		},
-
-
-
-
-
-
-		// linux 配置
-		{
-			"name": "linux_base",
-			"hidden": true,
-			"condition": {
-				"type": "equals",
-				"lhs": "${hostSystemName}",
-				"rhs": "Linux"
-			},
-			"cacheVariables": {
-				"cpp_lib_build_scripts_path": "$env{HOME}/cpp-lib-build-scripts"
-			},
-			"vendor": {
-				"microsoft.com/VisualStudioSettings/CMake/1.0": {
-					"intelliSenseMode": "linux-gcc-x64",
-					"sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
-				}
-			}
-		},
-		{
-			"name": "linux-debug",
-			"displayName": "Linux Debug",
-			"inherits": "linux_base",
-			"generator": "Ninja",
-			"binaryDir": "${sourceDir}/out/build/${presetName}",
-			"installDir": "${sourceDir}/out/install/${presetName}",
-			"cacheVariables": {
-				"CMAKE_BUILD_TYPE": "Debug",
-				"CMAKE_C_COMPILER": "gcc",
-				"CMAKE_CXX_COMPILER": "g++",
-				"platform": "linux"
-			}
-		},
-		{
-			"name": "linux-arm-debug",
-			"displayName": "Linux Arm Debug",
-			"inherits": "linux_base",
-			"generator": "Ninja",
-			"binaryDir": "${sourceDir}/out/build/${presetName}",
-			"installDir": "${sourceDir}/out/install/${presetName}",
-			"cacheVariables": {
-				"CMAKE_BUILD_TYPE": "Debug",
-				"CMAKE_C_COMPILER": "$env{HOME}/install/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-gcc",
-				"CMAKE_CXX_COMPILER": "$env{HOME}/install/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-linux-gnueabihf/bin/arm-none-linux-gnueabihf-g++",
-				"platform": "arm-none-linux-gnueabihf"
 			}
 		}
 	]
