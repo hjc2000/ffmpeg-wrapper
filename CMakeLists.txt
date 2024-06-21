@@ -19,3 +19,5 @@ target_import_jccpp(${ProjectName} PUBLIC)
 target_import_ffmpeg(${ProjectName} PUBLIC)
 target_import_base(${ProjectName} PUBLIC)
 target_import_pinvoke(${ProjectName} PUBLIC)
+
+set(CMAKE_INSTALL_PREFIX ${cpp_lib_build_scripts_path}/${platform}/.libs/${ProjectName}/)
