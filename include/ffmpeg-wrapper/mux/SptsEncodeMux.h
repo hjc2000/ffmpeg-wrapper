@@ -16,6 +16,7 @@ namespace video
 	/// </summary>
 	class SptsEncodeMux
 	{
+	private:
 		std::shared_ptr<video::IEncoderPipeFactory> _factory;
 
 		shared_ptr<OutputFormat> _out_format;
