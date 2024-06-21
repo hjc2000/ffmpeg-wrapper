@@ -5,6 +5,7 @@
 #include<ffmpeg-wrapper/pipe/interface/IDecoderPipe.h>
 #include<jccpp/define.h>
 #include<jccpp/TaskCompletionSignal.h>
+#include<memory>
 
 namespace video
 {
@@ -16,7 +17,7 @@ namespace video
 	{
 	private:
 		std::shared_ptr<IDecoderPipeFactory> _factory;
-		shared_ptr<IDecoderPipe> _decoder_pipe;
+		std::shared_ptr<IDecoderPipe> _decoder_pipe;
 		HysteresisBlockingPacketQueue _packet_queue { };
 		TaskCompletionSignal _decode_thread_exit { true };
 		std::atomic_bool _do_not_flush_consumer = false;
@@ -78,7 +79,7 @@ namespace video
 		void SetFrameRate(AVRational value) override;
 		#pragma endregion
 
-		base::List<shared_ptr<IFrameConsumer>> &FrameConsumerList() override
+		base::List<std::shared_ptr<IFrameConsumer>> &FrameConsumerList() override
 		{
 			return _decoder_pipe->FrameConsumerList();
 		}

@@ -1,10 +1,11 @@
 #include"ffmpeg-wrapper/pipe/interface/IPipeFrameSource.h"
+#include<memory>
 
 using namespace video;
 
 void IPipeFrameSource::SendFrameToEachConsumer(AVFrameWrapper *frame)
 {
-	for (shared_ptr<IFrameConsumer> &consumer : FrameConsumerList())
+	for (std::shared_ptr<IFrameConsumer> &consumer : FrameConsumerList())
 	{
 		if (consumer)
 		{

@@ -6,6 +6,8 @@
 #include<ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include<ffmpeg-wrapper/wrapper/AVProgramWrapper.h>
 #include<ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
+#include<functional>
+#include<memory>
 #include<mutex>
 #include<thread>
 
@@ -62,6 +64,6 @@ namespace video
 		/// </summary>
 		/// <param name="codec_ctx"></param>
 		/// <returns>创建流成功则返回流</returns>
-		AVStreamWrapper CreateNewStream(shared_ptr<AVCodecContextWrapper> codec_ctx);
+		AVStreamWrapper CreateNewStream(std::shared_ptr<AVCodecContextWrapper> codec_ctx);
 	};
 }

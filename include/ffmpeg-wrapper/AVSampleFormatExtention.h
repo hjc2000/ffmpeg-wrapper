@@ -1,5 +1,6 @@
 #pragma once
 #include<ffmpeg-wrapper/base_include.h>
+#include<string>
 
 namespace video
 {
@@ -32,7 +33,7 @@ namespace video
 		///		返回 AVSampleFormat。
 		///		如果无法解析字符串，返回 AVSampleFormat::AV_SAMPLE_FMT_NONE。
 		/// </returns>
-	 	static AVSampleFormat string_to_av_sample_format(std::string str);
+		static AVSampleFormat string_to_av_sample_format(std::string str);
 
 		/// <summary>
 		///		分析特定编码器需要多少个采样点。

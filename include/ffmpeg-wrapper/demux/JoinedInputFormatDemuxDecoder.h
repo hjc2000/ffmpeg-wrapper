@@ -1,4 +1,5 @@
 #pragma once
+#include<base/task/CancellationToken.h>
 #include<ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
 #include<ffmpeg-wrapper/input-format/InputFormat.h>
 #include<ffmpeg-wrapper/pipe/InfinitePacketPipe.h>
@@ -6,7 +7,6 @@
 #include<ffmpeg-wrapper/pipe/ThreadDecoderPipe.h>
 #include<functional>
 #include<memory>
-#include<base/task/CancellationToken.h>
 
 namespace video
 {
@@ -20,16 +20,16 @@ namespace video
 	class JoinedInputFormatDemuxDecoder :public IPump
 	{
 	private:
-		shared_ptr<InputFormat> _current_input_format;
+		std::shared_ptr<InputFormat> _current_input_format;
 		AVStreamInfoCollection _video_stream_infos;
-		shared_ptr<IDecoderPipe> _video_decode_pipe;
+		std::shared_ptr<IDecoderPipe> _video_decode_pipe;
 		int _source_video_stream_index = -1;
 		AVStreamInfoCollection _audio_stream_infos;
-		shared_ptr<IDecoderPipe> _audio_decode_pipe;
+		std::shared_ptr<IDecoderPipe> _audio_decode_pipe;
 		int _source_audio_stream_index = -1;
-		shared_ptr<InfinitePacketPipe> _infinite_packet_pipe { new InfinitePacketPipe { } };
-		base::List<shared_ptr<IFrameConsumer>> _video_frame_consumer_list;
-		base::List<shared_ptr<IFrameConsumer>> _audio_frame_consumer_list;
+		std::shared_ptr<InfinitePacketPipe> _infinite_packet_pipe { new InfinitePacketPipe { } };
+		base::List<std::shared_ptr<IFrameConsumer>> _video_frame_consumer_list;
+		base::List<std::shared_ptr<IFrameConsumer>> _audio_frame_consumer_list;
 
 		void InitializeVideoDecoderPipe();
 		void InitializeAudioDecoderPipe();
@@ -41,11 +41,11 @@ namespace video
 		///		* 回调函数返回 InputFormat 对象则视频流继续。
 		///		* 回调函数返回空指针则结束视频流。
 		/// </summary>
-		std::function<shared_ptr<InputFormat>()> _get_format_callback;
+		std::function<std::shared_ptr<InputFormat>()> _get_format_callback;
 
-		void Pump(shared_ptr<base::CancellationToken> cancel_pump) override;
+		void Pump(std::shared_ptr<base::CancellationToken> cancel_pump) override;
 
-		void AddVideoFrameConsumer(shared_ptr<IFrameConsumer> consumer);
-		void AddAudioFrameConsumer(shared_ptr<IFrameConsumer> consumer);
+		void AddVideoFrameConsumer(std::shared_ptr<IFrameConsumer> consumer);
+		void AddAudioFrameConsumer(std::shared_ptr<IFrameConsumer> consumer);
 	};
 }

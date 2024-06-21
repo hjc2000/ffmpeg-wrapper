@@ -1,5 +1,6 @@
 #pragma once
 #include<ffmpeg-wrapper/base_include.h>
+#include<string>
 
 namespace video
 {
@@ -21,7 +22,7 @@ namespace video
 		/// <summary>
 		/// 作为静态类，禁止构造
 		/// </summary>
-		AVChannelLayoutExtension() {}
+		AVChannelLayoutExtension() { }
 
 	public:
 		/// <summary>
@@ -29,7 +30,7 @@ namespace video
 		/// </summary>
 		/// <param name="layout"></param>
 		/// <returns></returns>
-		static string channel_layout_description(AVChannelLayout layout);
+		static std::string channel_layout_description(AVChannelLayout layout);
 
 		/// <summary>
 		/// 获取单声道的声道布局

@@ -4,6 +4,7 @@
 #include<ffmpeg-wrapper/output-format/OutputFormat.h>
 #include<ffmpeg-wrapper/pipe/InfinitePacketPipe.h>
 #include<ffmpeg-wrapper/pipe/interface/IPump.h>
+#include<memory>
 
 namespace video
 {
@@ -15,9 +16,9 @@ namespace video
 	/// </summary>
 	class AVMixer :public IPump
 	{
-		shared_ptr<InputFormat> _input_video_format;
-		shared_ptr<InputFormat> _input_audio_format;
-		shared_ptr<OutputFormat> _out_format;
+		std::shared_ptr<InputFormat> _input_video_format;
+		std::shared_ptr<InputFormat> _input_audio_format;
+		std::shared_ptr<OutputFormat> _out_format;
 		AVPacketWrapper _temp_packet;
 		int _src_video_stream_index = 0;
 		int _src_audio_stream_index = 0;
@@ -26,16 +27,16 @@ namespace video
 
 		void CreateNewVideoStream();
 		void CreateNewAudioStream();
-		bool ReadVideoPacketOnce(shared_ptr<base::CancellationToken> cancel_pump);
-		bool ReadAudioPacketOnce(shared_ptr<base::CancellationToken> cancel_pump);
+		bool ReadVideoPacketOnce(std::shared_ptr<base::CancellationToken> cancel_pump);
+		bool ReadAudioPacketOnce(std::shared_ptr<base::CancellationToken> cancel_pump);
 
 	public:
 		AVMixer(
-			shared_ptr<InputFormat> input_video_format,
-			shared_ptr<InputFormat> input_audio_format,
-			shared_ptr<OutputFormat> out_format
+			std::shared_ptr<InputFormat> input_video_format,
+			std::shared_ptr<InputFormat> input_audio_format,
+			std::shared_ptr<OutputFormat> out_format
 		);
 
-		void Pump(shared_ptr<base::CancellationToken> cancel_pump) override;
+		void Pump(std::shared_ptr<base::CancellationToken> cancel_pump) override;
 	};
 }

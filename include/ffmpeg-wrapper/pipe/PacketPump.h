@@ -6,6 +6,7 @@
 #include<ffmpeg-wrapper/pipe/interface/IPipePacketSource.h>
 #include<ffmpeg-wrapper/pipe/interface/IPump.h>
 #include<jccpp/IDisposable.h>
+#include<memory>
 
 namespace video
 {
@@ -18,11 +19,11 @@ namespace video
 		public IDisposable
 	{
 		std::atomic_bool _disposed = false;
-		shared_ptr<IPacketSource> _packet_source;
-		base::List<shared_ptr<IPacketConsumer>> _consumer_list;
+		std::shared_ptr<IPacketSource> _packet_source;
+		base::List<std::shared_ptr<IPacketConsumer>> _consumer_list;
 
 	public:
-		PacketPump(shared_ptr<IPacketSource> packet_source)
+		PacketPump(std::shared_ptr<IPacketSource> packet_source)
 		{
 			_packet_source = packet_source;
 		}
@@ -38,7 +39,7 @@ namespace video
 			_disposed = true;
 		}
 
-		base::List<shared_ptr<IPacketConsumer>> &PacketConsumerList() override
+		base::List<std::shared_ptr<IPacketConsumer>> &PacketConsumerList() override
 		{
 			return _consumer_list;
 		}
@@ -48,6 +49,6 @@ namespace video
 		/// </summary>
 		std::function<void(AVPacketWrapper *packet)> _on_before_send_packet_to_consumer;
 
-		void Pump(shared_ptr<base::CancellationToken> cancellation_token) override;
+		void Pump(std::shared_ptr<base::CancellationToken> cancellation_token) override;
 	};
 }

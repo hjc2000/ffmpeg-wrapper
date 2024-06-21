@@ -1,13 +1,15 @@
 #include"ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h"
 #include<ffmpeg-wrapper/AVCalculate.h>
 #include<ffmpeg-wrapper/AVCodecExtention.h>
-#include<ffmpeg-wrapper/ErrorCode.h>
 #include<ffmpeg-wrapper/base_include.h>
+#include<ffmpeg-wrapper/ErrorCode.h>
 #include<ffmpeg-wrapper/wrapper/AVDictionaryWrapper.h>
 #include<ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include<ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include<ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
 #include<format>
+#include<iostream>
+#include<memory>
 
 using namespace video;
 
@@ -35,14 +37,12 @@ AVCodecContextWrapper::~AVCodecContextWrapper()
 #pragma endregion
 
 #pragma region 工厂函数
-shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateDecoder(AVStreamInfoCollection stream)
+std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateDecoder(AVStreamInfoCollection stream)
 {
-	shared_ptr<AVCodecContextWrapper> ctx{
-		new AVCodecContextWrapper{
-			stream._codec,
-			stream._codec_params
-	}
-	};
+	std::shared_ptr<AVCodecContextWrapper> ctx { new AVCodecContextWrapper {
+		stream._codec,
+		stream._codec_params
+	} };
 
 	ctx->SetTimeBase(stream.TimeBase());
 	ctx->SetFrameRate(stream.FrameRate());
@@ -51,7 +51,7 @@ shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateDecoder(AVStreamI
 	return ctx;
 }
 
-shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
+std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
 	const char *encoder_name,
 	IAudioStreamInfoCollection const &infos,
 	bool set_global_header,
@@ -61,10 +61,10 @@ shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
 	auto codec = AVCodecExtention::find_encoder_by_name(encoder_name);
 	if (!codec)
 	{
-		throw std::runtime_error{ CODE_POS_STR + std::string{"查找编码器失败"} };
+		throw std::runtime_error { CODE_POS_STR + std::string { "查找编码器失败" } };
 	}
 
-	shared_ptr<AVCodecContextWrapper> ctx{ new AVCodecContextWrapper{codec,} };
+	std::shared_ptr<AVCodecContextWrapper> ctx { new AVCodecContextWrapper { codec, } };
 
 	// 设置编码器参数
 	(*ctx)->codec_type = AVMediaType::AVMEDIA_TYPE_AUDIO;
@@ -85,7 +85,7 @@ shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
 	return ctx;
 }
 
-shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
+std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
 	const char *encoder_name,
 	IVideoStreamInfoCollection const &infos,
 	bool set_global_header,
@@ -95,10 +95,10 @@ shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
 	auto codec = AVCodecExtention::find_encoder_by_name(encoder_name);
 	if (!codec)
 	{
-		throw std::runtime_error{ CODE_POS_STR + std::string{"查找编码器失败"} };
+		throw std::runtime_error { CODE_POS_STR + std::string { "查找编码器失败" } };
 	}
 
-	shared_ptr<AVCodecContextWrapper> ctx{ new AVCodecContextWrapper{codec} };
+	std::shared_ptr<AVCodecContextWrapper> ctx { new AVCodecContextWrapper { codec } };
 
 	// 设置编码器参数
 	(*ctx)->codec_type = AVMediaType::AVMEDIA_TYPE_VIDEO;
@@ -140,7 +140,7 @@ void AVCodecContextWrapper::Open(AVDictionary **dic)
 	int ret = ::avcodec_open2(_wrapped_obj, _codec, dic);
 	if (ret)
 	{
-		throw std::runtime_error{ CODE_POS_STR + std::string{"打开编解码器失败"} };
+		throw std::runtime_error { CODE_POS_STR + std::string { "打开编解码器失败" } };
 	}
 }
 
@@ -173,7 +173,7 @@ void AVCodecContextWrapper::SendFrame(AVFrameWrapper *frame)
 			ToString((ErrorCode)ret)
 		);
 
-		throw std::runtime_error{ CODE_POS_STR + msg };
+		throw std::runtime_error { CODE_POS_STR + msg };
 	}
 }
 
@@ -208,7 +208,7 @@ void AVCodecContextWrapper::SendPacket(AVPacketWrapper *packet)
 
 	if (ret < 0)
 	{
-		cout << CODE_POS_STR << "错误代码：" << ret << " -- " << ToString((ErrorCode)ret);
+		std::cout << CODE_POS_STR << "错误代码：" << ret << " -- " << ToString((ErrorCode)ret);
 		//throw SendPacketException{};
 	}
 }

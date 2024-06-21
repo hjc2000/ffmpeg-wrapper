@@ -1,4 +1,6 @@
 #include"AVParse.h"
+#include<iostream>
+#include<jccpp/define.h>
 
 AVMediaType Parse(std::string str)
 {
@@ -25,7 +27,7 @@ AVMediaType Parse(std::string str)
 	}
 	else
 	{
-		cout << CODE_POS_STR << "解析媒体类型字符串，结果为未知" << endl;
+		std::cout << CODE_POS_STR << "解析媒体类型字符串，结果为未知" << std::endl;
 		type = AVMediaType::AVMEDIA_TYPE_UNKNOWN;
 	}
 

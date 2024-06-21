@@ -3,6 +3,7 @@
 #include<ffmpeg-wrapper/AVCompare.h>
 #include<ffmpeg-wrapper/AVSampleFormatExtention.h>
 #include<ffmpeg-wrapper/base_include.h>
+#include<string>
 
 namespace video
 {
@@ -54,17 +55,17 @@ namespace video
 		///		将 sample_format 属性转化为字符串。
 		/// </summary>
 		/// <returns>返回 sample_format 的名称。如果是未知类型，返回空字符串</returns>
-		string sample_format_string() const
+		std::string sample_format_string() const
 		{
 			const char *name = av_get_sample_fmt_name(SampleFormat());
-			return name ? string(name) : "";
+			return name ? std::string(name) : "";
 		}
 
 		/// <summary>
 		///		获取声道布局的描述字符串
 		/// </summary>
 		/// <returns></returns>
-		string channel_layout_description() const
+		std::string channel_layout_description() const
 		{
 			return AVChannelLayoutExtension::channel_layout_description(ChannelLayout());
 		}

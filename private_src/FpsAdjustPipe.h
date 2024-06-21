@@ -8,6 +8,7 @@
 #include<ffmpeg-wrapper/ErrorCode.h>
 #include<ffmpeg-wrapper/filter/VideoFilterGraph.h>
 #include<ffmpeg-wrapper/pipe/interface/IPipeFrameSource.h>
+#include<memory>
 
 namespace video
 {
@@ -20,7 +21,7 @@ namespace video
 		public IPipeFrameSource
 	{
 	private:
-		base::List<shared_ptr<IFrameConsumer>> _consumer_list;
+		base::List<std::shared_ptr<IFrameConsumer>> _consumer_list;
 		VideoStreamInfoCollection _input_video_stream_infos;
 		VideoFilterGraph _graph;
 		AVRational _desired_out_fps;
@@ -36,7 +37,7 @@ namespace video
 		/// <param name="desired_out_fps">期望的输出帧率</param>
 		FpsAdjustPipe(IVideoStreamInfoCollection const &input_video_stream_infos, AVRational desired_out_fps);
 
-		base::List<shared_ptr<IFrameConsumer>> &FrameConsumerList() override
+		base::List<std::shared_ptr<IFrameConsumer>> &FrameConsumerList() override
 		{
 			return _consumer_list;
 		}

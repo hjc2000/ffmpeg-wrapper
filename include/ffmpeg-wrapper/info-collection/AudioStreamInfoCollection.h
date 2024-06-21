@@ -1,5 +1,6 @@
 #pragma once
 #include<ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
+#include<memory>
 
 namespace video
 {
@@ -9,7 +10,7 @@ namespace video
 	public:
 		AudioStreamInfoCollection() = default;
 
-		AudioStreamInfoCollection(shared_ptr<IAudioStreamInfoCollection> value)
+		AudioStreamInfoCollection(std::shared_ptr<IAudioStreamInfoCollection> value)
 		{
 			*this = *value;
 		}
@@ -25,10 +26,10 @@ namespace video
 			return *this;
 		}
 
-		AVRational _time_base{};
-		AVSampleFormat _sample_format{};
+		AVRational _time_base { };
+		AVSampleFormat _sample_format { };
 		int _sample_rate = 0;
-		AVChannelLayout _ch_layout{};
+		AVChannelLayout _ch_layout { };
 
 		AVRational TimeBase() const override
 		{

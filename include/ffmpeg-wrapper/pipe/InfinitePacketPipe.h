@@ -4,6 +4,7 @@
 #include<ffmpeg-wrapper/AVToString.h>
 #include<ffmpeg-wrapper/pipe/interface/IPacketConsumer.h>
 #include<ffmpeg-wrapper/pipe/interface/IPipePacketSource.h>
+#include<memory>
 
 namespace video
 {
@@ -15,7 +16,7 @@ namespace video
 		int64_t _last_dts = 0;
 		int64_t _offset = 0;
 		int64_t _last_packet_duration = 0;
-		base::List<shared_ptr<IPacketConsumer>> _consumer_list;
+		base::List<std::shared_ptr<IPacketConsumer>> _consumer_list;
 
 		void UpdateLastPacketDuration(int64_t value);
 		void UpdateLastPts(int64_t value);
@@ -36,7 +37,7 @@ namespace video
 		#pragma endregion
 
 	public:
-		base::List<shared_ptr<IPacketConsumer>> &PacketConsumerList() override
+		base::List<std::shared_ptr<IPacketConsumer>> &PacketConsumerList() override
 		{
 			return _consumer_list;
 		}

@@ -3,7 +3,7 @@
 
 using namespace video;
 
-AVIOContextWrapper::AVIOContextWrapper(bool is_write, shared_ptr<base::Stream> stream)
+AVIOContextWrapper::AVIOContextWrapper(bool is_write, std::shared_ptr<base::Stream> stream)
 {
 	_stream = stream;
 	_buffer_size = 1024 * 64;

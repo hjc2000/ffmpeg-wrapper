@@ -1,7 +1,11 @@
 #pragma once
-#include<ffmpeg-wrapper/base_include.h>
-#include<jccpp/ToString.h>
 #include<base/Wrapper.h>
+#include<ffmpeg-wrapper/base_include.h>
+#include<format>
+#include<iostream>
+#include<jccpp/ToString.h>
+#include<sstream>
+#include<string>
 
 namespace video
 {
@@ -65,7 +69,7 @@ namespace video
 		AVDictionary *_wrapped_obj = nullptr;
 
 	public:
-		AVDictionaryWrapper() {}
+		AVDictionaryWrapper() { }
 
 		AVDictionaryWrapper(AVDictionary *dic)
 		{
@@ -210,7 +214,7 @@ namespace video
 			std::stringstream sb;
 			for (AVDictionaryEntry *entry : *this)
 			{
-				sb << std::format("{} = {}", entry->key, entry->value) << endl;
+				sb << std::format("{} = {}", entry->key, entry->value) << std::endl;
 			}
 
 			return sb.str();

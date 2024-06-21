@@ -16,6 +16,6 @@ namespace video
 	public:
 		static std::shared_ptr<DecoderPipeFactory> Instance();
 
-		shared_ptr<IDecoderPipe> CreateDecoderPipe(AVStreamInfoCollection const &infos) override;
+		std::shared_ptr<IDecoderPipe> CreateDecoderPipe(AVStreamInfoCollection const &infos) override;
 	};
 }

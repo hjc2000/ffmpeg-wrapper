@@ -1,11 +1,12 @@
 #pragma once
+#include<base/Wrapper.h>
 #include<chrono>
 #include<ffmpeg-wrapper/base_include.h>
 #include<ffmpeg-wrapper/pipe/interface/IPacketSource.h>
 #include<ffmpeg-wrapper/wrapper/AVIOContextWrapper.h>
 #include<ffmpeg-wrapper/wrapper/AVProgramWrapper.h>
 #include<functional>
-#include<base/Wrapper.h>
+#include<memory>
 #include<string>
 
 namespace video
@@ -20,8 +21,8 @@ namespace video
 	{
 	private:
 		AVFormatContext *_wrapped_obj = nullptr;
-		string _url;
-		shared_ptr<AVIOContextWrapper> _io_context;
+		std::string _url;
+		std::shared_ptr<AVIOContextWrapper> _io_context;
 
 		/// <summary>
 		///		通过读几个包来检测流信息。此操作不会导致读取进度向前推移
@@ -32,8 +33,8 @@ namespace video
 	public:
 		InputFormat(std::string url);
 		InputFormat(std::string url, AVInputFormat const *fmt, AVDictionary **options);
-		InputFormat(shared_ptr<AVIOContextWrapper> io_context);
-		InputFormat(shared_ptr<base::Stream> input_stream);
+		InputFormat(std::shared_ptr<AVIOContextWrapper> io_context);
+		InputFormat(std::shared_ptr<base::Stream> input_stream);
 		~InputFormat();
 
 		AVFormatContext *&WrappedObj() override

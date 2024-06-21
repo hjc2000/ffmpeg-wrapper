@@ -1,4 +1,5 @@
 #pragma once
+#include<base/Wrapper.h>
 #include<ffmpeg-wrapper/AVCodecExtention.h>
 #include<ffmpeg-wrapper/base_include.h>
 #include<ffmpeg-wrapper/base_include.h>
@@ -9,7 +10,7 @@
 #include<ffmpeg-wrapper/pipe/interface/IFrameSource.h>
 #include<ffmpeg-wrapper/pipe/interface/IPacketConsumer.h>
 #include<ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
-#include<base/Wrapper.h>
+#include<memory>
 
 namespace video
 {
@@ -71,7 +72,7 @@ namespace video
 		/// </summary>
 		/// <param name="stream"></param>
 		/// <returns></returns>
-		static shared_ptr<AVCodecContextWrapper> CreateDecoder(AVStreamInfoCollection stream);
+		static std::shared_ptr<AVCodecContextWrapper> CreateDecoder(AVStreamInfoCollection stream);
 
 		/// <summary>
 		///		创建音频编码器
@@ -87,7 +88,7 @@ namespace video
 		///		  NeedGlobalHeader 属性来确定是否需要全局头部。
 		/// </param>
 		/// <returns></returns>
-		static shared_ptr<AVCodecContextWrapper> CreateEncoder(
+		static std::shared_ptr<AVCodecContextWrapper> CreateEncoder(
 			const char *encoder_name,
 			IAudioStreamInfoCollection const &infos,
 			bool set_global_header,
@@ -105,7 +106,7 @@ namespace video
 		*
 		* @return 返回的编码器已打开。
 		*/
-		static shared_ptr<AVCodecContextWrapper> CreateEncoder(
+		static std::shared_ptr<AVCodecContextWrapper> CreateEncoder(
 			const char *encoder_name,
 			IVideoStreamInfoCollection const &infos,
 			bool set_global_header,

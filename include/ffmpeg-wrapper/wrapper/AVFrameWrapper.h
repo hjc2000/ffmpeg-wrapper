@@ -19,7 +19,7 @@ namespace video
 		public IAudioFrameInfoCollection,
 		public IVideoFrameInfoCollection
 	{
-		shared_ptr<ImageBuffer> _image_buf;
+		std::shared_ptr<ImageBuffer> _image_buf;
 		AVFrame *_wrapped_obj = nullptr;
 
 	public:
@@ -149,7 +149,7 @@ namespace video
 		/// <returns></returns>
 		std::chrono::milliseconds PtsToMilliseconds();
 
-		void copy_image_to_buffer(shared_ptr<ImageBuffer> buffer);
+		void copy_image_to_buffer(std::shared_ptr<ImageBuffer> buffer);
 
 		/// <summary>
 		///		将视频帧复制到流中.请确保本帧是视频帧。

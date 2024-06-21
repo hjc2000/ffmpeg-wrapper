@@ -9,14 +9,14 @@ std::shared_ptr<EncoderPipeFactory> video::EncoderPipeFactory::Instance()
 	return o;
 }
 
-shared_ptr<IFrameConsumer> video::EncoderPipeFactory::CreateEncoderPipe(
+std::shared_ptr<IFrameConsumer> video::EncoderPipeFactory::CreateEncoderPipe(
 	std::string codec_name,
 	IVideoStreamInfoCollection const &in_stream_infos,
-	shared_ptr<OutputFormat> output_format,
+	std::shared_ptr<OutputFormat> output_format,
 	int64_t out_bit_rate_in_bps
 )
 {
-	return shared_ptr<IFrameConsumer>{new EncoderPipe {
+	return std::shared_ptr<IFrameConsumer>{new EncoderPipe {
 		codec_name,
 		in_stream_infos,
 		output_format,
@@ -24,13 +24,13 @@ shared_ptr<IFrameConsumer> video::EncoderPipeFactory::CreateEncoderPipe(
 	}};
 }
 
-shared_ptr<IFrameConsumer> video::EncoderPipeFactory::CreateEncoderPipe(
+std::shared_ptr<IFrameConsumer> video::EncoderPipeFactory::CreateEncoderPipe(
 	std::string codec_name,
 	IAudioStreamInfoCollection const &in_stream_infos,
-	shared_ptr<OutputFormat> output_format
+	std::shared_ptr<OutputFormat> output_format
 )
 {
-	return shared_ptr<IFrameConsumer>{new EncoderPipe {
+	return std::shared_ptr<IFrameConsumer>{new EncoderPipe {
 		codec_name,
 		in_stream_infos,
 		output_format

@@ -1,10 +1,10 @@
 #include "ffmpeg-wrapper/AVChannelLayoutExtension.h"
 
-string video::AVChannelLayoutExtension::channel_layout_description(AVChannelLayout layout)
+std::string video::AVChannelLayoutExtension::channel_layout_description(AVChannelLayout layout)
 {
 	char buf[64];
 	av_channel_layout_describe(&layout, buf, sizeof(buf));
-	return string(buf);
+	return std::string(buf);
 }
 
 AVChannelLayout video::AVChannelLayoutExtension::get_mono_layout_channel()

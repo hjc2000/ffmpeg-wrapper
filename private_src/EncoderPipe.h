@@ -21,9 +21,9 @@ namespace video
 	class EncoderPipe :public IFrameConsumer
 	{
 	private:
-		shared_ptr<AVCodecContextWrapper> _encoder_ctx;
+		std::shared_ptr<AVCodecContextWrapper> _encoder_ctx;
 		AVStreamWrapper _new_stream;
-		shared_ptr<OutputFormat> _output_format;
+		std::shared_ptr<OutputFormat> _output_format;
 
 		/// <summary>
 		///		读取包并写入封装
@@ -43,7 +43,7 @@ namespace video
 		EncoderPipe(
 			std::string codec_name,
 			IVideoStreamInfoCollection const &in_stream_infos,
-			shared_ptr<OutputFormat> output_format,
+			std::shared_ptr<OutputFormat> output_format,
 			int64_t out_bit_rate_in_bps = -1
 		);
 
@@ -56,7 +56,7 @@ namespace video
 		EncoderPipe(
 			std::string codec_name,
 			IAudioStreamInfoCollection const &in_stream_infos,
-			shared_ptr<OutputFormat> output_format
+			std::shared_ptr<OutputFormat> output_format
 		);
 
 		/// <summary>

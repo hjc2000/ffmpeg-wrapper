@@ -26,11 +26,11 @@ void video::SwsPipe::ReadAndSendFrame()
 
 void video::SwsPipe::change_sws()
 {
-	cout << CODE_POS_STR << "重新构造 sws。" << endl;
+	std::cout << CODE_POS_STR << "重新构造 sws。" << std::endl;
 	ReadAndSendFrame();
-	_sws_context = shared_ptr<SwsContextWrapper>{ new SwsContextWrapper {
-			_in_video_frame_infos,
-			_desire_out_video_frame_infos
+	_sws_context = std::shared_ptr<SwsContextWrapper> { new SwsContextWrapper {
+		_in_video_frame_infos,
+		_desire_out_video_frame_infos
 	} };
 }
 
@@ -38,9 +38,9 @@ video::SwsPipe::SwsPipe(IVideoFrameInfoCollection const &desire_out_video_frame_
 {
 	_in_video_frame_infos = desire_out_video_frame_infos;
 	_desire_out_video_frame_infos = desire_out_video_frame_infos;
-	_sws_context = shared_ptr<SwsContextWrapper>{ new SwsContextWrapper {
-			_in_video_frame_infos,
-			_desire_out_video_frame_infos
+	_sws_context = std::shared_ptr<SwsContextWrapper> { new SwsContextWrapper {
+		_in_video_frame_infos,
+		_desire_out_video_frame_infos
 	} };
 }
 

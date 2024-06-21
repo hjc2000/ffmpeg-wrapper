@@ -1,7 +1,7 @@
 #include "ffmpeg-wrapper/signal-source/ISignalSource.h"
 #include<ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 
-int video::ISignalSource::ReadFrame(shared_ptr<AVFrameWrapper> frame)
+int video::ISignalSource::ReadFrame(std::shared_ptr<AVFrameWrapper> frame)
 {
 	if (frame->IsPlanar())
 	{

@@ -1,8 +1,9 @@
 #pragma once
+#include<base/Wrapper.h>
 #include<ffmpeg-wrapper/base_include.h>
 #include<ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
 #include<ffmpeg-wrapper/info-collection/IVideoStreamInfoCollection.h>
-#include<base/Wrapper.h>
+#include<memory>
 
 namespace video
 {
@@ -54,7 +55,7 @@ namespace video
 		/// </summary>
 		/// <param name="codec_ctx">此码器上下文的信息将被复制到此流中</param>
 		/// <returns>设置成功则返回值大于等于0，失败则返回小于 0 的错误代码</returns>
-		int SetCodecParams(shared_ptr<AVCodecContextWrapper> codec_ctx);
+		int SetCodecParams(std::shared_ptr<AVCodecContextWrapper> codec_ctx);
 
 		/// <summary>
 		///		获取此流对应的码器

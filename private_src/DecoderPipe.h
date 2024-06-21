@@ -10,6 +10,7 @@
 #include<ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h>
 #include<ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
 #include<jccpp/TaskCompletionSignal.h>
+#include<memory>
 #include<vector>
 
 namespace video
@@ -18,9 +19,9 @@ namespace video
 	{
 		AVStreamInfoCollection _stream_infos;
 		std::atomic_bool _disposed = false;
-		shared_ptr<AVCodecContextWrapper> _decoder;
+		std::shared_ptr<AVCodecContextWrapper> _decoder;
 		AVFrameWrapper _decoder_out_frame;
-		base::List<shared_ptr<IFrameConsumer>> _consumer_list;
+		base::List<std::shared_ptr<IFrameConsumer>> _consumer_list;
 
 		void read_and_send_frame();
 
@@ -34,7 +35,7 @@ namespace video
 		/// </summary>
 		void Dispose() override;
 
-		base::List<shared_ptr<IFrameConsumer>> &FrameConsumerList() override
+		base::List<std::shared_ptr<IFrameConsumer>> &FrameConsumerList() override
 		{
 			return _consumer_list;
 		}

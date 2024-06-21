@@ -23,10 +23,10 @@ namespace video
 		/// <param name="output_format"></param>
 		/// <param name="out_bit_rate_in_bps"></param>
 		/// <returns></returns>
-		shared_ptr<IFrameConsumer> CreateEncoderPipe(
+		std::shared_ptr<IFrameConsumer> CreateEncoderPipe(
 			std::string codec_name,
 			IVideoStreamInfoCollection const &in_stream_infos,
-			shared_ptr<OutputFormat> output_format,
+			std::shared_ptr<OutputFormat> output_format,
 			int64_t out_bit_rate_in_bps = -1
 		) override;
 
@@ -37,10 +37,10 @@ namespace video
 		/// <param name="in_stream_infos"></param>
 		/// <param name="output_format"></param>
 		/// <returns></returns>
-		shared_ptr<IFrameConsumer> CreateEncoderPipe(
+		std::shared_ptr<IFrameConsumer> CreateEncoderPipe(
 			std::string codec_name,
 			IAudioStreamInfoCollection const &in_stream_infos,
-			shared_ptr<OutputFormat> output_format
+			std::shared_ptr<OutputFormat> output_format
 		) override;
 	};
 }

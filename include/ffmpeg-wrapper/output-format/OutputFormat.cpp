@@ -1,5 +1,10 @@
-#include "ffmpeg-wrapper/output-format/OutputFormat.h"
+#include"OutputFormat.h"
 #include<ffmpeg-wrapper/ErrorCode.h>
+#include<iostream>
+#include<jccpp/define.h>
+#include<memory>
+#include<mutex>
+#include<thread>
 
 using namespace video;
 
@@ -11,7 +16,7 @@ void video::OutputFormat::SendPacket(AVPacketWrapper *packet)
 		_flush_times++;
 		if (_flush_times == WrappedObj()->nb_streams)
 		{
-			cout << CODE_POS_STR << "所有流都被冲洗了。" << endl;
+			std::cout << CODE_POS_STR << "所有流都被冲洗了。" << std::endl;
 			WriteTrailer();
 			if (_on_all_stream_flushed_async)
 			{
@@ -28,7 +33,7 @@ void video::OutputFormat::SendPacket(AVPacketWrapper *packet)
 	int ret = av_interleaved_write_frame(WrappedObj(), *packet);
 	if (ret < 0)
 	{
-		cout << CODE_POS_STR << "错误代码：" << ret << " -- " << ToString((ErrorCode)ret);
+		std::cout << CODE_POS_STR << "错误代码：" << ret << " -- " << ToString((ErrorCode)ret);
 	}
 }
 
@@ -38,7 +43,7 @@ void video::OutputFormat::WriteHeader(AVDictionary **dic)
 	int ret = ::avformat_write_header(WrappedObj(), dic);
 	if (ret < 0)
 	{
-		throw std::runtime_error{ ToString((ErrorCode)ret) };
+		throw std::runtime_error { ToString((ErrorCode)ret) };
 	}
 }
 
@@ -47,7 +52,7 @@ void video::OutputFormat::WriteTrailer()
 	int ret = ::av_write_trailer(WrappedObj());
 	if (ret < 0)
 	{
-		throw std::runtime_error{ ToString((ErrorCode)ret) };
+		throw std::runtime_error { ToString((ErrorCode)ret) };
 	}
 }
 
@@ -60,13 +65,13 @@ bool video::OutputFormat::NeedGlobalHeader()
 void video::OutputFormat::DumpFormat(char const *url)
 {
 	std::lock_guard l(_not_private_methods_lock);
-	cout << endl;
-	cout << "------------------------------------------------------------" << endl;
-	cout << "▼ 格式信息" << endl;
-	cout << "------------------------------------------------------------" << endl;
+	std::cout << std::endl;
+	std::cout << "------------------------------------------------------------" << std::endl;
+	std::cout << "▼ 格式信息" << endl;
+	std::cout << "------------------------------------------------------------" << std::endl;
 	av_dump_format(WrappedObj(), 0, url, true);
-	cout << "------------------------------------------------------------" << endl;
-	cout << endl;
+	std::cout << "------------------------------------------------------------" << std::endl;
+	std::cout << std::endl;
 }
 
 AVStreamWrapper video::OutputFormat::CreateNewStream()
@@ -75,28 +80,28 @@ AVStreamWrapper video::OutputFormat::CreateNewStream()
 	::AVStream *ps = avformat_new_stream(WrappedObj(), nullptr);
 	if (ps == nullptr)
 	{
-		throw std::runtime_error{ "创建流失败" };
+		throw std::runtime_error { "创建流失败" };
 	}
 
 	return AVStreamWrapper(ps);
 }
 
-AVStreamWrapper video::OutputFormat::CreateNewStream(shared_ptr<AVCodecContextWrapper> codec_ctx)
+AVStreamWrapper video::OutputFormat::CreateNewStream(std::shared_ptr<AVCodecContextWrapper> codec_ctx)
 {
 	std::lock_guard l(_not_private_methods_lock);
 	AVStream *ps = avformat_new_stream(WrappedObj(), nullptr);
 	if (ps == nullptr)
 	{
-		throw std::runtime_error{ "创建流失败" };
+		throw std::runtime_error { "创建流失败" };
 	}
 
-	AVStreamWrapper stream{ ps };
+	AVStreamWrapper stream { ps };
 
 	/* SetCodecParam 函数设置参数的时候，会将码器的时间基，帧率的信息复制到流中。*/
 	int ret = stream.SetCodecParams(codec_ctx);
 	if (ret < 0)
 	{
-		throw std::runtime_error{ "设置流参数失败" };
+		throw std::runtime_error { "设置流参数失败" };
 	}
 
 	return stream;

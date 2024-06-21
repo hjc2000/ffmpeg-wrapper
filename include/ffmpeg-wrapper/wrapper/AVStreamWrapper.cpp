@@ -1,8 +1,9 @@
 #include<ffmpeg-wrapper/AVCodecExtention.h>
-#include<ffmpeg-wrapper/ErrorCode.h>
 #include<ffmpeg-wrapper/base_include.h>
+#include<ffmpeg-wrapper/ErrorCode.h>
 #include<ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h>
 #include<ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
+#include<memory>
 
 using namespace video;
 
@@ -42,7 +43,7 @@ void video::AVStreamWrapper::SetCodecParams(AVCodecParameters const &params)
 	avcodec_parameters_copy(_wrapped_obj->codecpar, &params);
 }
 
-int video::AVStreamWrapper::SetCodecParams(shared_ptr<AVCodecContextWrapper> codec_ctx)
+int video::AVStreamWrapper::SetCodecParams(std::shared_ptr<AVCodecContextWrapper> codec_ctx)
 {
 	// 设置时间基
 	_wrapped_obj->time_base = (*codec_ctx)->time_base;

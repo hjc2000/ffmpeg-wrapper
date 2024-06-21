@@ -1,6 +1,7 @@
-#include "ffmpeg-wrapper/ImageBuffer.h"
+#include"ffmpeg-wrapper/ImageBuffer.h"
 #include<ffmpeg-wrapper/base_include.h>
 #include<ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
+#include<iostream>
 
 using namespace video;
 
@@ -13,13 +14,13 @@ video::ImageBuffer::ImageBuffer(int width, int height, AVPixelFormat format, int
 
 	if (_size < 0)
 	{
-		throw std::runtime_error{ ToString((ErrorCode)_size) };
+		throw std::runtime_error { ToString((ErrorCode)_size) };
 	}
 }
 
 video::ImageBuffer::~ImageBuffer()
 {
-	cout << "ImageBuffer 析构函数" << endl;
+	std::cout << "ImageBuffer 析构函数" << std::endl;
 	::av_freep(&_pointers[0]);
 }
 

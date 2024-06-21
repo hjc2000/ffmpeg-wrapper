@@ -1,5 +1,6 @@
 #pragma once
 #include<ffmpeg-wrapper/info-collection/IVideoStreamInfoCollection.h>
+#include<memory>
 
 namespace video
 {
@@ -13,7 +14,7 @@ namespace video
 			*this = another;
 		}
 
-		VideoStreamInfoCollection &operator=(shared_ptr<IVideoStreamInfoCollection> value)
+		VideoStreamInfoCollection &operator=(std::shared_ptr<IVideoStreamInfoCollection> value)
 		{
 			*this = *value;
 			return *this;
@@ -45,7 +46,7 @@ namespace video
 			_height = value;
 		}
 
-		AVPixelFormat _pixel_format = AVPixelFormat{};
+		AVPixelFormat _pixel_format = AVPixelFormat { };
 		AVPixelFormat PixelFormat() const override
 		{
 			return _pixel_format;
@@ -55,7 +56,7 @@ namespace video
 			_pixel_format = value;
 		}
 
-		AVRational _frame_rate = AVRational{};
+		AVRational _frame_rate = AVRational { };
 		AVRational FrameRate() const override
 		{
 			return _frame_rate;
@@ -65,7 +66,7 @@ namespace video
 			_frame_rate = value;
 		}
 
-		AVRational _time_base = AVRational{};
+		AVRational _time_base = AVRational { };
 		virtual AVRational TimeBase() const override
 		{
 			return _time_base;

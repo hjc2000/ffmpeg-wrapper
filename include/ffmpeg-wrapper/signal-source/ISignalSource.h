@@ -1,10 +1,11 @@
 #pragma once
-#include<ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include<ffmpeg-wrapper/AVSampleFormatExtention.h>
+#include<ffmpeg-wrapper/base_include.h>
+#include<ffmpeg-wrapper/base_include.h>
 #include<ffmpeg-wrapper/ErrorCode.h>
-#include<ffmpeg-wrapper/base_include.h>
-#include<ffmpeg-wrapper/base_include.h>
 #include<ffmpeg-wrapper/info-collection/IAudioFrameInfoCollection.h>
+#include<ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
+#include<memory>
 
 namespace video
 {
@@ -16,7 +17,7 @@ namespace video
 	class ISignalSource : public IAudioFrameInfoCollection
 	{
 	public:
-		virtual ~ISignalSource() {}
+		virtual ~ISignalSource() { }
 
 	public:
 		/**
@@ -29,6 +30,6 @@ namespace video
 		/// </summary>
 		/// <param name="frame">用来接收本信号源采样值的帧</param>
 		/// <returns>目前总是会返回 0</returns>
-		int ReadFrame(shared_ptr<AVFrameWrapper> frame);
+		int ReadFrame(std::shared_ptr<AVFrameWrapper> frame);
 	};
 }
