@@ -5,20 +5,6 @@
 		}
 	],
 	"settings": {
-		"files.associations": {
-			"test": "cpp",
-			"tar": "cpp",
-			"ctar": "cpp",
-			"iostream": "cpp",
-			"array": "cpp",
-			"deque": "cpp",
-			"string": "cpp",
-			"unordered_map": "cpp",
-			"vector": "cpp",
-			"string_view": "cpp",
-			"format": "cpp",
-			"initializer_list": "cpp",
-			"span": "cpp"
-		}
+		"files.associations": {}
 	}
 }
