@@ -1,6 +1,7 @@
 #include"ReencodeDotNetVideoStream.h"
 #include<base/task/CancellationTokenSource.h>
 #include<ffmpeg-wrapper/factory/EncoderPipeFactory.h>
+#include<ffmpeg-wrapper/info-collection/VideoStreamInfoCollection.h>
 
 using namespace std;
 using namespace jc;

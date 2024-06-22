@@ -1,6 +1,8 @@
 #include"ffmpeg-wrapper/mux/SptsEncodeMux.h"
 #include<base/container/Queue.h>
 #include<ffmpeg-wrapper/factory/IEncoderPipeFactory.h>
+#include<ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
+#include<ffmpeg-wrapper/info-collection/VideoStreamInfoCollection.h>
 #include<ffmpeg-wrapper/output-format/OutputFormat.h>
 #include<ffmpeg-wrapper/pipe/SwrEncoderPipe.h>
 #include<ffmpeg-wrapper/pipe/SwsFpsEncoderPipe.h>
@@ -8,6 +10,23 @@
 
 using namespace video;
 using namespace std;
+
+class video::SptsEncodeMux::Context
+{
+public:
+	std::shared_ptr<video::IEncoderPipeFactory> _factory;
+
+	std::shared_ptr<OutputFormat> _out_format;
+
+	VideoStreamInfoCollection _video_stream_infos;
+	std::shared_ptr<SwsFpsEncoderPipe> _video_encoder_pipe;
+	std::string _video_codec_name;
+	int64_t _video_out_bitrate_in_bps = -1;
+
+	AudioStreamInfoCollection _audio_stream_infos;
+	std::shared_ptr<SwrEncoderPipe> _audio_encode_pipe;
+	std::string _audio_codec_name;
+};
 
 video::SptsEncodeMux::SptsEncodeMux(
 	std::shared_ptr<video::IEncoderPipeFactory> factory,
@@ -19,23 +38,24 @@ video::SptsEncodeMux::SptsEncodeMux(
 	// 音频相关参数
 	IAudioStreamInfoCollection const &audio_stream_infos,
 	std::string audio_codec_name
-)
+) :
+	_context(new Context { })
 {
-	_factory = factory;
-	_out_format = out_format;
+	_context->_factory = factory;
+	_context->_out_format = out_format;
 
 	// 视频参数
-	_video_stream_infos = video_stream_infos;
-	_video_codec_name = video_codec_name;
-	_video_out_bitrate_in_bps = video_out_bitrate_in_bps;
+	_context->_video_stream_infos = video_stream_infos;
+	_context->_video_codec_name = video_codec_name;
+	_context->_video_out_bitrate_in_bps = video_out_bitrate_in_bps;
 
 	// 音频参数
-	_audio_stream_infos = audio_stream_infos;
-	_audio_codec_name = audio_codec_name;
+	_context->_audio_stream_infos = audio_stream_infos;
+	_context->_audio_codec_name = audio_codec_name;
 
 	// ts 必须使用 1/90000 时间基
-	_video_stream_infos.SetTimeBase(AVRational { 1, 90000 });
-	_audio_stream_infos.SetTimeBase(AVRational { 1, 90000 });
+	_context->_video_stream_infos.SetTimeBase(AVRational { 1, 90000 });
+	_context->_audio_stream_infos.SetTimeBase(AVRational { 1, 90000 });
 
 	InitVideoEncodePipe();
 	InitAudioEncodePipe();
@@ -44,22 +64,22 @@ video::SptsEncodeMux::SptsEncodeMux(
 
 void video::SptsEncodeMux::InitVideoEncodePipe()
 {
-	_video_encoder_pipe = shared_ptr<SwsFpsEncoderPipe> { new SwsFpsEncoderPipe {
-		_factory,
-		_out_format,
-		_video_stream_infos,
-		_video_codec_name,
-		_video_out_bitrate_in_bps,
+	_context->_video_encoder_pipe = shared_ptr<SwsFpsEncoderPipe> { new SwsFpsEncoderPipe {
+		_context->_factory,
+		_context->_out_format,
+		_context->_video_stream_infos,
+		_context->_video_codec_name,
+		_context->_video_out_bitrate_in_bps,
 	} };
 }
 
 void video::SptsEncodeMux::InitAudioEncodePipe()
 {
-	_audio_encode_pipe = shared_ptr<SwrEncoderPipe> { new SwrEncoderPipe {
-		_factory,
-		_audio_codec_name,
-		_audio_stream_infos,
-		_out_format,
+	_context->_audio_encode_pipe = shared_ptr<SwrEncoderPipe> { new SwrEncoderPipe {
+		_context->_factory,
+		_context->_audio_codec_name,
+		_context->_audio_stream_infos,
+		_context->_out_format,
 	} };
 }
 
@@ -70,18 +90,18 @@ void video::SptsEncodeMux::WriteHeader()
 	option_dic.SetValueByKey("pat_period ", "1000");
 	option_dic.SetValueByKey("pmt_period", "1000");
 	option_dic.SetValueByKey("sdt_period", "1000");
-	_out_format->WriteHeader(option_dic);
-	_out_format->DumpFormat();
+	_context->_out_format->WriteHeader(option_dic);
+	_context->_out_format->DumpFormat();
 }
 
 shared_ptr<IFrameConsumer> video::SptsEncodeMux::VideoEncodePipe()
 {
-	return _video_encoder_pipe;
+	return _context->_video_encoder_pipe;
 }
 
 shared_ptr<IFrameConsumer> video::SptsEncodeMux::AudioEncodePipe()
 {
-	return _audio_encode_pipe;
+	return _context->_audio_encode_pipe;
 }
 
 
