@@ -1,11 +1,11 @@
 #pragma once
-#include<base/Wrapper.h>
-#include<ffmpeg-wrapper/base_include.h>
-#include<format>
-#include<iostream>
-#include<jccpp/ToString.h>
-#include<sstream>
-#include<string>
+#include <base/Wrapper.h>
+#include <ffmpeg-wrapper/base_include.h>
+#include <format>
+#include <iostream>
+#include <jccpp/ToString.h>
+#include <sstream>
+#include <string>
 
 namespace video
 {
@@ -16,7 +16,7 @@ namespace video
 	{
 		/**
 		 * @brief 无特殊操作
-		*/
+		 */
 		None = 0,
 
 		/**
@@ -62,14 +62,14 @@ namespace video
 	 * 如果 ffmpeg 的对象含有 AVDictionary* 字段，并且在调试时发现会重复释放，
 	 * 则在调用 ffmpeg 释放函数之前将那个对象的 AVDictionary* 字段设为 nullprt，
 	 * 就可避免重复释放。
-	*/
-	class AVDictionaryWrapper :public base::Wrapper<AVDictionary>, public ICanToString
+	 */
+	class AVDictionaryWrapper : public base::Wrapper<AVDictionary>, public ICanToString
 	{
 		bool _do_not_free_dic = false;
 		AVDictionary *_wrapped_obj = nullptr;
 
 	public:
-		AVDictionaryWrapper() { }
+		AVDictionaryWrapper() = default;
 
 		AVDictionaryWrapper(AVDictionary *dic)
 		{
@@ -93,7 +93,7 @@ namespace video
 		/**
 		 * @brief 不要释放内部包装的字典，这是为了避免与 ffmpeg 中的某些 free 函数重复释放导致崩溃。
 		 * @param do_not 设置为 true 后，本对象的 av_dict_free 方法不会生效。
-		*/
+		 */
 		void DoNotFreeInnerDictionary(bool do_not = true)
 		{
 			_do_not_free_dic = do_not;
@@ -101,7 +101,7 @@ namespace video
 
 		/**
 		 * @brief 释放内部包装的字典。调用 DoNotFreeInnerDictionary 并传入 true 后，本方法不会生效。
-		*/
+		 */
 		void FreeInnerDictionary()
 		{
 			if (_do_not_free_dic)
@@ -125,12 +125,15 @@ namespace video
 
 		/**
 		 * @brief 用 key 获取值。如果不存在指定的键值对，返回空指针。
+		 *
 		 * @param key
 		 * @param previous_entry
 		 * @param flags
 		 * @return 如果不存在指定的键值对，返回空指针。
-		*/
-		char const *GetValueByKey(char const *key, const AVDictionaryEntry *previous_entry = nullptr, AVDictionaryFlag flags = AVDictionaryFlag::None)
+		 */
+		char const *GetValueByKey(char const *key,
+								  const AVDictionaryEntry *previous_entry = nullptr,
+								  AVDictionaryFlag flags = AVDictionaryFlag::None)
 		{
 			AVDictionaryEntry *entry = GetEntryByKey(key, previous_entry, flags);
 			if (entry)
@@ -148,7 +151,10 @@ namespace video
 		 * @param flags
 		 * @return int
 		 */
-		int SetValueByKey(const char *key, const char *value, AVDictionaryFlag flags = AVDictionaryFlag::None)
+		int SetValueByKey(
+			const char *key,
+			const char *value,
+			AVDictionaryFlag flags = AVDictionaryFlag::None)
 		{
 			return ::av_dict_set(&_wrapped_obj, key, value, (int)flags);
 		}
@@ -162,12 +168,15 @@ namespace video
 		 * @param flags
 		 * @return 如果找到了，返回该节点的指针。如果没找到，返回空指针。
 		 */
-		AVDictionaryEntry *GetEntryByKey(const char *key, const AVDictionaryEntry *previous_entry = nullptr, AVDictionaryFlag flags = AVDictionaryFlag::None) const
+		AVDictionaryEntry *GetEntryByKey(
+			const char *key,
+			const AVDictionaryEntry *previous_entry = nullptr,
+			AVDictionaryFlag flags = AVDictionaryFlag::None) const
 		{
 			return ::av_dict_get(_wrapped_obj, key, previous_entry, (int)flags);
 		}
 
-		#pragma region 迭代器
+#pragma region 迭代器
 		class AVDictionaryIterator
 		{
 		public:
@@ -179,7 +188,12 @@ namespace video
 
 			AVDictionaryIterator &operator++()
 			{
-				_current_entry = av_dict_get(_dic, "", _current_entry, (int)AVDictionaryFlag::IgnoreSuffix);
+				_current_entry = av_dict_get(
+					_dic,
+					"",
+					_current_entry,
+					(int)AVDictionaryFlag::IgnoreSuffix);
+
 				return *this;
 			}
 
@@ -198,16 +212,13 @@ namespace video
 			AVDictionaryEntry *_current_entry;
 		};
 
-		AVDictionaryIterator begin() const
-		{
-			return AVDictionaryIterator(_wrapped_obj, av_dict_get(_wrapped_obj, "", nullptr, AV_DICT_IGNORE_SUFFIX));
-		}
+		AVDictionaryIterator begin() const;
 
 		AVDictionaryIterator end() const
 		{
 			return AVDictionaryIterator(_wrapped_obj, nullptr);
 		}
-		#pragma endregion
+#pragma endregion
 
 		std::string ToString() override
 		{
