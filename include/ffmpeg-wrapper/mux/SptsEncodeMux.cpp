@@ -11,6 +11,9 @@
 using namespace video;
 using namespace std;
 
+/// <summary>
+///		私有的上下文类
+/// </summary>
 class video::SptsEncodeMux::Context
 {
 public:
