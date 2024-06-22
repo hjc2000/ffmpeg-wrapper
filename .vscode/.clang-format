@@ -1,10 +1,12 @@
+---
 Language: Cpp
-
-BasedOnStyle: LLVM  # 或者选择你想要基于的其他风格，如Google, Mozilla 等\
+BasedOnStyle: LLVM
 
 IndentCaseLabels: false
 IndentCaseBlocks: true
+SortIncludes: CaseInsensitive
 PackConstructorInitializers: Never
+IndentPPDirectives: None
 
 BraceWrapping:
 	AfterClass: true
@@ -23,3 +25,4 @@ BraceWrapping:
 	SplitEmptyFunction: true
 	SplitEmptyRecord: true
 	SplitEmptyNamespace: true
+---

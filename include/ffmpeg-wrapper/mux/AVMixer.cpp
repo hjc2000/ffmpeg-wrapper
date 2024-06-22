@@ -6,8 +6,7 @@ using namespace video;
 void video::AVMixer::CreateNewVideoStream()
 {
 	_input_video_format->DumpFormat();
-	AVStreamWrapper stream =
-		_input_video_format->FindBestStream(AVMediaType::AVMEDIA_TYPE_VIDEO);
+	AVStreamWrapper stream = _input_video_format->FindBestStream(AVMediaType::AVMEDIA_TYPE_VIDEO);
 	if (stream.IsNull())
 	{
 		throw std::runtime_error{"没有视频流"};
@@ -23,9 +22,7 @@ void video::AVMixer::CreateNewVideoStream()
 void video::AVMixer::CreateNewAudioStream()
 {
 	_input_audio_format->DumpFormat();
-	AVStreamWrapper stream =
-		_input_audio_format->FindBestStream(AVMediaType::AVMEDIA_TYPE_AUDIO);
-
+	AVStreamWrapper stream = _input_audio_format->FindBestStream(AVMediaType::AVMEDIA_TYPE_AUDIO);
 	if (stream.IsNull())
 	{
 		throw std::runtime_error{"没有音频流"};
@@ -38,8 +35,7 @@ void video::AVMixer::CreateNewAudioStream()
 	new_stream.SetTimeBase(AVRational{1, 90000});
 }
 
-bool video::AVMixer::ReadVideoPacketOnce(
-	shared_ptr<base::CancellationToken> cancel_pump)
+bool video::AVMixer::ReadVideoPacketOnce(shared_ptr<base::CancellationToken> cancel_pump)
 {
 	while (!cancel_pump->IsCancellationRequested())
 	{
@@ -74,8 +70,7 @@ bool video::AVMixer::ReadVideoPacketOnce(
 	return false;
 }
 
-bool video::AVMixer::ReadAudioPacketOnce(
-	shared_ptr<base::CancellationToken> cancel_pump)
+bool video::AVMixer::ReadAudioPacketOnce(shared_ptr<base::CancellationToken> cancel_pump)
 {
 	while (!cancel_pump->IsCancellationRequested())
 	{
