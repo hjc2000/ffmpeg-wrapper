@@ -1,6 +1,6 @@
 #pragma once
-#include<ffmpeg-wrapper/demux/JoinedInputFormatDemuxDecoder.h>
-#include<ffmpeg-wrapper/mux/SptsEncodeMux.h>
+#include "ffmpeg-wrapper/demux/JoinedInputFormatDemuxDecoder.h"
+#include "ffmpeg-wrapper/mux/SptsEncodeMux.h"
 
 namespace video
 {

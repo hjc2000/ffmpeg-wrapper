@@ -43,7 +43,7 @@ video::SptsEncodeMux::SptsEncodeMux(
 	IAudioStreamInfoCollection const &audio_stream_infos,
 	std::string audio_codec_name
 ) :
-	_context(new Context { })
+	_context(new Context{ })
 {
 	_context->_factory = factory;
 	_context->_out_format = out_format;
@@ -58,8 +58,8 @@ video::SptsEncodeMux::SptsEncodeMux(
 	_context->_audio_codec_name = audio_codec_name;
 
 	// ts 必须使用 1/90000 时间基
-	_context->_video_stream_infos.SetTimeBase(AVRational { 1, 90000 });
-	_context->_audio_stream_infos.SetTimeBase(AVRational { 1, 90000 });
+	_context->_video_stream_infos.SetTimeBase(AVRational{ 1, 90000 });
+	_context->_audio_stream_infos.SetTimeBase(AVRational{ 1, 90000 });
 
 	InitVideoEncodePipe();
 	InitAudioEncodePipe();
@@ -68,7 +68,7 @@ video::SptsEncodeMux::SptsEncodeMux(
 
 void video::SptsEncodeMux::InitVideoEncodePipe()
 {
-	_context->_video_encoder_pipe = shared_ptr<SwsFpsEncoderPipe> { new SwsFpsEncoderPipe {
+	_context->_video_encoder_pipe = shared_ptr<SwsFpsEncoderPipe>{ new SwsFpsEncoderPipe {
 		_context->_factory,
 		_context->_out_format,
 		_context->_video_stream_infos,
@@ -79,7 +79,7 @@ void video::SptsEncodeMux::InitVideoEncodePipe()
 
 void video::SptsEncodeMux::InitAudioEncodePipe()
 {
-	_context->_audio_encode_pipe = shared_ptr<SwrEncoderPipe> { new SwrEncoderPipe {
+	_context->_audio_encode_pipe = shared_ptr<SwrEncoderPipe>{ new SwrEncoderPipe {
 		_context->_factory,
 		_context->_audio_codec_name,
 		_context->_audio_stream_infos,
@@ -126,13 +126,13 @@ void test_SptsEncodeMux()
 	file_queue.Enqueue("越权访问.mkv");
 	file_queue.Enqueue("moon.mp4");
 	file_queue.Enqueue("fallen-down.ts");
-	shared_ptr<JoinedInputFormatDemuxDecoder> joined_input_format_demux_decoder { new JoinedInputFormatDemuxDecoder { } };
+	shared_ptr<JoinedInputFormatDemuxDecoder> joined_input_format_demux_decoder{ new JoinedInputFormatDemuxDecoder { } };
 	joined_input_format_demux_decoder->_get_format_callback = [&]()->shared_ptr<InputFormat>
 	{
 		try
 		{
 			std::string file = file_queue.Dequeue();
-			shared_ptr<InputFormat> in_fmt_ctx { new InputFormat { file } };
+			shared_ptr<InputFormat> in_fmt_ctx{ new InputFormat { file } };
 			in_fmt_ctx->DumpFormat();
 			return in_fmt_ctx;
 		}
@@ -154,7 +154,7 @@ void test_SptsEncodeMux()
 
 	// 想要输出的视频信息
 	VideoStreamInfoCollection output_video_stream_infos;
-	output_video_stream_infos._frame_rate = AVRational { 30, 1 };
+	output_video_stream_infos._frame_rate = AVRational{ 30, 1 };
 	output_video_stream_infos._width = 1920;
 	output_video_stream_infos._height = 1080;
 	output_video_stream_infos._pixel_format = AVPixelFormat::AV_PIX_FMT_YUV420P;
@@ -166,8 +166,8 @@ void test_SptsEncodeMux()
 	output_audio_stream_infos._sample_rate = 48000;
 
 	shared_ptr<base::Stream> out_fs = jccpp::FileStream::CreateNewAnyway("mux_out.ts");
-	shared_ptr<StreamOutputFormat> out_fmt_ctx { new StreamOutputFormat { ".ts", out_fs } };
-	shared_ptr<SptsEncodeMux> spts_encode_mux { new SptsEncodeMux {
+	shared_ptr<StreamOutputFormat> out_fmt_ctx{ new StreamOutputFormat { ".ts", out_fs } };
+	shared_ptr<SptsEncodeMux> spts_encode_mux{ new SptsEncodeMux {
 		video::EncoderPipeFactory::Instance(),
 		out_fmt_ctx,
 		output_video_stream_infos,
@@ -181,7 +181,7 @@ void test_SptsEncodeMux()
 	joined_input_format_demux_decoder->AddAudioFrameConsumer(spts_encode_mux->AudioEncodePipe());
 
 	base::CancellationTokenSource cancel_pump_source;
-	TaskCompletionSignal pump_thread_exit { false };
+	TaskCompletionSignal pump_thread_exit{ false };
 	std::thread([&]()
 	{
 		try

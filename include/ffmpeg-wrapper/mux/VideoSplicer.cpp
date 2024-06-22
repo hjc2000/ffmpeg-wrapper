@@ -1,4 +1,4 @@
-#include"VideoSplicer.h"
+#include "VideoSplicer.h"
 
 using namespace std;
 using namespace video;
