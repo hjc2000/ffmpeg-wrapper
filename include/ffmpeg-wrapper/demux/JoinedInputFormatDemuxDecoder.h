@@ -20,22 +20,16 @@ namespace video
 	class JoinedInputFormatDemuxDecoder :public IPump
 	{
 	private:
-		std::shared_ptr<InputFormat> _current_input_format;
-		AVStreamInfoCollection _video_stream_infos;
-		std::shared_ptr<IDecoderPipe> _video_decode_pipe;
-		int _source_video_stream_index = -1;
-		AVStreamInfoCollection _audio_stream_infos;
-		std::shared_ptr<IDecoderPipe> _audio_decode_pipe;
-		int _source_audio_stream_index = -1;
-		std::shared_ptr<InfinitePacketPipe> _infinite_packet_pipe { new InfinitePacketPipe { } };
-		base::List<std::shared_ptr<IFrameConsumer>> _video_frame_consumer_list;
-		base::List<std::shared_ptr<IFrameConsumer>> _audio_frame_consumer_list;
+		class Context;
+		std::shared_ptr<Context> _context;
 
 		void InitializeVideoDecoderPipe();
 		void InitializeAudioDecoderPipe();
 		void OpenInputIfNull();
 
 	public:
+		JoinedInputFormatDemuxDecoder();
+
 		/// <summary>
 		///		当需要输入封装时就会触发此回调。
 		///		* 回调函数返回 InputFormat 对象则视频流继续。
