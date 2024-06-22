@@ -1,15 +1,15 @@
-#include"ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h"
-#include<ffmpeg-wrapper/AVCalculate.h>
-#include<ffmpeg-wrapper/AVCodecExtention.h>
-#include<ffmpeg-wrapper/base_include.h>
-#include<ffmpeg-wrapper/ErrorCode.h>
-#include<ffmpeg-wrapper/wrapper/AVDictionaryWrapper.h>
-#include<ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
-#include<ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
-#include<ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
-#include<format>
-#include<iostream>
-#include<memory>
+#include "ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h"
+#include <ffmpeg-wrapper/AVCalculate.h>
+#include <ffmpeg-wrapper/AVCodecExtention.h>
+#include <ffmpeg-wrapper/ErrorCode.h>
+#include <ffmpeg-wrapper/base_include.h>
+#include <ffmpeg-wrapper/wrapper/AVDictionaryWrapper.h>
+#include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
+#include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
+#include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
+#include <format>
+#include <iostream>
+#include <memory>
 
 using namespace video;
 
@@ -39,10 +39,9 @@ AVCodecContextWrapper::~AVCodecContextWrapper()
 #pragma region 工厂函数
 std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateDecoder(AVStreamInfoCollection stream)
 {
-	std::shared_ptr<AVCodecContextWrapper> ctx { new AVCodecContextWrapper {
+	std::shared_ptr<AVCodecContextWrapper> ctx{new AVCodecContextWrapper{
 		stream._codec,
-		stream._codec_params
-	} };
+		stream._codec_params}};
 
 	ctx->SetTimeBase(stream.TimeBase());
 	ctx->SetFrameRate(stream.FrameRate());
@@ -55,16 +54,17 @@ std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
 	const char *encoder_name,
 	IAudioStreamInfoCollection const &infos,
 	bool set_global_header,
-	bool auto_open
-)
+	bool auto_open)
 {
 	auto codec = AVCodecExtention::find_encoder_by_name(encoder_name);
 	if (!codec)
 	{
-		throw std::runtime_error { CODE_POS_STR + std::string { "查找编码器失败" } };
+		throw std::runtime_error{CODE_POS_STR + std::string{"查找编码器失败"}};
 	}
 
-	std::shared_ptr<AVCodecContextWrapper> ctx { new AVCodecContextWrapper { codec, } };
+	std::shared_ptr<AVCodecContextWrapper> ctx{new AVCodecContextWrapper{
+		codec,
+	}};
 
 	// 设置编码器参数
 	(*ctx)->codec_type = AVMediaType::AVMEDIA_TYPE_AUDIO;
@@ -89,16 +89,15 @@ std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
 	const char *encoder_name,
 	IVideoStreamInfoCollection const &infos,
 	bool set_global_header,
-	bool auto_open
-)
+	bool auto_open)
 {
 	auto codec = AVCodecExtention::find_encoder_by_name(encoder_name);
 	if (!codec)
 	{
-		throw std::runtime_error { CODE_POS_STR + std::string { "查找编码器失败" } };
+		throw std::runtime_error{CODE_POS_STR + std::string{"查找编码器失败"}};
 	}
 
-	std::shared_ptr<AVCodecContextWrapper> ctx { new AVCodecContextWrapper { codec } };
+	std::shared_ptr<AVCodecContextWrapper> ctx{new AVCodecContextWrapper{codec}};
 
 	// 设置编码器参数
 	(*ctx)->codec_type = AVMediaType::AVMEDIA_TYPE_VIDEO;
@@ -140,7 +139,7 @@ void AVCodecContextWrapper::Open(AVDictionary **dic)
 	int ret = ::avcodec_open2(_wrapped_obj, _codec, dic);
 	if (ret)
 	{
-		throw std::runtime_error { CODE_POS_STR + std::string { "打开编解码器失败" } };
+		throw std::runtime_error{CODE_POS_STR + std::string{"打开编解码器失败"}};
 	}
 }
 
@@ -170,10 +169,9 @@ void AVCodecContextWrapper::SendFrame(AVFrameWrapper *frame)
 		std::string msg = std::format(
 			"送入帧失败，错误代码：{} —— {}",
 			ret,
-			ToString((ErrorCode)ret)
-		);
+			ToString((ErrorCode)ret));
 
-		throw std::runtime_error { CODE_POS_STR + msg };
+		throw std::runtime_error{CODE_POS_STR + msg};
 	}
 }
 
@@ -196,9 +194,9 @@ void AVCodecContextWrapper::SendPacket(AVPacketWrapper *packet)
 	if (packet)
 	{
 		/* 解码不需要对包进行时间基调整。AVCodecContext 在作为解码器的时候自己会记录时间基，将所有
-		* 包的时间基都当作这个时间基。从封装中读出来的包不含有时间基信息（时间基字段为：0 / 1 ，是个无效值），
-		* 只含有 pst 和 dts。
-		*/
+		 * 包的时间基都当作这个时间基。从封装中读出来的包不含有时间基信息（时间基字段为：0 / 1 ，是个无效值），
+		 * 只含有 pst 和 dts。
+		 */
 		ret = ::avcodec_send_packet(_wrapped_obj, *packet);
 	}
 	else
@@ -209,7 +207,7 @@ void AVCodecContextWrapper::SendPacket(AVPacketWrapper *packet)
 	if (ret < 0)
 	{
 		std::cout << CODE_POS_STR << "错误代码：" << ret << " -- " << ToString((ErrorCode)ret);
-		//throw SendPacketException{};
+		// throw SendPacketException{};
 	}
 }
 
