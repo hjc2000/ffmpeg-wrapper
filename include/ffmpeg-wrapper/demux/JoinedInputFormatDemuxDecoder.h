@@ -1,15 +1,13 @@
 #pragma once
-#include<base/task/CancellationToken.h>
-#include<ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
-#include<ffmpeg-wrapper/input-format/InputFormat.h>
-#include<ffmpeg-wrapper/pipe/InfinitePacketPipe.h>
 #include<ffmpeg-wrapper/pipe/interface/IPump.h>
-#include<ffmpeg-wrapper/pipe/ThreadDecoderPipe.h>
 #include<functional>
 #include<memory>
 
 namespace video
 {
+	class InputFormat;
+	class IFrameConsumer;
+
 	/// <summary>
 	///		将输入格式拼接起来，进行解封装、解码。一个输入格式结束后会继续获取
 	///		下一个输入格式。最终输出来自不同输入格式解封装、解码后的视频帧、音频帧。

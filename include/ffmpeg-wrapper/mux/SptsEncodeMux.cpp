@@ -7,6 +7,7 @@
 #include<ffmpeg-wrapper/pipe/SwrEncoderPipe.h>
 #include<ffmpeg-wrapper/pipe/SwsFpsEncoderPipe.h>
 #include<iostream>
+#include<jccpp/TaskCompletionSignal.h>
 
 using namespace video;
 using namespace std;

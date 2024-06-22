@@ -1,6 +1,11 @@
 #include"JoinedInputFormatDemuxDecoder.h"
+#include<base/task/CancellationToken.h>
 #include<ffmpeg-wrapper/factory/DecoderPipeFactory.h>
+#include<ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
+#include<ffmpeg-wrapper/input-format/InputFormat.h>
+#include<ffmpeg-wrapper/pipe/InfinitePacketPipe.h>
 #include<ffmpeg-wrapper/pipe/PacketPump.h>
+#include<ffmpeg-wrapper/pipe/ThreadDecoderPipe.h>
 
 using namespace video;
 using namespace std;

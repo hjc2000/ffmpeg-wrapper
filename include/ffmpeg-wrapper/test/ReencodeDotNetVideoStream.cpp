@@ -2,9 +2,9 @@
 #include<base/task/CancellationTokenSource.h>
 #include<ffmpeg-wrapper/factory/EncoderPipeFactory.h>
 #include<ffmpeg-wrapper/info-collection/VideoStreamInfoCollection.h>
+#include<jccpp/TaskCompletionSignal.h>
 
 using namespace std;
-using namespace jc;
 using namespace video;
 
 void ReencodeDotNetVideoStream(DotNetStream *dotnet_video_stream)
