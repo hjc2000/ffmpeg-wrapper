@@ -1,7 +1,7 @@
 #pragma once
-#include<memory>
-#include<stdint.h>
-#include<string>
+#include <memory>
+#include <stdint.h>
+#include <string>
 
 namespace video
 {
@@ -15,7 +15,7 @@ namespace video
 
 	/// <summary>
 	///		输入视频帧和音频帧，将会编码，然后封装成 ts。
-	/// 
+	///
 	///		本类能够自适应输入的视频帧、音频帧的参数变化。例如：音频帧的采样格式变了之后能够重新构造
 	///		重采样器，从而保持输出端的音频帧格式始终不变。
 	/// </summary>
@@ -31,7 +31,7 @@ namespace video
 
 	public:
 		/// <summary>
-		///		
+		///
 		/// </summary>
 		/// <param name="out_format">输出格式</param>
 		/// <param name="video_stream_infos">
@@ -56,8 +56,7 @@ namespace video
 			int64_t video_out_bitrate_in_bps,
 			// 音频相关参数
 			IAudioStreamInfoCollection const &audio_stream_infos,
-			std::string audio_codec_name
-		);
+			std::string audio_codec_name);
 
 		std::shared_ptr<IFrameConsumer> VideoEncodePipe();
 		std::shared_ptr<IFrameConsumer> AudioEncodePipe();

@@ -1,0 +1,25 @@
+Language: Cpp
+
+BasedOnStyle: LLVM  # 或者选择你想要基于的其他风格，如Google, Mozilla 等\
+
+IndentCaseLabels: false
+IndentCaseBlocks: true
+PackConstructorInitializers: Never
+
+BraceWrapping:
+	AfterClass: true
+	AfterUnion: true
+	BeforeLambdaBody: true
+	AfterControlStatement: Always
+	AfterEnum: true
+	AfterFunction: true
+	AfterNamespace: true
+	AfterStruct: true
+	AfterExternBlock: true
+	BeforeCatch: true
+	BeforeElse: true
+	AfterCaseLabel: true
+	IndentBraces: true
+	SplitEmptyFunction: true
+	SplitEmptyRecord: true
+	SplitEmptyNamespace: true
