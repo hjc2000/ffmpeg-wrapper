@@ -1,5 +1,9 @@
 #include"ffmpeg-wrapper/mux/SptsEncodeMux.h"
 #include<base/container/Queue.h>
+#include<ffmpeg-wrapper/factory/IEncoderPipeFactory.h>
+#include<ffmpeg-wrapper/output-format/OutputFormat.h>
+#include<ffmpeg-wrapper/pipe/SwrEncoderPipe.h>
+#include<ffmpeg-wrapper/pipe/SwsFpsEncoderPipe.h>
 #include<iostream>
 
 using namespace video;

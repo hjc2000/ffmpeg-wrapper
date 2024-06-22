@@ -1,13 +1,20 @@
 #pragma once
-#include<ffmpeg-wrapper/factory/IEncoderPipeFactory.h>
 #include<ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
 #include<ffmpeg-wrapper/info-collection/VideoStreamInfoCollection.h>
-#include<ffmpeg-wrapper/output-format/OutputFormat.h>
-#include<ffmpeg-wrapper/pipe/SwrEncoderPipe.h>
-#include<ffmpeg-wrapper/pipe/SwsFpsEncoderPipe.h>
+#include<memory>
+#include<stdint.h>
+#include<string>
 
 namespace video
 {
+	class IEncoderPipeFactory;
+	class OutputFormat;
+	class SwrEncoderPipe;
+	class SwsFpsEncoderPipe;
+	class IVideoStreamInfoCollection;
+	class IAudioStreamInfoCollection;
+	class IFrameConsumer;
+
 	/// <summary>
 	///		输入视频帧和音频帧，将会编码，然后封装成 ts。
 	/// 
@@ -19,15 +26,15 @@ namespace video
 	private:
 		std::shared_ptr<video::IEncoderPipeFactory> _factory;
 
-		shared_ptr<OutputFormat> _out_format;
+		std::shared_ptr<OutputFormat> _out_format;
 
 		VideoStreamInfoCollection _video_stream_infos;
-		shared_ptr<SwsFpsEncoderPipe> _video_encoder_pipe;
+		std::shared_ptr<SwsFpsEncoderPipe> _video_encoder_pipe;
 		std::string _video_codec_name;
 		int64_t _video_out_bitrate_in_bps = -1;
 
 		AudioStreamInfoCollection _audio_stream_infos;
-		shared_ptr<SwrEncoderPipe> _audio_encode_pipe;
+		std::shared_ptr<SwrEncoderPipe> _audio_encode_pipe;
 		std::string _audio_codec_name;
 
 		void InitVideoEncodePipe();
@@ -54,7 +61,7 @@ namespace video
 		/// <param name="audio_codec_name">输出音频所使用的编码器名称</param>
 		SptsEncodeMux(
 			std::shared_ptr<video::IEncoderPipeFactory> factory,
-			shared_ptr<OutputFormat> out_format,
+			std::shared_ptr<OutputFormat> out_format,
 			// 视频相关参数
 			IVideoStreamInfoCollection const &video_stream_infos,
 			std::string video_codec_name,
@@ -64,8 +71,8 @@ namespace video
 			std::string audio_codec_name
 		);
 
-		shared_ptr<IFrameConsumer> VideoEncodePipe();
-		shared_ptr<IFrameConsumer> AudioEncodePipe();
+		std::shared_ptr<IFrameConsumer> VideoEncodePipe();
+		std::shared_ptr<IFrameConsumer> AudioEncodePipe();
 	};
 }
 
