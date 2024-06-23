@@ -7,7 +7,7 @@
 namespace video
 {
 	/// @brief 采样器。从信号源中采样，生成音频帧。
-	class Sampler
+	class AudioSampler
 		: video::IFrameSource,
 		  video::IAudioFrameInfoCollection
 	{
@@ -15,7 +15,7 @@ namespace video
 		std::shared_ptr<base::ISignalSource<double, double>> _signal_source;
 
 	public:
-		Sampler(
+		AudioSampler(
 			std::shared_ptr<base::ISignalSource<double, double>> signal_source,
 			video::AudioFrameInfoCollection const &infos);
 
