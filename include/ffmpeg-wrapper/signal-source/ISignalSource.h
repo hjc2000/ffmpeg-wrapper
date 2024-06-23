@@ -8,28 +8,22 @@
 
 namespace video
 {
-	/// <summary>
-	///		信号源接口。
-	///		* 一个信号源，要能够采样，所以有一个 sample 纯虚函数。此外，信号源实现了 IFrameSource 接口，
-	///		  能够填充一个 AVFrame
-	/// </summary>
+	/// @brief 信号源接口。
+	/// @note 一个信号源，要能够采样，所以有一个 sample 纯虚函数。此外，信号源实现了 IFrameSource 接口，
+	/// 能够填充一个 AVFrame
 	class ISignalSource
 		: public IAudioFrameInfoCollection
 	{
 	public:
 		virtual ~ISignalSource() = default;
 
-	public:
-		/**
-		 * @brief 采样一次，返回采样结果
-		 */
+		/// @brief 采样一次，返回采样结果
+		/// @return
 		virtual double sample() = 0;
 
-		/// <summary>
-		///		从信号源中读取帧
-		/// </summary>
-		/// <param name="frame">用来接收本信号源采样值的帧</param>
-		/// <returns>目前总是会返回 0</returns>
+		/// @brief 从信号源中读取帧
+		/// @param frame 用来接收本信号源采样值的帧
+		/// @return
 		int ReadFrame(std::shared_ptr<AVFrameWrapper> frame);
 	};
 }
