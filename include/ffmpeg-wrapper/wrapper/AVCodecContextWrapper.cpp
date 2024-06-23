@@ -37,11 +37,15 @@ AVCodecContextWrapper::~AVCodecContextWrapper()
 #pragma endregion
 
 #pragma region 工厂函数
-std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateDecoder(AVStreamInfoCollection stream)
+std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateDecoder(
+	AVStreamInfoCollection stream)
 {
-	std::shared_ptr<AVCodecContextWrapper> ctx{new AVCodecContextWrapper{
-		stream._codec,
-		stream._codec_params}};
+	std::shared_ptr<AVCodecContextWrapper> ctx{
+		new AVCodecContextWrapper{
+			stream._codec,
+			stream._codec_params,
+		},
+	};
 
 	ctx->SetTimeBase(stream.TimeBase());
 	ctx->SetFrameRate(stream.FrameRate());
@@ -62,9 +66,11 @@ std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
 		throw std::runtime_error{CODE_POS_STR + std::string{"查找编码器失败"}};
 	}
 
-	std::shared_ptr<AVCodecContextWrapper> ctx{new AVCodecContextWrapper{
-		codec,
-	}};
+	std::shared_ptr<AVCodecContextWrapper> ctx{
+		new AVCodecContextWrapper{
+			codec,
+		},
+	};
 
 	// 设置编码器参数
 	(*ctx)->codec_type = AVMediaType::AVMEDIA_TYPE_AUDIO;

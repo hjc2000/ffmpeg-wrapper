@@ -143,6 +143,7 @@ void test_SptsEncodeMux()
 
 	shared_ptr<base::Stream> out_fs = jccpp::FileStream::CreateNewAnyway("mux_out.ts");
 	shared_ptr<StreamOutputFormat> out_fmt_ctx{new StreamOutputFormat{".ts", out_fs}};
+
 	shared_ptr<SptsEncodeMux> spts_encode_mux{
 		new SptsEncodeMux{
 			video::EncoderPipeFactory::Instance(),
