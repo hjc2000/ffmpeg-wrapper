@@ -12,26 +12,30 @@ AVFrameWrapper::AVFrameWrapper()
 	_wrapped_obj = av_frame_alloc();
 }
 
-AVFrameWrapper::AVFrameWrapper(IAudioStreamInfoCollection const &infos, int nb_samples) : AVFrameWrapper()
+AVFrameWrapper::AVFrameWrapper(IAudioStreamInfoCollection const &infos, int nb_samples)
+	: AVFrameWrapper()
 {
 	IAudioStreamInfoCollection::operator=(infos);
 	SetSampleCount(nb_samples);
 	get_buffer(0);
 }
 
-AVFrameWrapper::AVFrameWrapper(IAudioFrameInfoCollection const &infos) : AVFrameWrapper()
+AVFrameWrapper::AVFrameWrapper(IAudioFrameInfoCollection const &infos)
+	: AVFrameWrapper()
 {
 	IAudioFrameInfoCollection::operator=(infos);
 	get_buffer(0);
 }
 
-AVFrameWrapper::AVFrameWrapper(IVideoFrameInfoCollection const &infos) : AVFrameWrapper()
+AVFrameWrapper::AVFrameWrapper(IVideoFrameInfoCollection const &infos)
+	: AVFrameWrapper()
 {
 	IVideoFrameInfoCollection::operator=(infos);
 	get_buffer(0);
 }
 
-AVFrameWrapper::AVFrameWrapper(AVFrameWrapper const &another) : AVFrameWrapper()
+AVFrameWrapper::AVFrameWrapper(AVFrameWrapper const &another)
+	: AVFrameWrapper()
 {
 	Ref(another);
 }
@@ -51,8 +55,16 @@ void AVFrameWrapper::ChangeTimeBase(AVRational new_time_base)
 {
 	AVRational old_time_base = _wrapped_obj->time_base;
 	_wrapped_obj->time_base = new_time_base;
-	_wrapped_obj->pts = ConvertTimeStamp(_wrapped_obj->pts, old_time_base, new_time_base);
-	_wrapped_obj->duration = ConvertTimeStamp(_wrapped_obj->duration, old_time_base, new_time_base);
+
+	_wrapped_obj->pts = ConvertTimeStamp(
+		_wrapped_obj->pts,
+		old_time_base,
+		new_time_base);
+
+	_wrapped_obj->duration = ConvertTimeStamp(
+		_wrapped_obj->duration,
+		old_time_base,
+		new_time_base);
 }
 
 int video::AVFrameWrapper::audio_data_size()
@@ -209,10 +221,14 @@ void video::AVFrameWrapper::CopyVideoFrameToStream(base::Stream &stream)
 		 * 根本无法正常播放。所以这里必须使用 1 字节对齐（即不对齐）。不管写入什么流都是一样的，
 		 * 统一写入不对齐的数据，包括网络流。
 		 */
-		_image_buf = shared_ptr<ImageBuffer>(
-			new ImageBuffer(
-				_wrapped_obj->width, _wrapped_obj->height,
-				(AVPixelFormat)_wrapped_obj->format, 1));
+		_image_buf = shared_ptr<ImageBuffer>{
+			new ImageBuffer{
+				_wrapped_obj->width,
+				_wrapped_obj->height,
+				(AVPixelFormat)_wrapped_obj->format,
+				1,
+			},
+		};
 	}
 
 	copy_image_to_buffer(_image_buf);

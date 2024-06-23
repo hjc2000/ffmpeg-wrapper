@@ -7,20 +7,19 @@ void video::SwsPipe::ReadAndSendFrame()
 	switch (ret)
 	{
 	case 0:
-		{
-			SendFrameToEachConsumer(&_sws_out_frame);
-			_sws_out_frame.Unref();
-			break;
-		}
+	{
+		SendFrameToEachConsumer(&_sws_out_frame);
+		break;
+	}
 	case (int)ErrorCode::output_is_temporarily_unavailable:
-		{
-			return;
-		}
+	{
+		return;
+	}
 	case (int)ErrorCode::eof:
-		{
-			SendFrameToEachConsumer(nullptr);
-			return;
-		}
+	{
+		SendFrameToEachConsumer(nullptr);
+		return;
+	}
 	}
 }
 
@@ -28,20 +27,18 @@ void video::SwsPipe::change_sws()
 {
 	std::cout << CODE_POS_STR << "重新构造 sws。" << std::endl;
 	ReadAndSendFrame();
-	_sws_context = std::shared_ptr<SwsContextWrapper> { new SwsContextWrapper {
+	_sws_context = std::shared_ptr<SwsContextWrapper>{new SwsContextWrapper{
 		_in_video_frame_infos,
-		_desire_out_video_frame_infos
-	} };
+		_desire_out_video_frame_infos}};
 }
 
 video::SwsPipe::SwsPipe(IVideoFrameInfoCollection const &desire_out_video_frame_infos)
 {
 	_in_video_frame_infos = desire_out_video_frame_infos;
 	_desire_out_video_frame_infos = desire_out_video_frame_infos;
-	_sws_context = std::shared_ptr<SwsContextWrapper> { new SwsContextWrapper {
+	_sws_context = std::shared_ptr<SwsContextWrapper>{new SwsContextWrapper{
 		_in_video_frame_infos,
-		_desire_out_video_frame_infos
-	} };
+		_desire_out_video_frame_infos}};
 }
 
 void video::SwsPipe::SendFrame(AVFrameWrapper *frame)
