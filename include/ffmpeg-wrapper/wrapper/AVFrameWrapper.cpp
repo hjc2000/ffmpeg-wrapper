@@ -7,6 +7,30 @@
 using namespace video;
 using namespace std;
 
+void AVFrameWrapper::GetBuffer(int align)
+{
+	int ret = ::av_frame_get_buffer(_wrapped_obj, align);
+	if (ret < 0)
+	{
+		throw std::runtime_error{CODE_POS_STR + std::string{"av_frame_get_buffer 失败。"}};
+	}
+}
+
+void AVFrameWrapper::Ref(AVFrameWrapper const &other)
+{
+	Unref();
+	int ret = av_frame_ref(_wrapped_obj, (AVFrameWrapper &)other);
+	if (ret < 0)
+	{
+		cerr << CODE_POS_STR << video::ToString((ErrorCode)ret) << endl;
+	}
+}
+
+void AVFrameWrapper::Unref()
+{
+	::av_frame_unref(_wrapped_obj);
+}
+
 AVFrameWrapper::AVFrameWrapper()
 {
 	_wrapped_obj = av_frame_alloc();
@@ -17,21 +41,21 @@ AVFrameWrapper::AVFrameWrapper(IAudioStreamInfoCollection const &infos, int nb_s
 {
 	IAudioStreamInfoCollection::operator=(infos);
 	SetSampleCount(nb_samples);
-	get_buffer(0);
+	GetBuffer(0);
 }
 
 AVFrameWrapper::AVFrameWrapper(IAudioFrameInfoCollection const &infos)
 	: AVFrameWrapper()
 {
 	IAudioFrameInfoCollection::operator=(infos);
-	get_buffer(0);
+	GetBuffer(0);
 }
 
 AVFrameWrapper::AVFrameWrapper(IVideoFrameInfoCollection const &infos)
 	: AVFrameWrapper()
 {
 	IVideoFrameInfoCollection::operator=(infos);
-	get_buffer(0);
+	GetBuffer(0);
 }
 
 AVFrameWrapper::AVFrameWrapper(AVFrameWrapper const &another)
@@ -99,30 +123,6 @@ void video::AVFrameWrapper::mute(int offset)
 		SampleCount() - offset,
 		ChannelLayout().nb_channels,
 		SampleFormat());
-}
-
-void AVFrameWrapper::get_buffer(int align)
-{
-	int ret = ::av_frame_get_buffer(_wrapped_obj, align);
-	if (ret < 0)
-	{
-		throw std::runtime_error{CODE_POS_STR + std::string{"av_frame_get_buffer 失败。"}};
-	}
-}
-
-void AVFrameWrapper::Ref(AVFrameWrapper const &other)
-{
-	Unref();
-	int ret = av_frame_ref(_wrapped_obj, (AVFrameWrapper &)other);
-	if (ret < 0)
-	{
-		cerr << CODE_POS_STR << video::ToString((ErrorCode)ret) << endl;
-	}
-}
-
-void AVFrameWrapper::Unref()
-{
-	::av_frame_unref(_wrapped_obj);
 }
 
 void AVFrameWrapper::make_writable()

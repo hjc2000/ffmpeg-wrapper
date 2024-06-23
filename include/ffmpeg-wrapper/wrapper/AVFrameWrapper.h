@@ -23,6 +23,14 @@ namespace video
 		std::shared_ptr<ImageBuffer> _image_buf;
 		AVFrame *_wrapped_obj = nullptr;
 
+		/// @brief 为此帧分配新的缓冲区。调用这个函数必须保证一些参数已经手动设置。
+		/// @note 对于视频帧，需要设置：像素格式、宽、高
+		/// @note 对于音频帧，需要设置：采样格式、采样点数量、声道布局
+		///
+		/// @param align 内存对齐的尺寸。传入 0，会自动根据 CPU 选择对齐方式。
+		/// @note 如果你不知道你在干什么，就传入 0.
+		void GetBuffer(int align);
+
 		/// @brief 让本帧引用另一个帧的缓冲区并复制其它参数。
 		/// @note 在引用另一个帧之前会先调用 Unref 方法。
 		///
@@ -94,14 +102,6 @@ namespace video
 		/// @brief 从指定位置开始将采样点设置为静音
 		/// @param offset 从此位置（包括此位置）开始，对采样点设置静音
 		void mute(int offset);
-
-		/// @brief 为此帧分配新的缓冲区。调用这个函数必须保证一些参数已经手动设置。
-		/// @note 对于视频帧，需要设置：像素格式、宽、高
-		/// @note 对于音频帧，需要设置：采样格式、采样点数量、声道布局
-		///
-		/// @param align 内存对齐的尺寸。传入 0，会自动根据 CPU 选择对齐方式。
-		/// @note 如果你不知道你在干什么，就传入 0.
-		void get_buffer(int align);
 
 		void make_writable();
 
