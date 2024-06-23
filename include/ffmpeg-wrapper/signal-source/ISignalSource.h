@@ -1,11 +1,10 @@
 #pragma once
-#include<ffmpeg-wrapper/AVSampleFormatExtention.h>
-#include<ffmpeg-wrapper/base_include.h>
-#include<ffmpeg-wrapper/base_include.h>
-#include<ffmpeg-wrapper/ErrorCode.h>
-#include<ffmpeg-wrapper/info-collection/IAudioFrameInfoCollection.h>
-#include<ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
-#include<memory>
+#include <ffmpeg-wrapper/AVSampleFormatExtention.h>
+#include <ffmpeg-wrapper/ErrorCode.h>
+#include <ffmpeg-wrapper/base_include.h>
+#include <ffmpeg-wrapper/info-collection/IAudioFrameInfoCollection.h>
+#include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
+#include <memory>
 
 namespace video
 {
@@ -17,12 +16,12 @@ namespace video
 	class ISignalSource : public IAudioFrameInfoCollection
 	{
 	public:
-		virtual ~ISignalSource() { }
+		virtual ~ISignalSource() {}
 
 	public:
 		/**
 		 * @brief 采样一次，返回采样结果
-		*/
+		 */
 		virtual double sample() = 0;
 
 		/// <summary>

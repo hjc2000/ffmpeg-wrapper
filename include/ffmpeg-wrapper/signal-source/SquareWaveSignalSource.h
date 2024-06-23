@@ -1,18 +1,22 @@
 #pragma once
-#include<ffmpeg-wrapper/ErrorCode.h>
-#include<ffmpeg-wrapper/base_include.h>
-#include<ffmpeg-wrapper/signal-source/PeriodicSignalSource.h>
+#include <ffmpeg-wrapper/ErrorCode.h>
+#include <ffmpeg-wrapper/base_include.h>
+#include <ffmpeg-wrapper/signal-source/PeriodicSignalSource.h>
 
 namespace video
 {
 	/**
 	 * @brief 方波
-	*/
-	class SquareWaveSignalSource :public PeriodicSignalSource
+	 */
+	class SquareWaveSignalSource : public PeriodicSignalSource
 	{
 	public:
-		SquareWaveSignalSource(double signal_freq, int sample_rate, double duty_cycle, bool truncate_time = true)
-			:PeriodicSignalSource(signal_freq, sample_rate, truncate_time)
+		SquareWaveSignalSource(
+			double signal_freq,
+			int sample_rate,
+			double duty_cycle,
+			bool truncate_time = true)
+			: PeriodicSignalSource(signal_freq, sample_rate, truncate_time)
 		{
 			_duty_cycle = duty_cycle;
 		}
@@ -34,7 +38,7 @@ namespace video
 	private:
 		/**
 		 * @brief 占空比
-		*/
+		 */
 		double _duty_cycle;
 	};
 }

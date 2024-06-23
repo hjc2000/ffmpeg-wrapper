@@ -1,5 +1,5 @@
 #include "ffmpeg-wrapper/signal-source/PeriodicSignalSource.h"
-#include<ffmpeg-wrapper/AVChannelLayoutExtension.h>
+#include <ffmpeg-wrapper/AVChannelLayoutExtension.h>
 
 using namespace video;
 
@@ -24,17 +24,17 @@ double video::PeriodicSignalSource::sample()
 
 void video::PeriodicSignalSource::SetSampleRate(int value)
 {
-	throw std::runtime_error{ "不支持的操作" };
+	throw std::runtime_error{"不支持的操作"};
 }
 
 AVRational video::PeriodicSignalSource::TimeBase() const
 {
-	return AVRational{ 1,SampleRate() };
+	return AVRational{1, SampleRate()};
 }
 
 void video::PeriodicSignalSource::SetTimeBase(AVRational value)
 {
-	throw std::runtime_error{ "不支持的操作" };
+	throw std::runtime_error{"不支持的操作"};
 }
 
 AVSampleFormat video::PeriodicSignalSource::SampleFormat()
@@ -44,7 +44,7 @@ AVSampleFormat video::PeriodicSignalSource::SampleFormat()
 
 void video::PeriodicSignalSource::SetSampleFormat(AVSampleFormat value)
 {
-	throw std::runtime_error{ "不支持的操作" };
+	throw std::runtime_error{"不支持的操作"};
 }
 
 AVChannelLayout video::PeriodicSignalSource::ChannelLayout() const
