@@ -1,12 +1,11 @@
 #include "ffmpeg-wrapper/wrapper/SwrContextWrapper.h"
-#include<ffmpeg-wrapper/AVCalculate.h>
+#include <ffmpeg-wrapper/AVCalculate.h>
 
 using namespace video;
 
 SwrContextWrapper::SwrContextWrapper(
 	IAudioStreamInfoCollection &in_stream_infos,
-	IAudioFrameInfoCollection &out_frame_infos
-)
+	IAudioFrameInfoCollection &out_frame_infos)
 {
 	_in_stream_infos = in_stream_infos;
 	_out_frame_infos = out_frame_infos;
@@ -20,18 +19,17 @@ SwrContextWrapper::SwrContextWrapper(
 		_in_stream_infos._sample_format,
 		_in_stream_infos._sample_rate,
 		0,
-		nullptr
-	);
+		nullptr);
 
 	if (ret < 0)
 	{
-		throw std::runtime_error{ CODE_POS_STR + std::string{"构造重采样器并设置参数失败"} };
+		throw std::runtime_error{CODE_POS_STR + std::string{"构造重采样器并设置参数失败"}};
 	}
 
 	ret = swr_init(_wrapped_obj);
 	if (ret < 0)
 	{
-		throw std::runtime_error{ CODE_POS_STR + std::string{"初始化重采样器失败"} };
+		throw std::runtime_error{CODE_POS_STR + std::string{"初始化重采样器失败"}};
 	}
 }
 
@@ -50,16 +48,16 @@ void video::SwrContextWrapper::SendFrame(AVFrameWrapper *input_frame)
 		_flushed = true;
 
 		/* _in_pts_when_send_frame 是输出端未来的时间戳，只要将重采样器缓冲区播放完了，
-		* 输出端的时间戳就会等于 _in_pts_when_send_frame。当然，这是在输入端的时间基上讨论的，
-		* 转换为输出端的时间基，则时间戳不等于 _in_pts_when_send_frame。
-		*
-		* _in_pts_when_send_frame 每次在 send_frame 中都要被设置为未来的值，但是冲洗模式时不用设置，
-		* 因为 _in_pts_when_send_frame 已经是重采样器缓冲区播放完时的值了。
-		*/
+		 * 输出端的时间戳就会等于 _in_pts_when_send_frame。当然，这是在输入端的时间基上讨论的，
+		 * 转换为输出端的时间基，则时间戳不等于 _in_pts_when_send_frame。
+		 *
+		 * _in_pts_when_send_frame 每次在 send_frame 中都要被设置为未来的值，但是冲洗模式时不用设置，
+		 * 因为 _in_pts_when_send_frame 已经是重采样器缓冲区播放完时的值了。
+		 */
 		int ret = convert(nullptr, 0, nullptr, 0);
 		if (ret < 0)
 		{
-			throw std::runtime_error{ ToString((ErrorCode)ret) };
+			throw std::runtime_error{ToString((ErrorCode)ret)};
 		}
 
 		return;
@@ -68,8 +66,7 @@ void video::SwrContextWrapper::SendFrame(AVFrameWrapper *input_frame)
 	_in_pts_when_send_frame = ConvertTimeStamp(
 		input_frame->pts(),
 		input_frame->TimeBase(),
-		AVRational{ 1,90000 }
-	);
+		AVRational{1, 90000});
 
 	// 非冲洗模式
 	if (input_frame->TimeBase() != _in_stream_infos.TimeBase())
@@ -80,14 +77,14 @@ void video::SwrContextWrapper::SendFrame(AVFrameWrapper *input_frame)
 	int ret = convert(nullptr, 0, (*input_frame)->extended_data, input_frame->SampleCount());
 	if (ret < 0)
 	{
-		throw std::runtime_error{ ToString((ErrorCode)ret) };
+		throw std::runtime_error{ToString((ErrorCode)ret)};
 	}
 }
 
 int video::SwrContextWrapper::ReadFrame(AVFrameWrapper &output_frame)
 {
 	lock_guard l(_not_private_methods_lock);
-	output_frame = AVFrameWrapper{ _out_frame_infos };
+	output_frame = AVFrameWrapper{_out_frame_infos};
 
 	int ret = 0;
 	if (_flushed)
@@ -102,25 +99,24 @@ int video::SwrContextWrapper::ReadFrame(AVFrameWrapper &output_frame)
 	}
 
 	/* 在送入帧的时候记录了当时的 pts，为 _pts_when_send_frame。现在已经读取出 output_frame 了，
-	* 将 _in_pts_when_send_frame 减去重采样器内，以输入侧时间基为时间基的延迟，就可以得到 output_frame
-	* 的 pts 在输入侧的值。因为延迟的关系，它比 _in_pts_when_send_frame 小。
-	*
-	* 但是，in_pts 是输入侧的时间戳，我们需要转换为在输出侧的时间戳，然后赋值给 output_frame。
-	*/
+	 * 将 _in_pts_when_send_frame 减去重采样器内，以输入侧时间基为时间基的延迟，就可以得到 output_frame
+	 * 的 pts 在输入侧的值。因为延迟的关系，它比 _in_pts_when_send_frame 小。
+	 *
+	 * 但是，in_pts 是输入侧的时间戳，我们需要转换为在输出侧的时间戳，然后赋值给 output_frame。
+	 */
 	int64_t delay = get_delay(90000);
 	if (ret == (int)ErrorCode::eof)
 	{
 		/* 不清楚冲洗完后重采样器内会不会仍然延迟不为 0，所以冲洗后，并且返回 eof，此时表示重采样器空了。
-		* 手动将 delay 设为 0.
-		*/
+		 * 手动将 delay 设为 0.
+		 */
 		delay = 0;
 	}
 
 	int64_t out_pts = ConvertTimeStamp(
 		_in_pts_when_send_frame - delay,
-		AVRational{ 1,90000 },
-		_out_frame_infos.TimeBase()
-	);
+		AVRational{1, 90000},
+		_out_frame_infos.TimeBase());
 	output_frame.set_pts(out_pts);
 	output_frame.SetTimeBase(_out_frame_infos.TimeBase());
 	return ret;
@@ -133,8 +129,7 @@ int SwrContextWrapper::convert(uint8_t **out, int out_count, uint8_t **in, int i
 		out,
 		out_count,
 		(const uint8_t **)in,
-		in_count
-	);
+		in_count);
 
 	return ret;
 }
@@ -161,14 +156,14 @@ int SwrContextWrapper::read_frame_in_flushing_mode(AVFrameWrapper &output_frame)
 	if (count > 0 && count < output_frame.SampleCount())
 	{
 		// 将后面没被填充的采样点设置为静音
-		output_frame.mute(count);
+		output_frame.Mute(count);
 	}
 
 	if (count > 0)
 	{
 		/* 有填充，说明重采样器内还是有采样点的，返回 0，表示读取成功。
-		* 只不过这个读取成功的帧有可能尾部是被填充了静音采样点的。
-		*/
+		 * 只不过这个读取成功的帧有可能尾部是被填充了静音采样点的。
+		 */
 		return 0;
 	}
 
@@ -205,8 +200,8 @@ int SwrContextWrapper::send_silence_samples(uint32_t nb_samples)
 
 	if (!_silence_frame)
 	{
-		_silence_frame = shared_ptr<AVFrameWrapper>{ new AVFrameWrapper{_in_stream_infos,64} };
-		_silence_frame->mute(0);
+		_silence_frame = shared_ptr<AVFrameWrapper>{new AVFrameWrapper{_in_stream_infos, 64}};
+		_silence_frame->Mute(0);
 	}
 
 	// 循环次数
@@ -219,9 +214,9 @@ int SwrContextWrapper::send_silence_samples(uint32_t nb_samples)
 	// 求模，取余数，看用 _silence_frame 填充 loop_times 次后还会剩下几个采样点才能达到 nb_samples
 	uint32_t remain_nb_samples = nb_samples % _silence_frame->SampleCount();
 	int ret = convert(nullptr,
-		0,
-		(*_silence_frame)->extended_data,
-		remain_nb_samples);
+					  0,
+					  (*_silence_frame)->extended_data,
+					  remain_nb_samples);
 	if (ret < 0)
 	{
 		// 失败返回负数的错误代码

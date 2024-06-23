@@ -101,7 +101,7 @@ namespace video
 
 		/// @brief 从指定位置开始将采样点设置为静音
 		/// @param offset 从此位置（包括此位置）开始，对采样点设置静音
-		void mute(int offset);
+		void Mute(int offset);
 
 		void make_writable();
 

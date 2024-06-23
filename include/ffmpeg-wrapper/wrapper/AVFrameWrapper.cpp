@@ -115,7 +115,7 @@ int video::AVFrameWrapper::audio_data_size()
 	return buf_size;
 }
 
-void video::AVFrameWrapper::mute(int offset)
+void video::AVFrameWrapper::Mute(int offset)
 {
 	av_samples_set_silence(
 		_wrapped_obj->extended_data,
