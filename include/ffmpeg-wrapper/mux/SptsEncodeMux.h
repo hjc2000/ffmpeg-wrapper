@@ -21,14 +21,11 @@ namespace video
 	{
 	private:
 		std::shared_ptr<video::IEncoderPipeFactory> _factory;
-
 		std::shared_ptr<OutputFormat> _out_format;
-
 		VideoStreamInfoCollection _video_stream_infos;
 		std::shared_ptr<SwsFpsEncoderPipe> _video_encoder_pipe;
 		std::string _video_codec_name;
 		int64_t _video_out_bitrate_in_bps = -1;
-
 		AudioStreamInfoCollection _audio_stream_infos;
 		std::shared_ptr<SwrEncoderPipe> _audio_encode_pipe;
 		std::string _audio_codec_name;
