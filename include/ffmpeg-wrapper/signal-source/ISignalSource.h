@@ -17,7 +17,7 @@ namespace video
 		: public IAudioFrameInfoCollection
 	{
 	public:
-		virtual ~ISignalSource() {}
+		virtual ~ISignalSource() = default;
 
 	public:
 		/**
