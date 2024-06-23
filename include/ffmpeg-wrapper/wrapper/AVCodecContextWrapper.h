@@ -18,7 +18,6 @@ namespace video
 
 	/// @brief 编解码器上下文的封装
 	/// @note 本类通过工厂函数创建，构造函数都是私有的。
-	/// @note 本类线程安全，所有公共方法都有加锁。
 	class AVCodecContextWrapper
 		: public base::Wrapper<AVCodecContext>,
 		  public IAudioStreamInfoCollection,
