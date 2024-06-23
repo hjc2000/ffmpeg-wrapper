@@ -100,6 +100,10 @@ namespace video
 		/// @param dic
 		void Open(AVDictionary **dic = nullptr);
 
+		/// @brief 通过 AVCodecParameters 设置编解码器参数。
+		/// @note AVCodecParameters 里面没有时间基信息。
+		///
+		/// @param param
 		void SetCodecParams(AVCodecParameters *param);
 
 		/// @brief 设置全局头部
@@ -135,6 +139,7 @@ namespace video
 
 		int Height() const override;
 		void SetHeight(int value) override;
+
 		AVPixelFormat PixelFormat() const override;
 		void SetPixelFormat(AVPixelFormat value) override;
 
