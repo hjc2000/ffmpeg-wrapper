@@ -13,7 +13,8 @@ namespace video
 	///		* 一个信号源，要能够采样，所以有一个 sample 纯虚函数。此外，信号源实现了 IFrameSource 接口，
 	///		  能够填充一个 AVFrame
 	/// </summary>
-	class ISignalSource : public IAudioFrameInfoCollection
+	class ISignalSource
+		: public IAudioFrameInfoCollection
 	{
 	public:
 		virtual ~ISignalSource() {}
