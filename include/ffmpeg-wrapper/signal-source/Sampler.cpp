@@ -1,6 +1,8 @@
 #include "Sampler.h"
 
-video::Sampler::Sampler(std::shared_ptr<base::ISignalSource<double, double>> signal_source)
+video::Sampler::Sampler(
+	std::shared_ptr<base::ISignalSource<double, double>> signal_source,
+	video::AudioFrameInfoCollection const &infos)
 {
 	_signal_source = signal_source;
 }

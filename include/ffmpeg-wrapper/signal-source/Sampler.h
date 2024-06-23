@@ -15,7 +15,10 @@ namespace video
 		std::shared_ptr<base::ISignalSource<double, double>> _signal_source;
 
 	public:
-		Sampler(std::shared_ptr<base::ISignalSource<double, double>> signal_source);
+		Sampler(
+			std::shared_ptr<base::ISignalSource<double, double>> signal_source,
+			video::AudioFrameInfoCollection const &infos);
+
 		int ReadFrame(AVFrameWrapper &frame) override;
 
 #pragma region IAudioFrameInfoCollection
