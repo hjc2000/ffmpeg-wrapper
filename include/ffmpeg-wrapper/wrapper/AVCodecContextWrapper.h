@@ -27,23 +27,7 @@ namespace video
 		  public IPacketConsumer
 	{
 	private:
-#pragma region AVCodec
-		/// <summary>
-		///		与本类绑定的 AVCodec
-		/// </summary>
 		AVCodec const *_codec = nullptr;
-
-		AVCodec const *Codec() const
-		{
-			return _codec;
-		}
-
-		void SetCodec(AVCodec const *codec)
-		{
-			_codec = codec;
-		}
-#pragma endregion
-
 		AVCodecContext *_wrapped_obj = nullptr;
 
 		AVCodecContextWrapper(AVCodec const *codec);

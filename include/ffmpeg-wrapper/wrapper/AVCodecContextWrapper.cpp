@@ -16,7 +16,7 @@ using namespace video;
 #pragma region 构造,析构
 AVCodecContextWrapper::AVCodecContextWrapper(AVCodec const *codec)
 {
-	SetCodec(codec);
+	_codec = codec;
 	_wrapped_obj = ::avcodec_alloc_context3(codec);
 	if (!_wrapped_obj)
 	{
