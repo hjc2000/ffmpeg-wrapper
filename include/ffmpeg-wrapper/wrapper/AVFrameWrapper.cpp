@@ -16,10 +16,10 @@ void AVFrameWrapper::GetBuffer(int align)
 	}
 }
 
-void AVFrameWrapper::Ref(AVFrameWrapper const &other)
+void AVFrameWrapper::Ref(AVFrameWrapper const &o)
 {
 	Unref();
-	int ret = av_frame_ref(_wrapped_obj, (AVFrameWrapper &)other);
+	int ret = av_frame_ref(_wrapped_obj, (AVFrameWrapper &)o);
 	if (ret < 0)
 	{
 		cerr << CODE_POS_STR << video::ToString((ErrorCode)ret) << endl;
@@ -36,6 +36,7 @@ AVFrameWrapper::AVFrameWrapper()
 	_wrapped_obj = av_frame_alloc();
 }
 
+#pragma region 生命周期
 AVFrameWrapper::AVFrameWrapper(IAudioStreamInfoCollection const &infos, int nb_samples)
 	: AVFrameWrapper()
 {
@@ -58,10 +59,10 @@ AVFrameWrapper::AVFrameWrapper(IVideoFrameInfoCollection const &infos)
 	GetBuffer(0);
 }
 
-AVFrameWrapper::AVFrameWrapper(AVFrameWrapper const &another)
+AVFrameWrapper::AVFrameWrapper(AVFrameWrapper const &o)
 	: AVFrameWrapper()
 {
-	Ref(another);
+	Ref(o);
 }
 
 AVFrameWrapper::~AVFrameWrapper()
@@ -74,6 +75,7 @@ AVFrameWrapper &AVFrameWrapper::operator=(AVFrameWrapper const &another)
 	Ref(another);
 	return *this;
 }
+#pragma endregion
 
 void AVFrameWrapper::ChangeTimeBase(AVRational new_time_base)
 {

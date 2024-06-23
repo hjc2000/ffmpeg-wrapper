@@ -34,8 +34,8 @@ namespace video
 		/// @brief 让本帧引用另一个帧的缓冲区并复制其它参数。
 		/// @note 在引用另一个帧之前会先调用 Unref 方法。
 		///
-		/// @param other
-		void Ref(AVFrameWrapper const &other);
+		/// @param o
+		void Ref(AVFrameWrapper const &o);
 
 		/// @brief 解除此帧对缓冲区的引用。重复调用不会出错
 		void Unref();
