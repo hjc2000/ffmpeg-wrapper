@@ -4,6 +4,7 @@
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/info-collection/IAudioFrameInfoCollection.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
+#include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include <memory>
 
 namespace video

@@ -9,7 +9,7 @@ void video::SwsPipe::ReadAndSendFrame()
 	case 0:
 		{
 			SendFrameToEachConsumer(&_sws_out_frame);
-			_sws_out_frame.unref();
+			_sws_out_frame.Unref();
 			break;
 		}
 	case (int)ErrorCode::output_is_temporarily_unavailable:

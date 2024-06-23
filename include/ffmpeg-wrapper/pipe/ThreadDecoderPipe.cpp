@@ -1,11 +1,13 @@
-#include"ThreadDecoderPipe.h"
-#include<DecoderPipe.h>
-#include<iostream>
+#include "ThreadDecoderPipe.h"
+#include <DecoderPipe.h>
+#include <iostream>
 
 using namespace std;
 using namespace video;
 
-video::ThreadDecoderPipe::ThreadDecoderPipe(std::shared_ptr<IDecoderPipeFactory> factory, AVStreamInfoCollection stream)
+video::ThreadDecoderPipe::ThreadDecoderPipe(
+	std::shared_ptr<IDecoderPipeFactory> factory,
+	AVStreamInfoCollection stream)
 {
 	_factory = factory;
 	_decoder_pipe = _factory->CreateDecoderPipe(stream);
@@ -14,7 +16,11 @@ video::ThreadDecoderPipe::ThreadDecoderPipe(std::shared_ptr<IDecoderPipeFactory>
 
 video::ThreadDecoderPipe::~ThreadDecoderPipe()
 {
-	if (_disposed) return;
+	if (_disposed)
+	{
+		return;
+	}
+
 	_disposed = true;
 
 	Dispose();
@@ -29,7 +35,7 @@ void video::ThreadDecoderPipe::Dispose()
 
 void video::ThreadDecoderPipe::InitDecodeThread()
 {
-	std::thread([this]()
+	auto thread_func = [this]()
 	{
 		try
 		{
@@ -37,11 +43,11 @@ void video::ThreadDecoderPipe::InitDecodeThread()
 		}
 		catch (...)
 		{
-
 		}
 
 		_decode_thread_exit.SetResult();
-	}).detach();
+	};
+	std::thread(thread_func).detach();
 	_decode_thread_exit.Reset();
 }
 
@@ -54,27 +60,27 @@ void video::ThreadDecoderPipe::DecodeThreadFunc()
 		switch (read_packet_result)
 		{
 		case 0:
-			{
-				_decoder_pipe->SendPacket(&packet);
-				break;
-			}
+		{
+			_decoder_pipe->SendPacket(&packet);
+			break;
+		}
 		case (int)ErrorCode::eof:
+		{
+			if (_do_not_flush_consumer)
 			{
-				if (_do_not_flush_consumer)
-				{
-					_decoder_pipe->FlushDecoderButNotFlushConsumers();
-				}
-				else
-				{
-					_decoder_pipe->SendPacket(nullptr);
-				}
+				_decoder_pipe->FlushDecoderButNotFlushConsumers();
+			}
+			else
+			{
+				_decoder_pipe->SendPacket(nullptr);
+			}
 
-				return;
-			}
+			return;
+		}
 		default:
-			{
-				throw std::runtime_error(ToString((ErrorCode)read_packet_result));
-			}
+		{
+			throw std::runtime_error(ToString((ErrorCode)read_packet_result));
+		}
 		}
 	}
 }

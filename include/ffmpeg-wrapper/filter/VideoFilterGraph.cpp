@@ -128,7 +128,7 @@ void VideoFilterGraph::config_graph()
 
 int VideoFilterGraph::ReadFrame(AVFrameWrapper &frame)
 {
-	frame.unref();
+	frame.Unref();
 	return av_buffersink_get_frame(_buffer_sink_filter, frame);
 }
 

@@ -1,12 +1,11 @@
 #pragma once
-#include<ffmpeg-wrapper/info-collection/IAudioFrameInfoCollection.h>
+#include <ffmpeg-wrapper/info-collection/IAudioFrameInfoCollection.h>
 
 namespace video
 {
-	/// <summary>
-	///		简单的储存音频信息的结构体
-	/// </summary>
-	class AudioFrameInfoCollection :public IAudioFrameInfoCollection
+	/// @brief 简单的储存音频信息的结构体
+	class AudioFrameInfoCollection
+		: public IAudioFrameInfoCollection
 	{
 	public:
 		AudioFrameInfoCollection() = default;
@@ -34,7 +33,7 @@ namespace video
 		AVChannelLayout _ch_layout{};
 		int _nb_samples = 0;
 
-		#pragma region IAudioFrameInfoCollection
+#pragma region IAudioFrameInfoCollection
 		AVRational TimeBase() const override
 		{
 			return _time_base;
@@ -79,7 +78,6 @@ namespace video
 		{
 			_nb_samples = value;
 		}
-		#pragma endregion
-
+#pragma endregion
 	};
 }

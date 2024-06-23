@@ -81,6 +81,6 @@ int video::SwsContextWrapper::ReadFrame(AVFrameWrapper &frame)
 		frame->linesize
 	);
 
-	_in_frame.unref();
+	_in_frame.Unref();
 	return 0;
 }

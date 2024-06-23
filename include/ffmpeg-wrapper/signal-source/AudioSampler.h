@@ -13,6 +13,7 @@ namespace video
 	{
 	private:
 		std::shared_ptr<base::ISignalSource<double, double>> _signal_source;
+		AudioFrameInfoCollection _audio_frame_infos;
 
 	public:
 		AudioSampler(
@@ -25,6 +26,10 @@ namespace video
 		AVRational TimeBase() const override;
 		void SetTimeBase(AVRational value) override;
 
+		/// @brief 采样格式无法自定义，因为采样值是 double，
+		/// 所以只能是 AVSampleFormat::AV_SAMPLE_FMT_DBL
+		///
+		/// @return
 		AVSampleFormat SampleFormat() const override;
 		void SetSampleFormat(AVSampleFormat value) override;
 

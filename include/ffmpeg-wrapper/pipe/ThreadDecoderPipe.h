@@ -1,11 +1,11 @@
 #pragma once
-#include<ffmpeg-wrapper/container/HysteresisBlockingPacketQueue.h>
-#include<ffmpeg-wrapper/factory/IDecoderPipeFactory.h>
-#include<ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
-#include<ffmpeg-wrapper/pipe/interface/IDecoderPipe.h>
-#include<jccpp/define.h>
-#include<jccpp/TaskCompletionSignal.h>
-#include<memory>
+#include <ffmpeg-wrapper/container/HysteresisBlockingPacketQueue.h>
+#include <ffmpeg-wrapper/factory/IDecoderPipeFactory.h>
+#include <ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
+#include <ffmpeg-wrapper/pipe/interface/IDecoderPipe.h>
+#include <jccpp/TaskCompletionSignal.h>
+#include <jccpp/define.h>
+#include <memory>
 
 namespace video
 {
@@ -13,13 +13,13 @@ namespace video
 	///		内部包装了一个线程的解码管道。
 	///		本类依赖 DecoderPipeFactory 来创建内部的解码管道。
 	/// </summary>
-	class ThreadDecoderPipe final :public IDecoderPipe
+	class ThreadDecoderPipe final : public IDecoderPipe
 	{
 	private:
 		std::shared_ptr<IDecoderPipeFactory> _factory;
 		std::shared_ptr<IDecoderPipe> _decoder_pipe;
-		HysteresisBlockingPacketQueue _packet_queue { };
-		TaskCompletionSignal _decode_thread_exit { true };
+		HysteresisBlockingPacketQueue _packet_queue{};
+		TaskCompletionSignal _decode_thread_exit{true};
 		std::atomic_bool _do_not_flush_consumer = false;
 		std::atomic_bool _disposed = false;
 
@@ -27,15 +27,17 @@ namespace video
 		void DecodeThreadFunc();
 
 	public:
-		#pragma region 生命周期
+#pragma region 生命周期
 		/// <summary>
 		///		将根据 stream 的信息构造一个解码管道。
 		/// </summary>
 		/// <param name="stream"></param>
-		ThreadDecoderPipe(std::shared_ptr<IDecoderPipeFactory> factory, AVStreamInfoCollection stream);
+		ThreadDecoderPipe(std::shared_ptr<IDecoderPipeFactory> factory,
+						  AVStreamInfoCollection stream);
+
 		~ThreadDecoderPipe();
 		void Dispose() override;
-		#pragma endregion
+#pragma endregion
 
 		/// <summary>
 		///		将包送入队列后就会立即返回，队列满了才会受到阻塞。
@@ -51,7 +53,7 @@ namespace video
 		/// </summary>
 		void FlushDecoderButNotFlushConsumers();
 
-		#pragma region 通过 IAudioStreamInfoCollection 继承
+#pragma region 通过 IAudioStreamInfoCollection 继承
 		AVRational TimeBase() const override;
 		void SetTimeBase(AVRational value) override;
 
@@ -63,9 +65,9 @@ namespace video
 
 		AVChannelLayout ChannelLayout() const override;
 		void SetChannelLayout(AVChannelLayout value) override;
-		#pragma endregion
+#pragma endregion
 
-		#pragma region 通过 IVideoStreamInfoCollection 继承
+#pragma region 通过 IVideoStreamInfoCollection 继承
 		int Width() const override;
 		void SetWidth(int value) override;
 
@@ -77,7 +79,7 @@ namespace video
 
 		AVRational FrameRate() const override;
 		void SetFrameRate(AVRational value) override;
-		#pragma endregion
+#pragma endregion
 
 		base::List<std::shared_ptr<IFrameConsumer>> &FrameConsumerList() override
 		{

@@ -1,29 +1,30 @@
 #pragma once
-#include<base/stream/Stream.h>
-#include<base/Wrapper.h>
-#include<chrono>
-#include<ffmpeg-wrapper/AVCalculate.h>
-#include<ffmpeg-wrapper/AVToString.h>
-#include<ffmpeg-wrapper/base_include.h>
-#include<ffmpeg-wrapper/ErrorCode.h>
-#include<ffmpeg-wrapper/info-collection/AudioFrameInfoCollection.h>
-#include<ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
-#include<ffmpeg-wrapper/info-collection/VideoFrameInfoCollection.h>
+#include <base/Wrapper.h>
+#include <base/stream/Stream.h>
+#include <chrono>
+#include <ffmpeg-wrapper/AVCalculate.h>
+#include <ffmpeg-wrapper/AVToString.h>
+#include <ffmpeg-wrapper/ErrorCode.h>
+#include <ffmpeg-wrapper/base_include.h>
+#include <ffmpeg-wrapper/info-collection/AudioFrameInfoCollection.h>
+#include <ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
+#include <ffmpeg-wrapper/info-collection/VideoFrameInfoCollection.h>
 
 namespace video
 {
 	class ImageBuffer;
 
-	class AVFrameWrapper :
-		public base::Wrapper<AVFrame>,
-		public IAudioFrameInfoCollection,
-		public IVideoFrameInfoCollection
+	class AVFrameWrapper
+		: public base::Wrapper<AVFrame>,
+		  public IAudioFrameInfoCollection,
+		  public IVideoFrameInfoCollection
 	{
+	private:
 		std::shared_ptr<ImageBuffer> _image_buf;
 		AVFrame *_wrapped_obj = nullptr;
 
 	public:
-		#pragma region 生命周期
+#pragma region 生命周期
 		AVFrameWrapper();
 
 		/// <summary>
@@ -50,9 +51,9 @@ namespace video
 		~AVFrameWrapper();
 
 		AVFrameWrapper &operator=(AVFrameWrapper const &another);
-		#pragma endregion
+#pragma endregion
 
-		#pragma region 相等运算符
+#pragma region 相等运算符
 		using IAudioFrameInfoCollection::operator==;
 		using IVideoFrameInfoCollection::operator==;
 		/// <summary>
@@ -64,7 +65,7 @@ namespace video
 		{
 			return this == &another;
 		}
-		#pragma endregion
+#pragma endregion
 
 		AVFrame *&WrappedObj() override
 		{
@@ -114,15 +115,15 @@ namespace video
 
 		/// <summary>
 		///		让本帧引用另一个帧的缓冲区并复制其它参数。
-		///		在引用另一个帧之前会先调用 unref 方法。
+		///		在引用另一个帧之前会先调用 Unref 方法。
 		/// </summary>
 		/// <param name="other"></param>
-		void ref(AVFrameWrapper const &other);
+		void Ref(AVFrameWrapper const &other);
 
 		/// <summary>
 		///		解除此帧对缓冲区的引用。重复调用不会出错
 		/// </summary>
-		void unref();
+		void Unref();
 
 		int64_t pts()
 		{
@@ -175,7 +176,7 @@ namespace video
 
 		std::string ToString();
 
-		#pragma region IAudioFrameInfoCollection
+#pragma region IAudioFrameInfoCollection
 		AVSampleFormat SampleFormat() const override;
 		void SetSampleFormat(AVSampleFormat value) override;
 
@@ -195,9 +196,9 @@ namespace video
 		/// <returns></returns>
 		AVRational TimeBase() const override;
 		void SetTimeBase(AVRational value) override;
-		#pragma endregion
+#pragma endregion
 
-		#pragma region IVideoFrameInfoCollection
+#pragma region IVideoFrameInfoCollection
 		int Width() const override;
 		void SetWidth(int value) override;
 
@@ -206,6 +207,6 @@ namespace video
 
 		AVPixelFormat PixelFormat() const override;
 		void SetPixelFormat(AVPixelFormat value) override;
-		#pragma endregion
+#pragma endregion
 	};
 }
