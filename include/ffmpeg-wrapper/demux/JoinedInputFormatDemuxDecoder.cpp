@@ -108,9 +108,9 @@ void video::JoinedInputFormatDemuxDecoder::InitializeAudioDecoderPipe()
 void video::JoinedInputFormatDemuxDecoder::OpenInputIfNull()
 {
 	if (_context->_current_input_format == nullptr &&
-		_get_format_callback != nullptr)
+		_get_format_callback_wrapper.Handle() != nullptr)
 	{
-		_context->_current_input_format = _get_format_callback();
+		_context->_current_input_format = _get_format_callback_wrapper.Handle()();
 	}
 
 	if (_context->_current_input_format == nullptr)

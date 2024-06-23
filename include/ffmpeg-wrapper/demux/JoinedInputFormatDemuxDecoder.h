@@ -1,4 +1,5 @@
 #pragma once
+#include <base/MutexHandleWrapper.h>
 #include <ffmpeg-wrapper/pipe/interface/IPump.h>
 #include <functional>
 #include <memory>
@@ -20,7 +21,7 @@ namespace video
 
 		/// @brief 当需要输入格式时就会触发此回调。
 		/// @return 回调函数返回 InputFormat 对象则视频流继续。回调函数返回空指针则结束视频流。
-		std::function<std::shared_ptr<InputFormat>()> _get_format_callback;
+		base::MutexHandleWrapper<std::function<std::shared_ptr<InputFormat>()>> _get_format_callback_wrapper;
 
 		void InitializeVideoDecoderPipe();
 		void InitializeAudioDecoderPipe();
@@ -40,7 +41,7 @@ namespace video
 		/// @note 回调函数返回 InputFormat 对象则视频流继续。回调函数返回空指针则结束视频流。
 		void SetImmediateInputFormatSource(std::function<std::shared_ptr<InputFormat>()> func)
 		{
-			_get_format_callback = func;
+			_get_format_callback_wrapper.SetHandle(func);
 		}
 
 		void AddVideoFrameConsumer(std::shared_ptr<IFrameConsumer> consumer);
