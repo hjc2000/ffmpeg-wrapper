@@ -44,7 +44,8 @@ void ReencodeDotNetVideoStream(DotNetStream *dotnet_video_stream)
 		spts_encode_mux->AudioEncodePipe());
 
 	int loop_times = 0;
-	joined_input_format_demux_decoder->_get_format_callback = [&]() -> shared_ptr<InputFormat>
+
+	auto get_input_format_func = [&]() -> shared_ptr<InputFormat>
 	{
 		if (loop_times > 2)
 		{
@@ -56,6 +57,7 @@ void ReencodeDotNetVideoStream(DotNetStream *dotnet_video_stream)
 		loop_times++;
 		return in_fmt_ctx;
 	};
+	joined_input_format_demux_decoder->SetImmediateInputFormatSource(get_input_format_func);
 
 	// 解码管道
 	base::CancellationTokenSource cancel_pump_source;

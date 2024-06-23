@@ -123,8 +123,11 @@ void test_SptsEncodeMux()
 	file_queue.Enqueue("越权访问.mkv");
 	file_queue.Enqueue("moon.mp4");
 	file_queue.Enqueue("fallen-down.ts");
-	shared_ptr<JoinedInputFormatDemuxDecoder> joined_input_format_demux_decoder{new JoinedInputFormatDemuxDecoder{}};
-	joined_input_format_demux_decoder->_get_format_callback = [&]() -> shared_ptr<InputFormat>
+	shared_ptr<JoinedInputFormatDemuxDecoder> joined_input_format_demux_decoder{
+		new JoinedInputFormatDemuxDecoder{},
+	};
+
+	auto get_input_format_func = [&]() -> shared_ptr<InputFormat>
 	{
 		try
 		{
@@ -147,6 +150,7 @@ void test_SptsEncodeMux()
 
 		return nullptr;
 	};
+	joined_input_format_demux_decoder->SetImmediateInputFormatSource(get_input_format_func);
 
 	// 想要输出的视频信息
 	VideoStreamInfoCollection output_video_stream_infos;
@@ -157,28 +161,36 @@ void test_SptsEncodeMux()
 
 	// 想要输出的音频信息
 	AudioStreamInfoCollection output_audio_stream_infos;
-	output_audio_stream_infos._ch_layout = AVChannelLayoutExtension::GetDefaultChannelLayout(2);
+	output_audio_stream_infos._ch_layout =
+		AVChannelLayoutExtension::GetDefaultChannelLayout(2);
 	output_audio_stream_infos._sample_format = AVSampleFormat::AV_SAMPLE_FMT_FLTP;
 	output_audio_stream_infos._sample_rate = 48000;
 
 	shared_ptr<base::Stream> out_fs = jccpp::FileStream::CreateNewAnyway("mux_out.ts");
 	shared_ptr<StreamOutputFormat> out_fmt_ctx{new StreamOutputFormat{".ts", out_fs}};
-	shared_ptr<SptsEncodeMux> spts_encode_mux{new SptsEncodeMux{
-		video::EncoderPipeFactory::Instance(),
-		out_fmt_ctx,
-		output_video_stream_infos,
-		"hevc_amf",
-		-1,
-		output_audio_stream_infos,
-		"eac3"}};
+	shared_ptr<SptsEncodeMux> spts_encode_mux{
+		new SptsEncodeMux{
+			video::EncoderPipeFactory::Instance(),
+			out_fmt_ctx,
+			output_video_stream_infos,
+			"hevc_amf",
+			-1,
+			output_audio_stream_infos,
+			"eac3",
+		},
+	};
 
-	joined_input_format_demux_decoder->AddVideoFrameConsumer(spts_encode_mux->VideoEncodePipe());
-	joined_input_format_demux_decoder->AddAudioFrameConsumer(spts_encode_mux->AudioEncodePipe());
+	joined_input_format_demux_decoder->AddVideoFrameConsumer(
+		spts_encode_mux->VideoEncodePipe());
+
+	joined_input_format_demux_decoder->AddAudioFrameConsumer(
+		spts_encode_mux->AudioEncodePipe());
 
 	base::CancellationTokenSource cancel_pump_source;
 	TaskCompletionSignal pump_thread_exit{false};
-	std::thread([&]()
-				{
+
+	auto pump_thread_func = [&]()
+	{
 		try
 		{
 			joined_input_format_demux_decoder->Pump(cancel_pump_source.Token());
@@ -193,8 +205,9 @@ void test_SptsEncodeMux()
 		}
 
 		cout << "线程退出" << endl;
-		pump_thread_exit.SetResult(); })
-		.detach();
+		pump_thread_exit.SetResult();
+	};
+	std::thread(pump_thread_func).detach();
 
 	cin.get();
 	cancel_pump_source.Cancel();
