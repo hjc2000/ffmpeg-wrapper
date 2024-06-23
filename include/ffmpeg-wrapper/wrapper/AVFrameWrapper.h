@@ -42,30 +42,32 @@ namespace video
 
 	public:
 #pragma region 生命周期
+		/// @brief 默认构造。此时构造出来的帧不含缓冲区。
 		AVFrameWrapper();
 
-		/// <summary>
-		///		构造音频帧。会分配缓冲区。
-		/// </summary>
-		/// <param name="infos"></param>
-		/// <param name="nb_samples"></param>
+		/// @brief 构造音频帧。会分配缓冲区。
+		/// @param infos
+		/// @param nb_samples
 		AVFrameWrapper(IAudioStreamInfoCollection const &infos, int nb_samples);
 
-		/// <summary>
-		///		构造音频帧。会分配缓冲区。
-		/// </summary>
-		/// <param name="infos"></param>
+		/// @brief 构造音频帧。会分配缓冲区。
+		/// @param infos
 		AVFrameWrapper(IAudioFrameInfoCollection const &infos);
 
 		/// @brief 根据 infos 中的信息构造视频帧。会分配缓冲区。
 		/// @param infos
 		AVFrameWrapper(IVideoFrameInfoCollection const &infos);
 
-		AVFrameWrapper(AVFrameWrapper const &another);
+		/// @brief 拷贝构造。
+		/// @note 会复制对方的信息到自己这边。
+		/// @note 会先解除自己对自己的缓冲区的引用，然后引用对方的缓冲。
+		///
+		/// @param o
+		AVFrameWrapper(AVFrameWrapper const &o);
 
 		~AVFrameWrapper();
 
-		AVFrameWrapper &operator=(AVFrameWrapper const &another);
+		AVFrameWrapper &operator=(AVFrameWrapper const &o);
 #pragma endregion
 
 #pragma region 相等运算符
@@ -73,11 +75,11 @@ namespace video
 		using IVideoFrameInfoCollection::operator==;
 
 		/// @brief 只有本对象的指针和另一个对象的指针相等时才认为相等。
-		/// @param another
+		/// @param o
 		/// @return
-		bool operator==(AVFrameWrapper const &another) const
+		bool operator==(AVFrameWrapper const &o) const
 		{
-			return this == &another;
+			return this == &o;
 		}
 #pragma endregion
 
