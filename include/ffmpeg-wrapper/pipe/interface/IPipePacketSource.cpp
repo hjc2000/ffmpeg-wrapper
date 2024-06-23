@@ -1,5 +1,5 @@
-#include"IPipePacketSource.h"
-#include<memory>
+#include "IPipePacketSource.h"
+#include <memory>
 
 using namespace video;
 

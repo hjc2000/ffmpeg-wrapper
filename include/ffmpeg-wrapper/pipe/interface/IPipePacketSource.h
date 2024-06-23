@@ -1,7 +1,7 @@
 #pragma once
-#include<base/container/List.h>
-#include<ffmpeg-wrapper/pipe/interface/IPacketConsumer.h>
-#include<memory>
+#include <base/container/List.h>
+#include <ffmpeg-wrapper/pipe/interface/IPacketConsumer.h>
+#include <memory>
 
 namespace video
 {
@@ -12,10 +12,8 @@ namespace video
 
 		virtual base::List<std::shared_ptr<IPacketConsumer>> &PacketConsumerList() = 0;
 
-		/// <summary>
-		///		向每个消费者送入包
-		/// </summary>
-		/// <param name="packet"></param>
+		/// @brief 向每个消费者送入包
+		/// @param packet
 		void SendPacketToEachConsumer(AVPacketWrapper *packet);
 	};
 }

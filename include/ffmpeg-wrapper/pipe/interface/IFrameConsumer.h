@@ -1,12 +1,12 @@
 #pragma once
-#include<ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
+#include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 
 namespace video
 {
 	class IFrameConsumer
 	{
 	public:
-		virtual ~IFrameConsumer() {}
+		virtual ~IFrameConsumer() = default;
 
 		/// <summary>
 		///		送入帧

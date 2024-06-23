@@ -1,5 +1,5 @@
-#include"ffmpeg-wrapper/pipe/interface/IPipeFrameSource.h"
-#include<memory>
+#include "ffmpeg-wrapper/pipe/interface/IPipeFrameSource.h"
+#include <memory>
 
 using namespace video;
 
