@@ -1,11 +1,15 @@
-#include"HysteresisBlockingPacketQueue.h"
+#include "HysteresisBlockingPacketQueue.h"
 
 using namespace video;
 using namespace jc;
 
 void HysteresisBlockingPacketQueue::Dispose()
 {
-	if (_disposed) return;
+	if (_disposed)
+	{
+		return;
+	}
+
 	_disposed = true;
 
 	_packet_queue.Dispose();

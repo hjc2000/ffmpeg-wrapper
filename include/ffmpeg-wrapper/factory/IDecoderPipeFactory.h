@@ -1,7 +1,7 @@
 #pragma once
-#include<ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
-#include<ffmpeg-wrapper/pipe/interface/IDecoderPipe.h>
-#include<memory>
+#include <ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
+#include <ffmpeg-wrapper/pipe/interface/IDecoderPipe.h>
+#include <memory>
 
 namespace video
 {
@@ -14,6 +14,7 @@ namespace video
 	public:
 		virtual ~IDecoderPipeFactory() = default;
 
-		virtual std::shared_ptr<IDecoderPipe> CreateDecoderPipe(AVStreamInfoCollection const &infos) = 0;
+		virtual std::shared_ptr<IDecoderPipe> CreateDecoderPipe(
+			AVStreamInfoCollection const &infos) = 0;
 	};
 }

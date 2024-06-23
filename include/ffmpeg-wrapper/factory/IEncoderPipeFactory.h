@@ -1,9 +1,9 @@
 #pragma once
-#include<ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
-#include<ffmpeg-wrapper/info-collection/IVideoStreamInfoCollection.h>
-#include<ffmpeg-wrapper/output-format/OutputFormat.h>
-#include<ffmpeg-wrapper/pipe/interface/IFrameConsumer.h>
-#include<memory>
+#include <ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
+#include <ffmpeg-wrapper/info-collection/IVideoStreamInfoCollection.h>
+#include <ffmpeg-wrapper/output-format/OutputFormat.h>
+#include <ffmpeg-wrapper/pipe/interface/IFrameConsumer.h>
+#include <memory>
 
 namespace video
 {
@@ -24,8 +24,7 @@ namespace video
 			std::string codec_name,
 			IVideoStreamInfoCollection const &in_stream_infos,
 			std::shared_ptr<OutputFormat> output_format,
-			int64_t out_bit_rate_in_bps = -1
-		) = 0;
+			int64_t out_bit_rate_in_bps = -1) = 0;
 
 		/// <summary>
 		///		构造音频编码管道
@@ -37,7 +36,6 @@ namespace video
 		virtual std::shared_ptr<IFrameConsumer> CreateEncoderPipe(
 			std::string codec_name,
 			IAudioStreamInfoCollection const &in_stream_infos,
-			std::shared_ptr<OutputFormat> output_format
-		) = 0;
+			std::shared_ptr<OutputFormat> output_format) = 0;
 	};
 }

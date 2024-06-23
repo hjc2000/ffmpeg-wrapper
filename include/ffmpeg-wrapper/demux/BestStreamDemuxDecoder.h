@@ -1,13 +1,13 @@
 #pragma once
-#include<ffmpeg-wrapper/input-format/InputFormat.h>
-#include<ffmpeg-wrapper/pipe/interface/IFrameConsumer.h>
-#include<ffmpeg-wrapper/pipe/interface/IPump.h>
-#include<ffmpeg-wrapper/pipe/ThreadDecoderPipe.h>
-#include<memory>
+#include <ffmpeg-wrapper/input-format/InputFormat.h>
+#include <ffmpeg-wrapper/pipe/ThreadDecoderPipe.h>
+#include <ffmpeg-wrapper/pipe/interface/IFrameConsumer.h>
+#include <ffmpeg-wrapper/pipe/interface/IPump.h>
+#include <memory>
 
 namespace video
 {
-	class BestStreamDemuxDecoder :public IPump
+	class BestStreamDemuxDecoder : public IPump
 	{
 	private:
 		std::shared_ptr<InputFormat> _input_format;

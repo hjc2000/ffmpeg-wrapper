@@ -71,6 +71,7 @@ void video::JoinedInputFormatDemuxDecoder::InitializeAudioDecoderPipe()
 	// 如果有音频流，初始化音频解码管道
 	AVStreamWrapper stream = _context->_current_input_format->FindBestStream(
 		AVMediaType::AVMEDIA_TYPE_AUDIO);
+
 	if (!stream.IsNull())
 	{
 		_context->_audio_stream_infos = stream;
@@ -85,11 +86,15 @@ void video::JoinedInputFormatDemuxDecoder::InitializeAudioDecoderPipe()
 		_context->_audio_stream_infos.SetTimeBase(AVRational{1, 90000});
 
 		_context->_audio_decode_pipe = shared_ptr<ThreadDecoderPipe>{
-			new ThreadDecoderPipe{video::DecoderPipeFactory::Instance(),
-								  _context->_audio_stream_infos}};
+			new ThreadDecoderPipe{
+				video::DecoderPipeFactory::Instance(),
+				_context->_audio_stream_infos,
+			},
+		};
 
 		_context->_audio_decode_pipe->FrameConsumerList().Add(
 			_context->_audio_frame_consumer_list);
+
 		_context->_infinite_packet_pipe->PacketConsumerList().Add(
 			_context->_audio_decode_pipe);
 	}
@@ -156,8 +161,7 @@ void video::JoinedInputFormatDemuxDecoder::Pump(
 				// 视频流的索引更改为 0.
 				packet->SetStreamIndex(0);
 			}
-			else if (packet->StreamIndex() ==
-					 _context->_source_audio_stream_index)
+			else if (packet->StreamIndex() == _context->_source_audio_stream_index)
 			{
 				// 音频流的索引更改为 1.
 				packet->SetStreamIndex(1);
