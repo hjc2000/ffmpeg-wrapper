@@ -7,7 +7,7 @@
 using namespace video;
 using namespace std;
 
-#pragma region 缓冲区管理, 引用
+#pragma region 私有生命周期函数
 void AVFrameWrapper::GetBuffer(int align)
 {
 	Unref();
@@ -34,12 +34,12 @@ void AVFrameWrapper::Unref()
 }
 #pragma endregion
 
+#pragma region 生命周期
 AVFrameWrapper::AVFrameWrapper()
 {
 	_wrapped_obj = av_frame_alloc();
 }
 
-#pragma region 生命周期
 AVFrameWrapper::AVFrameWrapper(IAudioStreamInfoCollection const &infos, int nb_samples)
 	: AVFrameWrapper()
 {

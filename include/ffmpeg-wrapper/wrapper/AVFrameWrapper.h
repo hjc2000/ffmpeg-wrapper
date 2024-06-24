@@ -23,7 +23,7 @@ namespace video
 		std::shared_ptr<ImageBuffer> _image_buf;
 		AVFrame *_wrapped_obj = nullptr;
 
-#pragma region 缓冲区管理, 引用
+#pragma region 私有生命周期函数
 		/// @brief 为此帧分配新的缓冲区。调用这个函数必须保证一些参数已经手动设置。
 		/// @note 对于视频帧，需要设置：像素格式、宽、高
 		/// @note 对于音频帧，需要设置：采样格式、采样点数量、声道布局
