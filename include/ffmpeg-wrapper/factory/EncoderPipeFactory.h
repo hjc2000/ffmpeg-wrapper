@@ -4,37 +4,41 @@
 
 namespace video
 {
-	/// <summary>
-	///		编码管道工厂。
-	///		编码管道应该自己连接着输出格式，在构造函数中就要求传入输出格式，初始化后应该
-	///		自动在输出格式中创建新的流，输入帧，编码后自动将包写入输出格式。
-	/// </summary>
-	class EncoderPipeFactory : public video::IEncoderPipeFactory
+	/// @brief 基于 ffmpeg 的编码管道工厂。
+	/// @note 这里创建出来的编码管道的编码器是 ffmpeg 的编码器的包装。
+	/// @note 如果移植到特殊平台，需要硬件编码加速，可以自己实现一个编码器工厂，
+	/// 继承 video::IEncoderPipeFactory 接口，在这里提供硬件加速的编码器。
+	class EncoderPipeFactory
+		: public video::IEncoderPipeFactory
 	{
+	private:
+		EncoderPipeFactory() = default;
+
 	public:
+		/// @brief 返回单例
+		/// @note 这里返回共享指针而不是引用，是因为工厂实例是作为依赖注入到需要它的类中，
+		/// 并且在那个类的生命周期内都要存在。
+		///
+		/// @return
 		static std::shared_ptr<EncoderPipeFactory> Instance();
 
-		/// <summary>
-		///		构造视频编码管道
-		/// </summary>
-		/// <param name="codec_name"></param>
-		/// <param name="in_stream_infos"></param>
-		/// <param name="output_format"></param>
-		/// <param name="out_bit_rate_in_bps"></param>
-		/// <returns></returns>
+		/// @brief 构造视频编码管道
+		/// @param codec_name
+		/// @param in_stream_infos
+		/// @param output_format
+		/// @param out_bit_rate_in_bps
+		/// @return
 		std::shared_ptr<IFrameConsumer> CreateEncoderPipe(
 			std::string codec_name,
 			IVideoStreamInfoCollection const &in_stream_infos,
 			std::shared_ptr<OutputFormat> output_format,
 			int64_t out_bit_rate_in_bps = -1) override;
 
-		/// <summary>
-		///		构造音频编码管道
-		/// </summary>
-		/// <param name="codec_name"></param>
-		/// <param name="in_stream_infos"></param>
-		/// <param name="output_format"></param>
-		/// <returns></returns>
+		/// @brief 构造音频编码管道
+		/// @param codec_name
+		/// @param in_stream_infos
+		/// @param output_format
+		/// @return
 		std::shared_ptr<IFrameConsumer> CreateEncoderPipe(
 			std::string codec_name,
 			IAudioStreamInfoCollection const &in_stream_infos,
