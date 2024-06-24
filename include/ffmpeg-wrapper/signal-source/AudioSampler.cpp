@@ -14,6 +14,7 @@ void video::AudioSampler::Open()
 	{
 		return;
 	}
+
 	_opened = true;
 
 	_time_base = base::Fraction{TimeBase().num, TimeBase().den};
