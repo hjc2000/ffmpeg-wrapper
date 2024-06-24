@@ -1,5 +1,5 @@
-#include"EncoderPipe.h"
-#include<ffmpeg-wrapper/ErrorCode.h>
+#include "EncoderPipe.h"
+#include <ffmpeg-wrapper/ErrorCode.h>
 
 using namespace video;
 
@@ -12,26 +12,26 @@ void EncoderPipe::ReadAndSendPacketToOutputFormat()
 		switch (ret)
 		{
 		case 0:
-			{
-				packet.SetStreamIndex(_new_stream.Index());
-				_output_format->SendPacket(&packet);
+		{
+			packet.SetStreamIndex(_new_stream.Index());
+			_output_format->SendPacket(&packet);
 
-				// 下一轮循环继续读取包
-				break;
-			}
+			// 下一轮循环继续读取包
+			break;
+		}
 		case (int)ErrorCode::output_is_temporarily_unavailable:
-			{
-				return;
-			}
+		{
+			return;
+		}
 		case (int)ErrorCode::eof:
-			{
-				_output_format->SendPacket(nullptr);
-				return;
-			}
+		{
+			_output_format->SendPacket(nullptr);
+			return;
+		}
 		default:
-			{
-				throw std::runtime_error{ CODE_POS_STR + std::string{"ReadPacket 返回了未知的错误代码"} };
-			}
+		{
+			throw std::runtime_error{CODE_POS_STR + std::string{"ReadPacket 返回了未知的错误代码"}};
+		}
 		}
 	}
 }
@@ -40,16 +40,14 @@ EncoderPipe::EncoderPipe(
 	std::string codec_name,
 	IVideoStreamInfoCollection const &in_stream_infos,
 	std::shared_ptr<OutputFormat> output_format,
-	int64_t out_bit_rate_in_bps
-)
+	int64_t out_bit_rate_in_bps)
 {
 	_output_format = output_format;
 	_encoder_ctx = AVCodecContextWrapper::CreateEncoder(
 		codec_name.c_str(),
 		in_stream_infos,
 		_output_format->NeedGlobalHeader(),
-		false
-	);
+		false);
 
 	if (out_bit_rate_in_bps > 0)
 	{
@@ -73,15 +71,13 @@ EncoderPipe::EncoderPipe(
 EncoderPipe::EncoderPipe(
 	std::string codec_name,
 	IAudioStreamInfoCollection const &in_stream_infos,
-	std::shared_ptr<OutputFormat> output_format
-)
+	std::shared_ptr<OutputFormat> output_format)
 {
 	_output_format = output_format;
 	_encoder_ctx = AVCodecContextWrapper::CreateEncoder(
 		codec_name.c_str(),
 		in_stream_infos,
-		_output_format->NeedGlobalHeader()
-	);
+		_output_format->NeedGlobalHeader());
 
 	_new_stream = _output_format->CreateNewStream(_encoder_ctx);
 }
