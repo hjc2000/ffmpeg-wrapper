@@ -135,3 +135,7 @@ void video::AudioSampler::SetSampleCount(int value)
 	_audio_frame_infos.SetSampleCount(value);
 }
 #pragma endregion
+
+void video::TestAudioSampler()
+{
+}

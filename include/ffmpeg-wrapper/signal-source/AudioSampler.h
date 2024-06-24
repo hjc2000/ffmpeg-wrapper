@@ -50,4 +50,6 @@ namespace video
 		void SetSampleCount(int value) override;
 #pragma endregion
 	};
+
+	void TestAudioSampler();
 }

@@ -1,15 +1,15 @@
 #pragma once
-#include<base/container/List.h>
-#include<base/Wrapper.h>
-#include<ffmpeg-wrapper/base_include.h>
-#include<ffmpeg-wrapper/pipe/interface/IPacketConsumer.h>
-#include<ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
-#include<ffmpeg-wrapper/wrapper/AVProgramWrapper.h>
-#include<ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
-#include<functional>
-#include<memory>
-#include<mutex>
-#include<thread>
+#include <base/Wrapper.h>
+#include <base/container/List.h>
+#include <ffmpeg-wrapper/base_include.h>
+#include <ffmpeg-wrapper/pipe/interface/IPacketConsumer.h>
+#include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
+#include <ffmpeg-wrapper/wrapper/AVProgramWrapper.h>
+#include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
+#include <functional>
+#include <memory>
+#include <mutex>
+#include <thread>
 
 namespace video
 {
@@ -17,10 +17,11 @@ namespace video
 	///		输出格式的基类。
 	///		本类的 _wrapped_obj 没有初始化，需要派生类继承后进行初始化。
 	/// </summary>
-	class OutputFormat :
-		public base::Wrapper<AVFormatContext>,
-		public IPacketConsumer
+	class OutputFormat
+		: public base::Wrapper<AVFormatContext>,
+		  public IPacketConsumer
 	{
+	private:
 		std::mutex _not_private_methods_lock;
 		uint32_t _flush_times = 0;
 
@@ -29,18 +30,14 @@ namespace video
 	public:
 		virtual ~OutputFormat() = default;
 
-		/// <summary>
-		///		封装的数据结束后会触发此回调。此回调会启动后台线程来执行，避免用户
-		///		在回调中调用本对象的加了互斥锁的方法，造成死锁。
-		/// </summary>
+		/// @brief 封装的数据结束后会触发此回调。此回调会启动后台线程来执行，避免用户
+		/// 在回调中调用本对象的加了互斥锁的方法，造成死锁。
 		std::function<void()> _on_all_stream_flushed_async;
 
 		void DumpFormat(char const *url = "");
 
-		/// <summary>
-		///		检查此输出格式是否需要设置全局头部。
-		/// </summary>
-		/// <returns></returns>
+		/// @brief 检查此输出格式是否需要设置全局头部。
+		/// @return
 		bool NeedGlobalHeader();
 
 		/// <summary>
