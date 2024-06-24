@@ -176,46 +176,6 @@ std::string AVFrameWrapper::ToString()
 		!_wrapped_obj->width ? ::ToString(SampleFormat()) : "");
 }
 
-AVSampleFormat video::AVFrameWrapper::SampleFormat() const
-{
-	return (AVSampleFormat)_wrapped_obj->format;
-}
-
-void video::AVFrameWrapper::SetSampleFormat(AVSampleFormat value)
-{
-	_wrapped_obj->format = value;
-}
-
-int video::AVFrameWrapper::SampleCount() const
-{
-	return _wrapped_obj->nb_samples;
-}
-
-void video::AVFrameWrapper::SetSampleCount(int value)
-{
-	_wrapped_obj->nb_samples = value;
-}
-
-AVChannelLayout video::AVFrameWrapper::ChannelLayout() const
-{
-	return _wrapped_obj->ch_layout;
-}
-
-void video::AVFrameWrapper::SetChannelLayout(AVChannelLayout value)
-{
-	_wrapped_obj->ch_layout = value;
-}
-
-int video::AVFrameWrapper::SampleRate() const
-{
-	return _wrapped_obj->sample_rate;
-}
-
-void video::AVFrameWrapper::SetSampleRate(int value)
-{
-	_wrapped_obj->sample_rate = value;
-}
-
 void video::AVFrameWrapper::CopyVideoFrameToStream(base::Stream &stream)
 {
 	if (!_image_buf)
@@ -249,11 +209,58 @@ void video::AVFrameWrapper::CopyAudioFrameToStream(base::Stream &stream)
 	stream.Write(_wrapped_obj->extended_data[0], 0, buf_size);
 }
 
+#pragma region IAudioFrameInfoCollection
+AVSampleFormat video::AVFrameWrapper::SampleFormat() const
+{
+	return (AVSampleFormat)_wrapped_obj->format;
+}
+void video::AVFrameWrapper::SetSampleFormat(AVSampleFormat value)
+{
+	_wrapped_obj->format = value;
+}
+
+int video::AVFrameWrapper::SampleCount() const
+{
+	return _wrapped_obj->nb_samples;
+}
+void video::AVFrameWrapper::SetSampleCount(int value)
+{
+	_wrapped_obj->nb_samples = value;
+}
+
+AVChannelLayout video::AVFrameWrapper::ChannelLayout() const
+{
+	return _wrapped_obj->ch_layout;
+}
+void video::AVFrameWrapper::SetChannelLayout(AVChannelLayout value)
+{
+	_wrapped_obj->ch_layout = value;
+}
+
+int video::AVFrameWrapper::SampleRate() const
+{
+	return _wrapped_obj->sample_rate;
+}
+void video::AVFrameWrapper::SetSampleRate(int value)
+{
+	_wrapped_obj->sample_rate = value;
+}
+
+AVRational video::AVFrameWrapper::TimeBase() const
+{
+	return _wrapped_obj->time_base;
+}
+void video::AVFrameWrapper::SetTimeBase(AVRational value)
+{
+	_wrapped_obj->time_base = value;
+}
+#pragma endregion
+
+#pragma region IVideoFrameInfoCollection
 int video::AVFrameWrapper::Width() const
 {
 	return _wrapped_obj->width;
 }
-
 void video::AVFrameWrapper::SetWidth(int value)
 {
 	_wrapped_obj->width = value;
@@ -263,7 +270,6 @@ int video::AVFrameWrapper::Height() const
 {
 	return _wrapped_obj->height;
 }
-
 void video::AVFrameWrapper::SetHeight(int value)
 {
 	_wrapped_obj->height = value;
@@ -273,18 +279,8 @@ AVPixelFormat video::AVFrameWrapper::PixelFormat() const
 {
 	return AVPixelFormat(_wrapped_obj->format);
 }
-
 void video::AVFrameWrapper::SetPixelFormat(AVPixelFormat value)
 {
 	_wrapped_obj->format = value;
 }
-
-AVRational video::AVFrameWrapper::TimeBase() const
-{
-	return _wrapped_obj->time_base;
-}
-
-void video::AVFrameWrapper::SetTimeBase(AVRational value)
-{
-	_wrapped_obj->time_base = value;
-}
+#pragma endregion

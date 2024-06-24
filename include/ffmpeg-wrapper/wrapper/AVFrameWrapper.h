@@ -172,10 +172,6 @@ namespace video
 		int SampleRate() const override;
 		void SetSampleRate(int value) override;
 
-		/// @brief AVFrameWrapper 的时间基属性不一定是有效的。例如从重采样器或解码器
-		/// 中输出的 AVFrameWrapper 的时间基属性就是无效值。
-		///
-		/// @return
 		AVRational TimeBase() const override;
 		void SetTimeBase(AVRational value) override;
 #pragma endregion
