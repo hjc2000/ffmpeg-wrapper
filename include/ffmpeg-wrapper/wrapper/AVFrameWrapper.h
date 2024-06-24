@@ -95,6 +95,10 @@ namespace video
 			return _wrapped_obj;
 		}
 
+		/// @brief 更换时间基。
+		/// @note 会重新计算 Pts, Duration
+		///
+		/// @param new_time_base
 		void ChangeTimeBase(AVRational new_time_base);
 
 		/// @brief 获取音频数据的大小。
