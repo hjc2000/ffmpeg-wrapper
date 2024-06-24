@@ -47,7 +47,9 @@ namespace video
 			IAudioStreamInfoCollection const &in_stream_infos,
 			std::shared_ptr<OutputFormat> output_format);
 
-		/// @brief 送入帧进行编码，然后将包送给消费者。
+		/// @brief 送入帧进行编码。
+		/// @note 编码后的包会被写入构造函数中传进来的输出格式中。
+		///
 		/// @param frame
 		void SendFrame(AVFrameWrapper *frame) override;
 	};
