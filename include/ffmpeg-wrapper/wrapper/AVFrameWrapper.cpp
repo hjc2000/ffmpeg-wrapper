@@ -9,6 +9,7 @@ using namespace std;
 
 void AVFrameWrapper::GetBuffer(int align)
 {
+	Unref();
 	int ret = ::av_frame_get_buffer(_wrapped_obj, align);
 	if (ret < 0)
 	{
