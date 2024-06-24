@@ -98,16 +98,20 @@ void AVFrameWrapper::ChangeTimeBase(AVRational new_time_base)
 
 int video::AVFrameWrapper::audio_data_size()
 {
-	/*  平面类型的声道布局，每一个声道的缓冲区后面都会有间隙。包类型的声道布局，多个声道的采样值
+	/* 平面类型的声道布局，每一个声道的缓冲区后面都会有间隙。包类型的声道布局，多个声道的采样值
 	 * 交错存放，呈 LRLRLR......
-	 *   包类型的声道布局的缓冲区中，只有在最末尾有因为对齐产生的间隙；平面类型的声道布局的缓冲区中，
+	 *
+	 * 包类型的声道布局的缓冲区中，只有在最末尾有因为对齐产生的间隙；平面类型的声道布局的缓冲区中，
 	 * 每一个声道的缓冲区后面都有因为对齐产生的间隙。
-	 *   PCM 文件需要包类型的声道布局。平面类型的声道布局仅限于 ffmpeg 内部各个函数进行数据交换
+	 *
+	 * PCM 文件需要包类型的声道布局。平面类型的声道布局仅限于 ffmpeg 内部各个函数进行数据交换
 	 * 使用，不能写到文件中。
-	 *   此外，要将缓冲区写入 PCM 文件时，后面的间隙不能写入文件。PCM 文件中的每一个数据都是实际的
+	 *
+	 * 此外，要将缓冲区写入 PCM 文件时，后面的间隙不能写入文件。PCM 文件中的每一个数据都是实际的
 	 * 采样值，不能是间隙，因为读的时候也是认为没有间隙的。如果把间隙写入 PCM 文件，播放的时候就会有噪音，
 	 * 声音的时间也会不对。
-	 *   综上，下面应该向 av_samples_get_buffer_size 函数的 align 参数传入 1，表示不对齐，也就是
+	 *
+	 * 综上，下面应该向 av_samples_get_buffer_size 函数的 align 参数传入 1，表示不对齐，也就是
 	 * 获取的 buf_size 不包括后面的间隙。
 	 */
 	int buf_size = av_samples_get_buffer_size(
@@ -130,7 +134,7 @@ void video::AVFrameWrapper::Mute(int offset)
 		SampleFormat());
 }
 
-void AVFrameWrapper::make_writable()
+void AVFrameWrapper::MakeWritable()
 {
 	int ret = ::av_frame_make_writable(_wrapped_obj);
 	if (ret)

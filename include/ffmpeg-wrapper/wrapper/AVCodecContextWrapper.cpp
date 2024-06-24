@@ -161,7 +161,7 @@ void AVCodecContextWrapper::SendFrame(AVFrameWrapper *frame)
 			frame->ChangeTimeBase(TimeBase());
 		}
 
-		frame->make_writable();
+		frame->MakeWritable();
 		ret = ::avcodec_send_frame(_wrapped_obj, *frame);
 	}
 	else

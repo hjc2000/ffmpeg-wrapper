@@ -112,7 +112,10 @@ namespace video
 		/// @param offset 从此位置（包括此位置）开始，对采样点设置静音
 		void Mute(int offset);
 
-		void make_writable();
+		/// @brief 使帧可写。
+		/// @note 使用 ffmpeg 的函数来操作帧时不需要调用此方法。此方法用于用户手动修改缓冲区之前调用。
+		/// 例如对于音频帧，当用户想要手动修改某个采样点的值时，就需要调用本方法。
+		void MakeWritable();
 
 		/// @brief 判断此帧是否可写
 		/// @return
