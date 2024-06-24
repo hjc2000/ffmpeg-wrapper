@@ -7,7 +7,7 @@
 using namespace video;
 using namespace std;
 
-#pragma region 私有生命周期函数
+#pragma region 私有生命周期
 void AVFrameWrapper::GetBuffer(int align)
 {
 	Unref();
