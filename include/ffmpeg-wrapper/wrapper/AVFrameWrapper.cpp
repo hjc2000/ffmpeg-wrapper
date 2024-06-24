@@ -7,6 +7,7 @@
 using namespace video;
 using namespace std;
 
+#pragma region 缓冲区管理, 引用
 void AVFrameWrapper::GetBuffer(int align)
 {
 	Unref();
@@ -31,6 +32,7 @@ void AVFrameWrapper::Unref()
 {
 	::av_frame_unref(_wrapped_obj);
 }
+#pragma endregion
 
 AVFrameWrapper::AVFrameWrapper()
 {
