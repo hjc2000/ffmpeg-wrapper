@@ -1,4 +1,5 @@
 #include "ffmpeg-wrapper/wrapper/AVFrameWrapper.h"
+#include "AVFrameWrapper.h"
 #include <ffmpeg-wrapper/AVToString.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/ImageBuffer.h>
@@ -141,6 +142,11 @@ void AVFrameWrapper::MakeWritable()
 	{
 		throw std::runtime_error{CODE_POS_STR + std::string{"av_frame_make_writable 失败。"}};
 	}
+}
+
+bool video::AVFrameWrapper::IsWritable()
+{
+	return av_frame_is_writable(_wrapped_obj);
 }
 
 std::chrono::milliseconds AVFrameWrapper::PtsToMilliseconds()
