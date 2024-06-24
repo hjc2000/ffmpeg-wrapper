@@ -157,8 +157,6 @@ namespace video
 		/// @param len
 		void CopyAudioDataToBuffer(uint8_t *buffer, int len);
 
-		std::string ToString();
-
 #pragma region IAudioFrameInfoCollection
 		AVSampleFormat SampleFormat() const override;
 		void SetSampleFormat(AVSampleFormat value) override;
@@ -186,5 +184,7 @@ namespace video
 		AVPixelFormat PixelFormat() const override;
 		void SetPixelFormat(AVPixelFormat value) override;
 #pragma endregion
+
+		std::string ToString();
 	};
 }

@@ -167,15 +167,6 @@ void AVFrameWrapper::CopyAudioDataToBuffer(uint8_t *buffer, int len)
 	memcpy(buffer, _wrapped_obj->extended_data[0], len);
 }
 
-std::string AVFrameWrapper::ToString()
-{
-	return std::format(
-		"pts={}, time_base={}, sample_format={}",
-		_wrapped_obj->pts,
-		::ToString(_wrapped_obj->time_base),
-		!_wrapped_obj->width ? ::ToString(SampleFormat()) : "");
-}
-
 void video::AVFrameWrapper::CopyVideoFrameToStream(base::Stream &stream)
 {
 	if (!_image_buf)
@@ -284,3 +275,12 @@ void video::AVFrameWrapper::SetPixelFormat(AVPixelFormat value)
 	_wrapped_obj->format = value;
 }
 #pragma endregion
+
+std::string AVFrameWrapper::ToString()
+{
+	return std::format(
+		"pts={}, time_base={}, sample_format={}",
+		_wrapped_obj->pts,
+		::ToString(_wrapped_obj->time_base),
+		!_wrapped_obj->width ? ::ToString(SampleFormat()) : "");
+}
