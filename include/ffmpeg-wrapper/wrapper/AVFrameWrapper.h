@@ -119,7 +119,7 @@ namespace video
 
 		/// @brief 判断此帧是否可写
 		/// @return
-		bool is_writable()
+		bool IsWritable()
 		{
 			return av_frame_is_writable(_wrapped_obj);
 		}
