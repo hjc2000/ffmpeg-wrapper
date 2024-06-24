@@ -1,5 +1,5 @@
-#include"AVPacketWrapper.h"
-#include<jccpp/define.h>
+#include "AVPacketWrapper.h"
+#include <jccpp/define.h>
 
 using namespace video;
 using namespace std;
@@ -9,13 +9,14 @@ AVPacketWrapper::AVPacketWrapper()
 	_wrapped_obj = av_packet_alloc();
 	if (_wrapped_obj == nullptr)
 	{
-		throw std::runtime_error { CODE_POS_STR + std::string { "构造 AVPacket 失败" } };
+		throw std::runtime_error{CODE_POS_STR + std::string{"构造 AVPacket 失败"}};
 	}
 }
 
-AVPacketWrapper::AVPacketWrapper(AVPacketWrapper const &another) :AVPacketWrapper()
+AVPacketWrapper::AVPacketWrapper(AVPacketWrapper const &another)
+	: AVPacketWrapper()
 {
-	ref(another);
+	Ref(another);
 }
 
 AVPacketWrapper::~AVPacketWrapper()
@@ -25,7 +26,7 @@ AVPacketWrapper::~AVPacketWrapper()
 
 AVPacketWrapper &AVPacketWrapper::operator=(AVPacketWrapper const &another)
 {
-	ref(another);
+	Ref(another);
 	return *this;
 }
 
@@ -33,22 +34,34 @@ void AVPacketWrapper::ChangeTimeBase(AVRational new_time_base)
 {
 	AVRational old_time_base = _wrapped_obj->time_base;
 	_wrapped_obj->time_base = new_time_base;
-	_wrapped_obj->pts = ConvertTimeStamp(_wrapped_obj->pts, old_time_base, new_time_base);
-	_wrapped_obj->dts = ConvertTimeStamp(_wrapped_obj->dts, old_time_base, new_time_base);
-	_wrapped_obj->duration = ConvertTimeStamp(_wrapped_obj->duration, old_time_base, new_time_base);
+
+	_wrapped_obj->pts = ConvertTimeStamp(
+		_wrapped_obj->pts,
+		old_time_base,
+		new_time_base);
+
+	_wrapped_obj->dts = ConvertTimeStamp(
+		_wrapped_obj->dts,
+		old_time_base,
+		new_time_base);
+
+	_wrapped_obj->duration = ConvertTimeStamp(
+		_wrapped_obj->duration,
+		old_time_base,
+		new_time_base);
 }
 
-void AVPacketWrapper::ref(const AVPacketWrapper &other)
+void AVPacketWrapper::Ref(const AVPacketWrapper &other)
 {
-	unref();
+	Unref();
 	int ret = av_packet_ref(_wrapped_obj, other._wrapped_obj);
 	if (ret < 0)
 	{
-		throw std::runtime_error { CODE_POS_STR + std::string { "引用 AVPacket 失败" } };
+		throw std::runtime_error{CODE_POS_STR + std::string{"引用 AVPacket 失败"}};
 	}
 }
 
-void AVPacketWrapper::unref()
+void AVPacketWrapper::Unref()
 {
 	av_packet_unref(_wrapped_obj);
 }
@@ -73,22 +86,22 @@ void AVPacketWrapper::SetDuration(int64_t value)
 	_wrapped_obj->duration = value;
 }
 
-int64_t AVPacketWrapper::pts() const
+int64_t AVPacketWrapper::Pts() const
 {
 	return _wrapped_obj->pts;
 }
 
-void AVPacketWrapper::set_pts(int64_t value)
+void AVPacketWrapper::SetPts(int64_t value)
 {
 	_wrapped_obj->pts = value;
 }
 
-int64_t AVPacketWrapper::dts() const
+int64_t AVPacketWrapper::Dts() const
 {
 	return _wrapped_obj->dts;
 }
 
-void AVPacketWrapper::set_dts(int64_t value)
+void AVPacketWrapper::SetDts(int64_t value)
 {
 	_wrapped_obj->dts = value;
 }

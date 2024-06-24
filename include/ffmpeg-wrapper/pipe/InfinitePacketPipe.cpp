@@ -33,15 +33,15 @@ void InfinitePacketPipe::CorrectStartTimeStamp(AVPacketWrapper &packet)
 	if (_start_pts_dts_not_set)
 	{
 		_start_pts_dts_not_set = false;
-		_start_pts = packet.pts();
-		_start_dts = packet.dts();
+		_start_pts = packet.Pts();
+		_start_dts = packet.Dts();
 
 		// 开头处对齐取最小值，因为不能出现时间戳回溯。
 		_correct_offset = std::min(_start_pts, _start_dts);
 	}
 
-	packet.set_pts(packet.pts() - _correct_offset);
-	packet.set_dts(packet.dts() - _correct_offset);
+	packet.SetPts(packet.Pts() - _correct_offset);
+	packet.SetDts(packet.Dts() - _correct_offset);
 }
 
 void InfinitePacketPipe::SendPacket(AVPacketWrapper *packet)
@@ -64,11 +64,11 @@ void InfinitePacketPipe::SendPacket(AVPacketWrapper *packet)
 	}
 
 	CorrectStartTimeStamp(*packet);
-	UpdateLastPts(packet->pts());
-	UpdateLastDts(packet->dts());
+	UpdateLastPts(packet->Pts());
+	UpdateLastDts(packet->Dts());
 	UpdateLastPacketDuration(packet->Duration());
-	packet->set_pts(packet->pts() + _offset);
-	packet->set_dts(packet->dts() + _offset);
+	packet->SetPts(packet->Pts() + _offset);
+	packet->SetDts(packet->Dts() + _offset);
 	SendPacketToEachConsumer(packet);
 }
 
