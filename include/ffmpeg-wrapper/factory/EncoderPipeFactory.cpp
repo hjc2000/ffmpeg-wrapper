@@ -1,5 +1,5 @@
 #include "EncoderPipeFactory.h"
-#include <EncoderPipe.h>
+#include <ffmpeg-wrapper/pipe/EncoderPipe.h>
 
 using namespace video;
 
