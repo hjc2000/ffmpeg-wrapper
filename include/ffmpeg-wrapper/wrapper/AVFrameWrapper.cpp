@@ -11,7 +11,7 @@ using namespace std;
 #pragma region 私有生命周期
 void AVFrameWrapper::GetBuffer(int align)
 {
-	Unref();
+	// GetBuffer里面不能调用Unref方法，否则会导致程序卡死
 	int ret = ::av_frame_get_buffer(_wrapped_obj, align);
 	if (ret < 0)
 	{
