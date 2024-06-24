@@ -124,11 +124,11 @@ namespace video
 			_wrapped_obj->pts = value;
 		}
 
-		int64_t duration()
+		int64_t Duration()
 		{
 			return _wrapped_obj->duration;
 		}
-		void set_duration(int64_t value)
+		void SetDuration(int64_t value)
 		{
 			_wrapped_obj->duration = value;
 		}
