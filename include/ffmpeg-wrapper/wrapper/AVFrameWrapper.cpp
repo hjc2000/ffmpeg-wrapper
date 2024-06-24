@@ -151,7 +151,7 @@ bool video::AVFrameWrapper::IsWritable()
 
 std::chrono::milliseconds AVFrameWrapper::PtsToMilliseconds()
 {
-	int64_t num = pts() * 1000 * TimeBase().num;
+	int64_t num = Pts() * 1000 * TimeBase().num;
 	int64_t den = TimeBase().den;
 	std::chrono::milliseconds m{num / den};
 	return m;

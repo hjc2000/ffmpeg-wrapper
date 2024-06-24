@@ -121,11 +121,11 @@ namespace video
 		/// @return
 		bool IsWritable();
 
-		int64_t pts()
+		int64_t Pts()
 		{
 			return _wrapped_obj->pts;
 		}
-		void set_pts(int64_t value)
+		void SetPts(int64_t value)
 		{
 			_wrapped_obj->pts = value;
 		}

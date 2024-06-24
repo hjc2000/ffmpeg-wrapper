@@ -64,7 +64,7 @@ void video::SwrContextWrapper::SendFrame(AVFrameWrapper *input_frame)
 	}
 
 	_in_pts_when_send_frame = ConvertTimeStamp(
-		input_frame->pts(),
+		input_frame->Pts(),
 		input_frame->TimeBase(),
 		AVRational{1, 90000});
 
@@ -117,7 +117,7 @@ int video::SwrContextWrapper::ReadFrame(AVFrameWrapper &output_frame)
 		_in_pts_when_send_frame - delay,
 		AVRational{1, 90000},
 		_out_frame_infos.TimeBase());
-	output_frame.set_pts(out_pts);
+	output_frame.SetPts(out_pts);
 	output_frame.SetTimeBase(_out_frame_infos.TimeBase());
 	return ret;
 }
