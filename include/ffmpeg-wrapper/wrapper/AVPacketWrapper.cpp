@@ -4,6 +4,23 @@
 using namespace video;
 using namespace std;
 
+#pragma region 私有生命周期
+void AVPacketWrapper::Ref(const AVPacketWrapper &other)
+{
+	Unref();
+	int ret = av_packet_ref(_wrapped_obj, other._wrapped_obj);
+	if (ret < 0)
+	{
+		throw std::runtime_error{CODE_POS_STR + std::string{"引用 AVPacket 失败"}};
+	}
+}
+
+void AVPacketWrapper::Unref()
+{
+	av_packet_unref(_wrapped_obj);
+}
+#pragma endregion
+
 AVPacketWrapper::AVPacketWrapper()
 {
 	_wrapped_obj = av_packet_alloc();
@@ -49,21 +66,6 @@ void AVPacketWrapper::ChangeTimeBase(AVRational new_time_base)
 		_wrapped_obj->duration,
 		old_time_base,
 		new_time_base);
-}
-
-void AVPacketWrapper::Ref(const AVPacketWrapper &other)
-{
-	Unref();
-	int ret = av_packet_ref(_wrapped_obj, other._wrapped_obj);
-	if (ret < 0)
-	{
-		throw std::runtime_error{CODE_POS_STR + std::string{"引用 AVPacket 失败"}};
-	}
-}
-
-void AVPacketWrapper::Unref()
-{
-	av_packet_unref(_wrapped_obj);
 }
 
 int AVPacketWrapper::StreamIndex() const
