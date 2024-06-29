@@ -13,15 +13,17 @@ namespace video
 		  video::IAudioFrameInfoCollection
 	{
 	private:
-		std::shared_ptr<base::ISignalSource<double, double>> _signal_source;
+		std::shared_ptr<base::ISignalSource<double>> _signal_source;
 		AudioFrameInfoCollection _audio_frame_infos;
 		int64_t _pts = 0;
-		base::Fraction _time_base;
 		bool _opened = false;
 
 	public:
+		/// @brief
+		/// @param signal_source 传入一个未打开的信号源。
+		/// @param infos
 		AudioSampler(
-			std::shared_ptr<base::ISignalSource<double, double>> signal_source,
+			std::shared_ptr<base::ISignalSource<double>> signal_source,
 			video::AudioFrameInfoCollection const &infos);
 
 		void Open();
@@ -36,6 +38,7 @@ namespace video
 		///
 		/// @return
 		AVSampleFormat SampleFormat() const override;
+
 		/// @brief 不支持设置采样格式，所以本函数是空函数。
 		/// @param value
 		void SetSampleFormat(AVSampleFormat value) override;
@@ -53,5 +56,6 @@ namespace video
 #pragma endregion
 	};
 
+	/// @brief 测试函数
 	void TestAudioSampler();
 }

@@ -1,11 +1,13 @@
 #include "AudioSampler.h"
 
 video::AudioSampler::AudioSampler(
-	std::shared_ptr<base::ISignalSource<double, double>> signal_source,
+	std::shared_ptr<base::ISignalSource<double>> signal_source,
 	video::AudioFrameInfoCollection const &infos)
 {
 	_signal_source = signal_source;
 	IAudioFrameInfoCollection::operator=(infos);
+	_signal_source->SetSampleInterval(base::Fraction{1, SampleRate()});
+	_signal_source->Open();
 }
 
 void video::AudioSampler::Open()
@@ -16,8 +18,6 @@ void video::AudioSampler::Open()
 	}
 
 	_opened = true;
-
-	_time_base = base::Fraction{TimeBase().num, TimeBase().den};
 }
 
 int video::AudioSampler::ReadFrame(AVFrameWrapper &frame)
@@ -35,12 +35,11 @@ int video::AudioSampler::ReadFrame(AVFrameWrapper &frame)
 	frame = AVFrameWrapper{_audio_frame_infos};
 	double *channel_buffer = reinterpret_cast<double *>(frame->extended_data[0]);
 
-	// 一个音频帧有 nb_samples 个采样点
+	// 一个音频帧有 SampleCount 个采样点
 	for (int i = 0; i < SampleCount(); i++)
 	{
 		// 采样一次
-		base::Fraction time = _pts * _time_base;
-		double sample_value = _signal_source->Sample(time.ToDouble());
+		double sample_value = _signal_source->Sample();
 		_pts++;
 
 		// 为每个声道填充相同的值
@@ -61,6 +60,7 @@ int video::AudioSampler::ReadFrame(AVFrameWrapper &frame)
 		channel_buffer += ChannelLayout().nb_channels;
 	}
 
+	// 返回 0 表示读取帧成功
 	return 0;
 }
 
