@@ -43,6 +43,8 @@ namespace video
 		int SampleRate() const override;
 		void SetSampleRate(int value) override;
 
+		/// @brief 声道布局可以设置，但是所有声道都是相同的采样值。
+		/// @return
 		AVChannelLayout ChannelLayout() const override;
 		void SetChannelLayout(AVChannelLayout value) override;
 
