@@ -136,6 +136,23 @@ void video::AudioSampler::SetSampleCount(int value)
 }
 #pragma endregion
 
+#include <ffmpeg-wrapper/factory/EncoderPipeFactory.h>
+#include <ffmpeg-wrapper/output-format/FileOutputFormat.h>
+
 void video::TestAudioSampler()
 {
+	AudioFrameInfoCollection audio_frame_infos;
+	audio_frame_infos.SetChannelLayout(AVChannelLayoutExtension::GetDefaultChannelLayout(2));
+	audio_frame_infos.SetSampleCount(AVSampleFormatExtention::ParseRequiredSampleCount("eac3"));
+	audio_frame_infos.SetSampleFormat(AVSampleFormat::AV_SAMPLE_FMT_DBL);
+	audio_frame_infos.SetSampleRate(44100);
+	audio_frame_infos.SetTimeBase(AVRational{1, 90000});
+
+	std::shared_ptr<video::FileOutputFormat> out_format{new video::FileOutputFormat{"sin_audio.ts"}};
+
+	video::EncoderPipeFactory::Instance()
+		->CreateEncoderPipe(
+			"eac3",
+			audio_frame_infos,
+			out_format);
 }
