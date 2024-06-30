@@ -1,12 +1,12 @@
 #pragma once
 #include <atomic>
+#include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/info-collection/AudioFrameInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
 #include <ffmpeg-wrapper/pipe/interface/IFrameConsumer.h>
-#include <ffmpeg-wrapper/pipe/interface/IFrameSource.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include <mutex>
 #include <thread>
@@ -19,9 +19,10 @@ namespace video
 	///		重采样器。
 	///		* 本类线程安全，因为所有的公共方法都加了互斥锁。
 	/// </summary>
-	class SwrContextWrapper : public base::Wrapper<SwrContext>,
-							  public IFrameConsumer,
-							  public IFrameSource
+	class SwrContextWrapper
+		: public base::Wrapper<SwrContext>,
+		  public IFrameConsumer,
+		  public base::ISource<AVFrameWrapper>
 	{
 		SwrContext *_wrapped_obj = nullptr;
 

@@ -1,9 +1,10 @@
 #pragma once
+#include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/info-collection/VideoStreamInfoCollection.h>
 #include <ffmpeg-wrapper/pipe/interface/IFrameConsumer.h>
-#include <ffmpeg-wrapper/pipe/interface/IFrameSource.h>
 #include <ffmpeg-wrapper/wrapper/AVDictionaryWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVFilterContextWrapper.h>
+#include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 
 namespace video
 {
@@ -11,7 +12,7 @@ namespace video
 	class VideoFilterGraph
 		: public base::Wrapper<AVFilterGraph>,
 		  public IFrameConsumer,
-		  public IFrameSource
+		  public base::ISource<AVFrameWrapper>
 	{
 	private:
 		AVFilterGraph *_wrapped_obj = nullptr;

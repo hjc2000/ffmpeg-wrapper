@@ -1,15 +1,16 @@
 #pragma once
 #include <base/math/Fraction.h>
+#include <base/pipe/ISource.h>
 #include <base/signal/ISignalSource.h>
 #include <ffmpeg-wrapper/info-collection/AudioFrameInfoCollection.h>
-#include <ffmpeg-wrapper/pipe/interface/IFrameSource.h>
+#include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include <memory>
 
 namespace video
 {
 	/// @brief 采样器。从信号源中采样，生成音频帧。
 	class AudioSampler
-		: video::IFrameSource,
+		: base::ISource<AVFrameWrapper>,
 		  video::IAudioFrameInfoCollection
 	{
 	private:

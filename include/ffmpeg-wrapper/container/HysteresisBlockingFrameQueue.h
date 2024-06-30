@@ -1,6 +1,7 @@
 #pragma once
+#include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/pipe/interface/IFrameConsumer.h>
-#include <ffmpeg-wrapper/pipe/interface/IFrameSource.h>
+#include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include <jccpp/IDisposable.h>
 #include <jccpp/container/HysteresisBlockingQueue.h>
 
@@ -8,7 +9,7 @@ namespace video
 {
 	class HysteresisBlockingFrameQueue
 		: public IFrameConsumer,
-		  public IFrameSource,
+		  public base::ISource<AVFrameWrapper>,
 		  public IDisposable
 	{
 	private:
