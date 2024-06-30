@@ -1,27 +1,27 @@
 #pragma once
-#include<atomic>
-#include<base/container/List.h>
-#include<ffmpeg-wrapper/AVToString.h>
-#include<ffmpeg-wrapper/ErrorCode.h>
-#include<ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
-#include<ffmpeg-wrapper/pipe/interface/IDecoderPipe.h>
-#include<ffmpeg-wrapper/pipe/interface/IFrameConsumer.h>
-#include<ffmpeg-wrapper/pipe/interface/IPacketConsumer.h>
-#include<ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h>
-#include<ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
-#include<jccpp/TaskCompletionSignal.h>
-#include<memory>
-#include<vector>
+#include <atomic>
+#include <base/container/List.h>
+#include <base/pipe/IConsumer.h>
+#include <ffmpeg-wrapper/AVToString.h>
+#include <ffmpeg-wrapper/ErrorCode.h>
+#include <ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
+#include <ffmpeg-wrapper/pipe/interface/IDecoderPipe.h>
+#include <ffmpeg-wrapper/pipe/interface/IPacketConsumer.h>
+#include <ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h>
+#include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
+#include <jccpp/TaskCompletionSignal.h>
+#include <memory>
+#include <vector>
 
 namespace video
 {
-	class DecoderPipe final :public IDecoderPipe
+	class DecoderPipe final : public IDecoderPipe
 	{
 		AVStreamInfoCollection _stream_infos;
 		std::atomic_bool _disposed = false;
 		std::shared_ptr<AVCodecContextWrapper> _decoder;
 		AVFrameWrapper _decoder_out_frame;
-		base::List<std::shared_ptr<IFrameConsumer>> _consumer_list;
+		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper *>>> _consumer_list;
 
 		void read_and_send_frame();
 
@@ -35,7 +35,7 @@ namespace video
 		/// </summary>
 		void Dispose() override;
 
-		base::List<std::shared_ptr<IFrameConsumer>> &FrameConsumerList() override
+		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper *>>> &FrameConsumerList() override
 		{
 			return _consumer_list;
 		}
@@ -49,7 +49,7 @@ namespace video
 		void SendPacket(AVPacketWrapper *packet) override;
 		void FlushDecoderButNotFlushConsumers() override;
 
-		#pragma region 通过 IAudioStreamInfoCollection 继承
+#pragma region 通过 IAudioStreamInfoCollection 继承
 		AVRational TimeBase() const override;
 		void SetTimeBase(AVRational value) override;
 		AVSampleFormat SampleFormat() const override;
@@ -58,9 +58,9 @@ namespace video
 		void SetSampleRate(int value) override;
 		AVChannelLayout ChannelLayout() const override;
 		void SetChannelLayout(AVChannelLayout value) override;
-		#pragma endregion
+#pragma endregion
 
-		#pragma region 通过 IVideoStreamInfoCollection 继承
+#pragma region 通过 IVideoStreamInfoCollection 继承
 		int Width() const override;
 		void SetWidth(int value) override;
 		int Height() const override;
@@ -69,7 +69,6 @@ namespace video
 		void SetPixelFormat(AVPixelFormat value) override;
 		AVRational FrameRate() const override;
 		void SetFrameRate(AVRational value) override;
-		#pragma endregion
-
+#pragma endregion
 	};
 }

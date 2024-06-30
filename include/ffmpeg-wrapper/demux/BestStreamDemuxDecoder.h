@@ -1,7 +1,7 @@
 #pragma once
+#include <base/pipe/IConsumer.h>
 #include <ffmpeg-wrapper/input-format/InputFormat.h>
 #include <ffmpeg-wrapper/pipe/ThreadDecoderPipe.h>
-#include <ffmpeg-wrapper/pipe/interface/IFrameConsumer.h>
 #include <ffmpeg-wrapper/pipe/interface/IPump.h>
 #include <memory>
 
@@ -17,8 +17,8 @@ namespace video
 	public:
 		BestStreamDemuxDecoder(std::shared_ptr<InputFormat> input_format);
 
-		void AddVideoFrameConsumer(std::shared_ptr<IFrameConsumer> consumer);
-		void AddAudioFrameConsumer(std::shared_ptr<IFrameConsumer> consumer);
+		void AddVideoFrameConsumer(std::shared_ptr<base::IConsumer<AVFrameWrapper *>> consumer);
+		void AddAudioFrameConsumer(std::shared_ptr<base::IConsumer<AVFrameWrapper *>> consumer);
 
 		void Pump(std::shared_ptr<base::CancellationToken> cancel_pump) override;
 	};

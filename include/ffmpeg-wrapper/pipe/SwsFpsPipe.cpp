@@ -5,7 +5,7 @@
 
 using namespace video;
 
-base::List<std::shared_ptr<IFrameConsumer>> &SwsFpsPipe::FrameConsumerList()
+base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper *>>> &SwsFpsPipe::FrameConsumerList()
 {
 	return _fps_adjust_pipe->FrameConsumerList();
 }

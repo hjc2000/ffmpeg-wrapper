@@ -4,14 +4,15 @@
 
 namespace video
 {
-	class SwrPipe : public IPipeFrameSource,
-					public IFrameConsumer
+	class SwrPipe
+		: public IPipeFrameSource,
+		  public base::IConsumer<AVFrameWrapper *>
 	{
 		shared_ptr<SwrContextWrapper> _swr;
 		AudioStreamInfoCollection _in_stream_infos;
 		AudioFrameInfoCollection _desired_out_frame_infos;
 		AVFrameWrapper _swr_out_frame;
-		base::List<shared_ptr<IFrameConsumer>> _consumer_list;
+		base::List<shared_ptr<base::IConsumer<AVFrameWrapper *>>> _consumer_list;
 
 		/// <summary>
 		///		从 _swr 中读取帧，送给消费者。
@@ -37,7 +38,7 @@ namespace video
 		/// <param name="desired_out_frame_infos">期望输出的音频帧是什么样的</param>
 		SwrPipe(IAudioFrameInfoCollection &desired_out_frame_infos);
 
-		base::List<shared_ptr<IFrameConsumer>> &FrameConsumerList() override
+		base::List<shared_ptr<base::IConsumer<AVFrameWrapper *>>> &FrameConsumerList() override
 		{
 			return _consumer_list;
 		}

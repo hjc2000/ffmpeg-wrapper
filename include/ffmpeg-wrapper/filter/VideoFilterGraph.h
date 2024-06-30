@@ -1,7 +1,7 @@
 #pragma once
+#include <base/pipe/IConsumer.h>
 #include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/info-collection/VideoStreamInfoCollection.h>
-#include <ffmpeg-wrapper/pipe/interface/IFrameConsumer.h>
 #include <ffmpeg-wrapper/wrapper/AVDictionaryWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVFilterContextWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
@@ -11,7 +11,7 @@ namespace video
 	/// @brief 视频滤镜图
 	class VideoFilterGraph
 		: public base::Wrapper<AVFilterGraph>,
-		  public IFrameConsumer,
+		  public base::IConsumer<AVFrameWrapper *>,
 		  public base::ISource<AVFrameWrapper>
 	{
 	private:

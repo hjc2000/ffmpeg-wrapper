@@ -1,12 +1,12 @@
 #pragma once
 #include <atomic>
+#include <base/pipe/IConsumer.h>
 #include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/info-collection/AudioFrameInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
-#include <ffmpeg-wrapper/pipe/interface/IFrameConsumer.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include <mutex>
 #include <thread>
@@ -21,7 +21,7 @@ namespace video
 	/// </summary>
 	class SwrContextWrapper
 		: public base::Wrapper<SwrContext>,
-		  public IFrameConsumer,
+		  public base::IConsumer<AVFrameWrapper *>,
 		  public base::ISource<AVFrameWrapper>
 	{
 		SwrContext *_wrapped_obj = nullptr;

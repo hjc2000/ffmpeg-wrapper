@@ -61,8 +61,8 @@ namespace video
 			IAudioStreamInfoCollection const &audio_stream_infos,
 			std::string audio_codec_name);
 
-		std::shared_ptr<IFrameConsumer> VideoEncodePipe();
-		std::shared_ptr<IFrameConsumer> AudioEncodePipe();
+		std::shared_ptr<base::IConsumer<AVFrameWrapper *>> VideoEncodePipe();
+		std::shared_ptr<base::IConsumer<AVFrameWrapper *>> AudioEncodePipe();
 	};
 }
 

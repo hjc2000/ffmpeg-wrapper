@@ -11,10 +11,10 @@ namespace video
 	///		入口处有重采样器管道的编码器管道。能够接收采样格式，采样率等参数动态变化的音频帧，
 	///		输出统一参数的音频包。
 	/// </summary>
-	class SwrEncoderPipe : public IFrameConsumer
+	class SwrEncoderPipe : public base::IConsumer<AVFrameWrapper *>
 	{
 	private:
-		shared_ptr<IFrameConsumer> _encoder_pipe;
+		shared_ptr<base::IConsumer<AVFrameWrapper *>> _encoder_pipe;
 		shared_ptr<SwrPipe> _swr_pipe;
 
 	public:

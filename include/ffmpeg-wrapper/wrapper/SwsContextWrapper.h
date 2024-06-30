@@ -1,11 +1,11 @@
 #pragma once
 #include <atomic>
 #include <base/Wrapper.h>
+#include <base/pipe/IConsumer.h>
 #include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/info-collection/VideoFrameInfoCollection.h>
-#include <ffmpeg-wrapper/pipe/interface/IFrameConsumer.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include <mutex>
 
@@ -13,7 +13,7 @@ namespace video
 {
 	class SwsContextWrapper
 		: public base::Wrapper<SwsContext>,
-		  public IFrameConsumer,
+		  public base::IConsumer<AVFrameWrapper *>,
 		  public base::ISource<AVFrameWrapper>
 	{
 		SwsContext *_wrapped_obj = nullptr;
