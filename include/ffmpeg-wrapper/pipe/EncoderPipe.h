@@ -1,12 +1,13 @@
 #pragma once
 #include <atomic>
 #include <base/pipe/IConsumer.h>
+#include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/IVideoStreamInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/VideoStreamInfoCollection.h>
 #include <ffmpeg-wrapper/output-format/OutputFormat.h>
-#include <ffmpeg-wrapper/pipe/interface/IPacketSource.h>
 #include <ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h>
+#include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
 #include <jccpp/IDisposable.h>
 

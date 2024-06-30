@@ -1,7 +1,7 @@
 #pragma once
+#include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/pipe/interface/IPacketConsumer.h>
-#include <ffmpeg-wrapper/pipe/interface/IPacketSource.h>
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include <jccpp/container/HysteresisBlockingQueue.h>
 
@@ -12,7 +12,7 @@ namespace video
 	/// </summary>
 	class HysteresisBlockingPacketQueue
 		: public IPacketConsumer,
-		  public IPacketSource,
+		  public base::ISource<AVPacketWrapper>,
 		  public IDisposable
 	{
 	private:
