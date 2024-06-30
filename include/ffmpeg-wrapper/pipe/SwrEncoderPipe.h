@@ -1,9 +1,9 @@
 #pragma once
-#include<ffmpeg-wrapper/base_include.h>
-#include<ffmpeg-wrapper/factory/IEncoderPipeFactory.h>
-#include<ffmpeg-wrapper/output-format/OutputFormat.h>
-#include<ffmpeg-wrapper/pipe/SwrPipe.h>
-#include<string>
+#include <ffmpeg-wrapper/base_include.h>
+#include <ffmpeg-wrapper/factory/IEncoderPipeFactory.h>
+#include <ffmpeg-wrapper/output-format/OutputFormat.h>
+#include <ffmpeg-wrapper/pipe/SwrPipe.h>
+#include <string>
 
 namespace video
 {
@@ -11,7 +11,7 @@ namespace video
 	///		入口处有重采样器管道的编码器管道。能够接收采样格式，采样率等参数动态变化的音频帧，
 	///		输出统一参数的音频包。
 	/// </summary>
-	class SwrEncoderPipe :public IFrameConsumer
+	class SwrEncoderPipe : public IFrameConsumer
 	{
 	private:
 		shared_ptr<IFrameConsumer> _encoder_pipe;
@@ -19,7 +19,7 @@ namespace video
 
 	public:
 		/// <summary>
-		///		
+		///
 		/// </summary>
 		/// <param name="codec_name">编码器名称。全部小写。</param>
 		/// <param name="infos">
@@ -31,13 +31,12 @@ namespace video
 			std::shared_ptr<IEncoderPipeFactory> facroty,
 			std::string codec_name,
 			IAudioStreamInfoCollection &infos,
-			shared_ptr<OutputFormat> output_format
-		);
+			shared_ptr<OutputFormat> output_format);
 
 		/// <summary>
 		///		送入帧。会先经过重采样管道然后编码，最后写入封装。
 		/// </summary>
 		/// <param name="frame"></param>
-		void SendFrame(AVFrameWrapper *frame) override;
+		void SendData(AVFrameWrapper *frame) override;
 	};
 }

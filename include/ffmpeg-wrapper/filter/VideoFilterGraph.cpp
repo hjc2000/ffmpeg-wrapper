@@ -131,7 +131,7 @@ int VideoFilterGraph::ReadFrame(AVFrameWrapper &frame)
 	return av_buffersink_get_frame(_buffer_sink_filter, frame);
 }
 
-void VideoFilterGraph::SendFrame(AVFrameWrapper *frame)
+void VideoFilterGraph::SendData(AVFrameWrapper *frame)
 {
 	if (!frame)
 	{

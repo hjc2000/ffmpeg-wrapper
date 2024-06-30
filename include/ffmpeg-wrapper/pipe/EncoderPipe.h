@@ -51,6 +51,6 @@ namespace video
 		/// @note 编码后的包会被写入构造函数中传进来的输出格式中。
 		///
 		/// @param frame
-		void SendFrame(AVFrameWrapper *frame) override;
+		void SendData(AVFrameWrapper *frame) override;
 	};
 }

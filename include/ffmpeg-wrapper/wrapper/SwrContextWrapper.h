@@ -1,15 +1,15 @@
 #pragma once
-#include<atomic>
-#include<ffmpeg-wrapper/ErrorCode.h>
-#include<ffmpeg-wrapper/base_include.h>
-#include<ffmpeg-wrapper/info-collection/AudioFrameInfoCollection.h>
-#include<ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
-#include<ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
-#include<ffmpeg-wrapper/pipe/interface/IFrameConsumer.h>
-#include<ffmpeg-wrapper/pipe/interface/IFrameSource.h>
-#include<ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
-#include<mutex>
-#include<thread>
+#include <atomic>
+#include <ffmpeg-wrapper/ErrorCode.h>
+#include <ffmpeg-wrapper/base_include.h>
+#include <ffmpeg-wrapper/info-collection/AudioFrameInfoCollection.h>
+#include <ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
+#include <ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
+#include <ffmpeg-wrapper/pipe/interface/IFrameConsumer.h>
+#include <ffmpeg-wrapper/pipe/interface/IFrameSource.h>
+#include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
+#include <mutex>
+#include <thread>
 
 namespace video
 {
@@ -19,10 +19,9 @@ namespace video
 	///		重采样器。
 	///		* 本类线程安全，因为所有的公共方法都加了互斥锁。
 	/// </summary>
-	class SwrContextWrapper :
-		public base::Wrapper<SwrContext>,
-		public IFrameConsumer,
-		public IFrameSource
+	class SwrContextWrapper : public base::Wrapper<SwrContext>,
+							  public IFrameConsumer,
+							  public IFrameSource
 	{
 		SwrContext *_wrapped_obj = nullptr;
 
@@ -59,14 +58,14 @@ namespace video
 
 		/// <summary>
 		///		send_frame 方法被调用，向重采样器送入帧时就会记录那个帧的 pts。
-		/// 
+		///
 		///		_in_pts_when_send_frame 相当于未来的时间戳。只要将重采样缓冲区中的采样点播放完，
 		///		重采样器输出端的时间戳就会真正变成 _in_pts_when_send_frame。也就是输入端的时间戳
 		///		和输出端的时间戳不仅时间基不一样，还存在时间差。
 		/// </summary>
 		int64_t _in_pts_when_send_frame = 0;
 
-		#pragma region ReadFrame 方法专用
+#pragma region ReadFrame 方法专用
 		/// <summary>
 		///		对 input_frame 缓冲区的音频帧进行重采样，输出到 output_frame 的缓冲区中。
 		/// </summary>
@@ -85,7 +84,7 @@ namespace video
 		int read_frame_in_flushing_mode(AVFrameWrapper &output_frame);
 
 		int read_frame_in_non_flushing_mode(AVFrameWrapper &output_frame);
-		#pragma endregion
+#pragma endregion
 
 	public:
 		/// <summary>
@@ -97,8 +96,7 @@ namespace video
 		/// <param name="out_frame_infos">设置重采样器输出流。</param>
 		SwrContextWrapper(
 			IAudioStreamInfoCollection &in_stream_infos,
-			IAudioFrameInfoCollection &out_frame_infos
-		);
+			IAudioFrameInfoCollection &out_frame_infos);
 
 		~SwrContextWrapper();
 
@@ -113,16 +111,16 @@ namespace video
 
 		/// <summary>
 		///		获取重采样器内部的延迟。
-		/// 
+		///
 		///		重采样器内部有一个高阶滤波器，高阶滤波器需要不同时刻的采样值来做差分，
 		///		所以内部有一个采样点队列用来储存不同时刻的采样值。这会导致输出产生延迟。
-		/// 
+		///
 		///		此外，如果转换完的采样点没有被取走，则会被储存在内部的输出缓冲区中，这
 		///		也会产生延迟。此函数用来获取所有的这些延迟。
 		/// </summary>
 		/// <param name="base">
 		///		延迟的基。（不是时间基，base 是时间基的倒数。详见 https://www.yuque.com/qiaodangyi/yrin4p/ica2heo5g3kyre9t）
-		///		
+		///
 		///		- 使用时间基的倒数是因为 ffmpeg 默认你会取一个 (0, 1] 内的，并且很接近 0 的数作为时间基，因为
 		///		  这样精度才高。整型无法表示这种数，所以取了倒数。不用 double 是因为 double 在表示很小的数，例如
 		///		  1 / 90000 时精度不能满足要求。这种时候用整型可以没有误差。time_base = 1 / 90000，则 base = 90000。
@@ -180,8 +178,8 @@ namespace video
 		 * @param input_frame 要输入重采样器的帧。可以传入空指针。传入空指针会启动冲洗模式。
 		 *
 		 * @exception SendFrameException
-		*/
-		void SendFrame(AVFrameWrapper *input_frame) override;
+		 */
+		void SendData(AVFrameWrapper *input_frame) override;
 
 		/**
 		 * @brief 将重采样器中的数据取出来
@@ -199,7 +197,7 @@ namespace video
 		 * - 如果重采样器内有数据，则有多少拿多少，直到填充满输出帧或者拿完了。如果拿完后仍然不够填满输出帧，
 		 *   则会将输出帧后面没被填充的空隙填充为静音。此时也是返回 0
 		 * - 如果重采样器内部没有数据，则返回 ErrorCode::eof，表示到达文件尾。
-		*/
+		 */
 		int ReadFrame(AVFrameWrapper &output_frame);
 
 		/// <summary>

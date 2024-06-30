@@ -9,7 +9,7 @@ void IPipeFrameSource::SendFrameToEachConsumer(AVFrameWrapper *frame)
 	{
 		if (consumer)
 		{
-			consumer->SendFrame(frame);
+			consumer->SendData(frame);
 		}
 	}
 }

@@ -82,10 +82,10 @@ EncoderPipe::EncoderPipe(
 	_new_stream = _output_format->CreateNewStream(_encoder_ctx);
 }
 
-void EncoderPipe::SendFrame(AVFrameWrapper *frame)
+void EncoderPipe::SendData(AVFrameWrapper *frame)
 {
 	// 防止编码器中有数据残留
 	ReadAndSendPacketToOutputFormat();
-	_encoder_ctx->SendFrame(frame);
+	_encoder_ctx->SendData(frame);
 	ReadAndSendPacketToOutputFormat();
 }

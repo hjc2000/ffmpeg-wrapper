@@ -14,7 +14,7 @@ int video::HysteresisBlockingFrameQueue::ReadFrame(AVFrameWrapper &frame)
 	}
 }
 
-void video::HysteresisBlockingFrameQueue::SendFrame(AVFrameWrapper *frame)
+void video::HysteresisBlockingFrameQueue::SendData(AVFrameWrapper *frame)
 {
 	if (!frame)
 	{

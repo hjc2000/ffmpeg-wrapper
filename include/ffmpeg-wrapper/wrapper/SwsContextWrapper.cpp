@@ -28,7 +28,7 @@ video::SwsContextWrapper::SwsContextWrapper(
 	}
 }
 
-void video::SwsContextWrapper::SendFrame(AVFrameWrapper *frame)
+void video::SwsContextWrapper::SendData(AVFrameWrapper *frame)
 {
 	std::lock_guard l(_lock);
 	if (_flushed)

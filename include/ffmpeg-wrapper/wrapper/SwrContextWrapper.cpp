@@ -38,7 +38,7 @@ SwrContextWrapper::~SwrContextWrapper()
 	swr_free(&_wrapped_obj);
 }
 
-void video::SwrContextWrapper::SendFrame(AVFrameWrapper *input_frame)
+void video::SwrContextWrapper::SendData(AVFrameWrapper *input_frame)
 {
 	lock_guard l(_not_private_methods_lock);
 
@@ -208,7 +208,7 @@ int SwrContextWrapper::send_silence_samples(uint32_t nb_samples)
 	uint32_t loop_times = nb_samples / _silence_frame->SampleCount();
 	for (uint32_t i = 0; i < loop_times; i++)
 	{
-		SendFrame(_silence_frame.get());
+		SendData(_silence_frame.get());
 	}
 
 	// 求模，取余数，看用 _silence_frame 填充 loop_times 次后还会剩下几个采样点才能达到 nb_samples

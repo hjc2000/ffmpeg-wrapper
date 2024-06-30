@@ -41,12 +41,12 @@ video::SwsPipe::SwsPipe(IVideoFrameInfoCollection const &desire_out_video_frame_
 		_desire_out_video_frame_infos}};
 }
 
-void video::SwsPipe::SendFrame(AVFrameWrapper *frame)
+void video::SwsPipe::SendData(AVFrameWrapper *frame)
 {
 	if (!frame)
 	{
 		// 冲洗模式
-		_sws_context->SendFrame(nullptr);
+		_sws_context->SendData(nullptr);
 		ReadAndSendFrame();
 		return;
 	}
@@ -58,6 +58,6 @@ void video::SwsPipe::SendFrame(AVFrameWrapper *frame)
 		change_sws();
 	}
 
-	_sws_context->SendFrame(frame);
+	_sws_context->SendData(frame);
 	ReadAndSendFrame();
 }

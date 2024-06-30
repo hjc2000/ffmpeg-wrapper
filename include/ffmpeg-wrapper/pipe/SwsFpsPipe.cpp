@@ -19,7 +19,7 @@ video::SwsFpsPipe::SwsFpsPipe(IVideoStreamInfoCollection const &out_video_stream
 	_sws_pipe->FrameConsumerList().Add(_fps_adjust_pipe);
 }
 
-void video::SwsFpsPipe::SendFrame(AVFrameWrapper *frame)
+void video::SwsFpsPipe::SendData(AVFrameWrapper *frame)
 {
-	_sws_pipe->SendFrame(frame);
+	_sws_pipe->SendData(frame);
 }

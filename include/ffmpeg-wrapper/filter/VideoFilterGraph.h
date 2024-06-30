@@ -49,6 +49,6 @@ namespace video
 		void config_graph();
 
 		int ReadFrame(AVFrameWrapper &frame) override;
-		void SendFrame(AVFrameWrapper *frame) override;
+		void SendData(AVFrameWrapper *frame) override;
 	};
 }

@@ -64,7 +64,7 @@ FpsAdjustPipe::FpsAdjustPipe(IVideoStreamInfoCollection const &input_video_strea
 	_graph.config_graph();
 }
 
-void FpsAdjustPipe::SendFrame(AVFrameWrapper *frame)
+void FpsAdjustPipe::SendData(AVFrameWrapper *frame)
 {
 	if (FrameConsumerList().Count() == 0)
 	{
@@ -77,7 +77,7 @@ void FpsAdjustPipe::SendFrame(AVFrameWrapper *frame)
 		frame->ChangeTimeBase(_input_video_stream_infos.TimeBase());
 	}
 
-	_graph.SendFrame(frame);
+	_graph.SendData(frame);
 
 	if (frame)
 	{

@@ -16,6 +16,6 @@ namespace video
 		///		要送入的帧。送入空指针表示冲洗。
 		///		冲洗完后就不要再送入帧了，否则会引发异常。
 		/// </param>
-		virtual void SendFrame(AVFrameWrapper *frame) = 0;
+		virtual void SendData(AVFrameWrapper *frame) = 0;
 	};
 }

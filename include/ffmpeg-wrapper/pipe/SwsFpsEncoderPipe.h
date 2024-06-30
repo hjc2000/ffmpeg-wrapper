@@ -1,11 +1,11 @@
 #pragma once
-#include<ffmpeg-wrapper/factory/IEncoderPipeFactory.h>
-#include<ffmpeg-wrapper/pipe/SwsFpsPipe.h>
-#include<memory>
+#include <ffmpeg-wrapper/factory/IEncoderPipeFactory.h>
+#include <ffmpeg-wrapper/pipe/SwsFpsPipe.h>
+#include <memory>
 
 namespace video
 {
-	class SwsFpsEncoderPipe :public IFrameConsumer
+	class SwsFpsEncoderPipe : public IFrameConsumer
 	{
 	private:
 		std::shared_ptr<SwsFpsPipe> _sws_fps_pipe;
@@ -17,9 +17,8 @@ namespace video
 			std::shared_ptr<OutputFormat> out_format,
 			IVideoStreamInfoCollection const &video_stream_infos,
 			std::string video_codec_name,
-			int64_t video_out_bitrate_in_bps
-		);
+			int64_t video_out_bitrate_in_bps);
 
-		void SendFrame(AVFrameWrapper *frame) override;
+		void SendData(AVFrameWrapper *frame) override;
 	};
 }

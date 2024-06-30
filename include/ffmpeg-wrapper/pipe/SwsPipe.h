@@ -1,15 +1,14 @@
 #pragma once
-#include<ffmpeg-wrapper/info-collection/VideoFrameInfoCollection.h>
-#include<ffmpeg-wrapper/pipe/interface/IFrameConsumer.h>
-#include<ffmpeg-wrapper/pipe/interface/IPipeFrameSource.h>
-#include<ffmpeg-wrapper/wrapper/SwsContextWrapper.h>
-#include<memory>
+#include <ffmpeg-wrapper/info-collection/VideoFrameInfoCollection.h>
+#include <ffmpeg-wrapper/pipe/interface/IFrameConsumer.h>
+#include <ffmpeg-wrapper/pipe/interface/IPipeFrameSource.h>
+#include <ffmpeg-wrapper/wrapper/SwsContextWrapper.h>
+#include <memory>
 
 namespace video
 {
-	class SwsPipe :
-		public IPipeFrameSource,
-		public IFrameConsumer
+	class SwsPipe : public IPipeFrameSource,
+					public IFrameConsumer
 	{
 	private:
 		base::List<std::shared_ptr<IFrameConsumer>> _consumer_list;
@@ -29,6 +28,6 @@ namespace video
 			return _consumer_list;
 		}
 
-		void SendFrame(AVFrameWrapper *frame) override;
+		void SendData(AVFrameWrapper *frame) override;
 	};
 }

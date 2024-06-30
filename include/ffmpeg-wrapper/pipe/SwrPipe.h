@@ -1,12 +1,11 @@
 #pragma once
-#include<ffmpeg-wrapper/pipe/interface/IPipeFrameSource.h>
-#include<ffmpeg-wrapper/wrapper/SwrContextWrapper.h>
+#include <ffmpeg-wrapper/pipe/interface/IPipeFrameSource.h>
+#include <ffmpeg-wrapper/wrapper/SwrContextWrapper.h>
 
 namespace video
 {
-	class SwrPipe :
-		public IPipeFrameSource,
-		public IFrameConsumer
+	class SwrPipe : public IPipeFrameSource,
+					public IFrameConsumer
 	{
 		shared_ptr<SwrContextWrapper> _swr;
 		AudioStreamInfoCollection _in_stream_infos;
@@ -47,6 +46,6 @@ namespace video
 		///		向管道送入帧。重采样后会送给消费者。如果出口处没有任何消费者，则本函数会直接返回，不执行工作。
 		/// </summary>
 		/// <param name="frame"></param>
-		void SendFrame(AVFrameWrapper *frame) override;
+		void SendData(AVFrameWrapper *frame) override;
 	};
 }
