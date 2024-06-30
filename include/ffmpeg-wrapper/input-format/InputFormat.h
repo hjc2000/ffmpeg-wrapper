@@ -1,13 +1,13 @@
 #pragma once
-#include<base/Wrapper.h>
-#include<chrono>
-#include<ffmpeg-wrapper/base_include.h>
-#include<ffmpeg-wrapper/pipe/interface/IPacketSource.h>
-#include<ffmpeg-wrapper/wrapper/AVIOContextWrapper.h>
-#include<ffmpeg-wrapper/wrapper/AVProgramWrapper.h>
-#include<functional>
-#include<memory>
-#include<string>
+#include <base/Wrapper.h>
+#include <chrono>
+#include <ffmpeg-wrapper/base_include.h>
+#include <ffmpeg-wrapper/pipe/interface/IPacketSource.h>
+#include <ffmpeg-wrapper/wrapper/AVIOContextWrapper.h>
+#include <ffmpeg-wrapper/wrapper/AVProgramWrapper.h>
+#include <functional>
+#include <memory>
+#include <string>
 
 namespace video
 {
@@ -15,9 +15,8 @@ namespace video
 	class AVStreamWrapper;
 	class AVCodecContextWrapper;
 
-	class InputFormat :
-		public base::Wrapper<AVFormatContext>,
-		public IPacketSource
+	class InputFormat : public base::Wrapper<AVFormatContext>,
+						public IPacketSource
 	{
 	private:
 		AVFormatContext *_wrapped_obj = nullptr;
@@ -66,7 +65,7 @@ namespace video
 		/// </summary>
 		/// <param name="packet">读取到的包会写入这里。</param>
 		/// <returns>成功返回 0，失败返回错误代码</returns>
-		int ReadPacket(AVPacketWrapper &packet) override;
+		int ReadData(AVPacketWrapper &packet) override;
 
 		/// <summary>
 		///		获取本格式的播放时长

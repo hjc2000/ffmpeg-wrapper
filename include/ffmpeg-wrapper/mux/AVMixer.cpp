@@ -39,7 +39,7 @@ bool video::AVMixer::ReadVideoPacketOnce(shared_ptr<base::CancellationToken> can
 {
 	while (!cancel_pump->IsCancellationRequested())
 	{
-		int result = _input_video_format->ReadPacket(_temp_packet);
+		int result = _input_video_format->ReadData(_temp_packet);
 		switch (result)
 		{
 		case 0:
@@ -74,7 +74,7 @@ bool video::AVMixer::ReadAudioPacketOnce(shared_ptr<base::CancellationToken> can
 {
 	while (!cancel_pump->IsCancellationRequested())
 	{
-		int result = _input_audio_format->ReadPacket(_temp_packet);
+		int result = _input_audio_format->ReadData(_temp_packet);
 		switch (result)
 		{
 		case 0:

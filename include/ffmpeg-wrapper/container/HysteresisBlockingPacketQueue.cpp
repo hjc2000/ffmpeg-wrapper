@@ -26,7 +26,7 @@ void HysteresisBlockingPacketQueue::SendPacket(AVPacketWrapper *packet)
 	_packet_queue.Enqueue(*packet);
 }
 
-int HysteresisBlockingPacketQueue::ReadPacket(AVPacketWrapper &packet)
+int HysteresisBlockingPacketQueue::ReadData(AVPacketWrapper &packet)
 {
 	try
 	{

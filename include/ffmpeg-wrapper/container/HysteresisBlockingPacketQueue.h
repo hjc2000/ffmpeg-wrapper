@@ -40,6 +40,6 @@ namespace video
 		/// </summary>
 		/// <param name="packet"></param>
 		/// <returns></returns>
-		int ReadPacket(AVPacketWrapper &packet);
+		int ReadData(AVPacketWrapper &packet);
 	};
 }

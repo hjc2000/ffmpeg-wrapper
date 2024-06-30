@@ -56,7 +56,7 @@ void video::ThreadDecoderPipe::DecodeThreadFunc()
 	AVPacketWrapper packet;
 	while (true)
 	{
-		int read_packet_result = _packet_queue.ReadPacket(packet);
+		int read_packet_result = _packet_queue.ReadData(packet);
 		switch (read_packet_result)
 		{
 		case 0:

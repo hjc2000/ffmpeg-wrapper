@@ -1,12 +1,12 @@
 #pragma once
-#include<base/stream/Stream.h>
-#include<base/Wrapper.h>
-#include<ffmpeg-wrapper/base_include.h>
-#include<memory>
+#include <base/Wrapper.h>
+#include <base/stream/Stream.h>
+#include <ffmpeg-wrapper/base_include.h>
+#include <memory>
 
 namespace video
 {
-	class AVIOContextWrapper :public base::Wrapper<AVIOContext>
+	class AVIOContextWrapper : public base::Wrapper<AVIOContext>
 	{
 		AVIOContext *_wrapped_obj = nullptr;
 		int _buffer_size;
@@ -17,7 +17,7 @@ namespace video
 		static int StaticWritePacket(void *opaque, uint8_t const *buf, int buf_size);
 		static int64_t StaticSeek(void *opaque, int64_t offset, int whence);
 
-		int ReadPacket(uint8_t *buf, int buf_size);
+		int ReadData(uint8_t *buf, int buf_size);
 		int WritePacket(uint8_t *buf, int buf_size);
 		int64_t Seek(int64_t offset, int whence);
 

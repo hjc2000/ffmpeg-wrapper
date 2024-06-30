@@ -1,5 +1,5 @@
-#include"ffmpeg-wrapper/wrapper/AVIOContextWrapper.h"
-#include<ffmpeg-wrapper/ErrorCode.h>
+#include "ffmpeg-wrapper/wrapper/AVIOContextWrapper.h"
+#include <ffmpeg-wrapper/ErrorCode.h>
 
 using namespace video;
 
@@ -16,34 +16,31 @@ AVIOContextWrapper::AVIOContextWrapper(bool is_write, std::shared_ptr<base::Stre
 		this,
 		StaticReadPacket,
 		StaticWritePacket,
-		StaticSeek
-	);
+		StaticSeek);
 }
 
 AVIOContextWrapper::~AVIOContextWrapper()
 {
 	// av_free(_buffer);
 	/* 不要执行：av_free(_buffer);
-	*
-	* 将 _buffer 传给 avio_alloc_context 函数后，创建出来的 AVIOContext 就拥有缓冲区所有权，
-	* 调用 avformat_close_input(&_wrapped_obj); 或 avformat_free_context(_wrapped_obj);
-	* 时会释放这个缓冲区。所以这里如果 av_free(_buffer); 会重复释放。
-	*/
-
-
+	 *
+	 * 将 _buffer 传给 avio_alloc_context 函数后，创建出来的 AVIOContext 就拥有缓冲区所有权，
+	 * 调用 avformat_close_input(&_wrapped_obj); 或 avformat_free_context(_wrapped_obj);
+	 * 时会释放这个缓冲区。所以这里如果 av_free(_buffer); 会重复释放。
+	 */
 
 	/* 因为 Stream 有自己的析构函数，且是用共享指针来引用的，所以这里不执行析构。
-	* 这还有一个好处是：此 Stream 如果不止是要给本 AVIOContextWrapper 使用，
-	* 还要到别的地方使用，不需要额外的逻辑来防止本 AVIOContextWrapper
-	* 对象把 Stream 关闭了。
-	*/
+	 * 这还有一个好处是：此 Stream 如果不止是要给本 AVIOContextWrapper 使用，
+	 * 还要到别的地方使用，不需要额外的逻辑来防止本 AVIOContextWrapper
+	 * 对象把 Stream 关闭了。
+	 */
 	//_stream->Close();
 }
 
 int AVIOContextWrapper::StaticReadPacket(void *opaque, uint8_t *buf, int buf_size)
 {
 	AVIOContextWrapper *me = (AVIOContextWrapper *)opaque;
-	return me->ReadPacket(buf, buf_size);
+	return me->ReadData(buf, buf_size);
 }
 
 int AVIOContextWrapper::StaticWritePacket(void *opaque, uint8_t const *buf, int buf_size)
@@ -58,7 +55,7 @@ int64_t AVIOContextWrapper::StaticSeek(void *opaque, int64_t offset, int whence)
 	return me->Seek(offset, whence);
 }
 
-int AVIOContextWrapper::ReadPacket(uint8_t *buf, int buf_size)
+int AVIOContextWrapper::ReadData(uint8_t *buf, int buf_size)
 {
 	try
 	{
@@ -99,29 +96,29 @@ int64_t AVIOContextWrapper::Seek(int64_t offset, int whence)
 	switch (whence)
 	{
 	case SEEK_SET:
-		{
-			_stream->SetPosition(offset);
-			return _stream->Position();
-		}
+	{
+		_stream->SetPosition(offset);
+		return _stream->Position();
+	}
 	case SEEK_CUR:
-		{
-			size_t current_pos = _stream->Position();
-			_stream->SetPosition(current_pos + offset);
-			return _stream->Position();
-		}
+	{
+		size_t current_pos = _stream->Position();
+		_stream->SetPosition(current_pos + offset);
+		return _stream->Position();
+	}
 	case SEEK_END:
-		{
-			size_t end_pos = _stream->Length();
-			_stream->SetPosition(end_pos + offset);
-			return _stream->Position();
-		}
+	{
+		size_t end_pos = _stream->Length();
+		_stream->SetPosition(end_pos + offset);
+		return _stream->Position();
+	}
 	case AVSEEK_SIZE:
-		{
-			return _stream->Length();
-		}
+	{
+		return _stream->Length();
+	}
 	default:
-		{
-			return -1;
-		}
+	{
+		return -1;
+	}
 	}
 }

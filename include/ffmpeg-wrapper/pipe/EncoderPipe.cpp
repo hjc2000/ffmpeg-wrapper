@@ -8,7 +8,7 @@ void EncoderPipe::ReadAndSendPacketToOutputFormat()
 	AVPacketWrapper packet;
 	while (1)
 	{
-		int ret = _encoder_ctx->ReadPacket(packet);
+		int ret = _encoder_ctx->ReadData(packet);
 		switch (ret)
 		{
 		case 0:
@@ -30,7 +30,7 @@ void EncoderPipe::ReadAndSendPacketToOutputFormat()
 		}
 		default:
 		{
-			throw std::runtime_error{CODE_POS_STR + std::string{"ReadPacket 返回了未知的错误代码"}};
+			throw std::runtime_error{CODE_POS_STR + std::string{"ReadData 返回了未知的错误代码"}};
 		}
 		}
 	}
