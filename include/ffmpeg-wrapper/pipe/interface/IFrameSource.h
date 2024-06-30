@@ -11,6 +11,6 @@ namespace video
 		/// @brief 读取帧
 		/// @param frame 用来接收数据的帧
 		/// @return 成功返回 0，失败返回负数的错误代码
-		virtual int ReadFrame(AVFrameWrapper &frame) = 0;
+		virtual int ReadData(AVFrameWrapper &frame) = 0;
 	};
 }

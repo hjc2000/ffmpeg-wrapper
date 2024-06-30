@@ -27,7 +27,7 @@ namespace video
 			video::AudioFrameInfoCollection const &infos);
 
 		void Open();
-		int ReadFrame(AVFrameWrapper &frame) override;
+		int ReadData(AVFrameWrapper &frame) override;
 
 #pragma region IAudioFrameInfoCollection
 		AVRational TimeBase() const override;

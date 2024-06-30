@@ -11,7 +11,7 @@ void FpsAdjustPipe::ReadAndSendFrame()
 
 	while (1)
 	{
-		int ret = _graph.ReadFrame(frame);
+		int ret = _graph.ReadData(frame);
 		switch (ret)
 		{
 		case 0:

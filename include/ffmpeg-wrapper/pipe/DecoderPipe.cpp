@@ -15,7 +15,8 @@ DecoderPipe::~DecoderPipe()
 
 void DecoderPipe::Dispose()
 {
-	if (_disposed) return;
+	if (_disposed)
+		return;
 	_disposed = true;
 }
 
@@ -53,29 +54,29 @@ void DecoderPipe::read_and_send_frame()
 {
 	while (!_disposed)
 	{
-		int ret = _decoder->ReadFrame(_decoder_out_frame);
+		int ret = _decoder->ReadData(_decoder_out_frame);
 		switch (ret)
 		{
 		case 0:
-			{
-				SendFrameToEachConsumer(&_decoder_out_frame);
-				break;
-			}
+		{
+			SendFrameToEachConsumer(&_decoder_out_frame);
+			break;
+		}
 		case (int)ErrorCode::output_is_temporarily_unavailable:
-			{
-				// 解码器需要继续输入包才能输出帧
-				return;
-			}
+		{
+			// 解码器需要继续输入包才能输出帧
+			return;
+		}
 		case (int)ErrorCode::eof:
-			{
-				// 解码器已被冲洗
-				SendFrameToEachConsumer(nullptr);
-				return;
-			}
+		{
+			// 解码器已被冲洗
+			SendFrameToEachConsumer(nullptr);
+			return;
+		}
 		default:
-			{
-				throw std::runtime_error{ ToString((ErrorCode)ret) };
-			}
+		{
+			throw std::runtime_error{ToString((ErrorCode)ret)};
+		}
 		}
 	}
 }
@@ -85,28 +86,28 @@ void DecoderPipe::FlushDecoderButNotFlushConsumers()
 	_decoder->SendPacket(nullptr);
 	while (!_disposed)
 	{
-		int ret = _decoder->ReadFrame(_decoder_out_frame);
+		int ret = _decoder->ReadData(_decoder_out_frame);
 		switch (ret)
 		{
 		case 0:
-			{
-				SendFrameToEachConsumer(&_decoder_out_frame);
-				break;
-			}
+		{
+			SendFrameToEachConsumer(&_decoder_out_frame);
+			break;
+		}
 		case (int)ErrorCode::output_is_temporarily_unavailable:
-			{
-				// 解码器需要继续输入包才能输出帧
-				return;
-			}
+		{
+			// 解码器需要继续输入包才能输出帧
+			return;
+		}
 		case (int)ErrorCode::eof:
-			{
-				// 解码器已被冲洗，但这里不冲洗消费者。
-				return;
-			}
+		{
+			// 解码器已被冲洗，但这里不冲洗消费者。
+			return;
+		}
 		default:
-			{
-				throw std::runtime_error{ ToString((ErrorCode)ret) };
-			}
+		{
+			throw std::runtime_error{ToString((ErrorCode)ret)};
+		}
 		}
 	}
 }
@@ -192,4 +193,3 @@ void video::DecoderPipe::SetFrameRate(AVRational value)
 	_stream_infos._frame_rate = value;
 }
 #pragma endregion
-

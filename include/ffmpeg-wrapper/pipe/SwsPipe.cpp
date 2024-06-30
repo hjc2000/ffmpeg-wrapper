@@ -3,7 +3,7 @@
 void video::SwsPipe::ReadAndSendFrame()
 {
 	// 因为 sws 内没有比较深的队列，它只会储存 1 帧，所以不用在循环里 read_frame
-	int ret = _sws_context->ReadFrame(_sws_out_frame);
+	int ret = _sws_context->ReadData(_sws_out_frame);
 	switch (ret)
 	{
 	case 0:

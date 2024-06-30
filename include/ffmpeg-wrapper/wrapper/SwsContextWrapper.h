@@ -57,6 +57,6 @@ namespace video
 		 * @param frame
 		 * @return
 		 */
-		int ReadFrame(AVFrameWrapper &frame) override;
+		int ReadData(AVFrameWrapper &frame) override;
 	};
 }

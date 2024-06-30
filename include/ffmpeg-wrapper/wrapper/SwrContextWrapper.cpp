@@ -81,7 +81,7 @@ void video::SwrContextWrapper::SendData(AVFrameWrapper *input_frame)
 	}
 }
 
-int video::SwrContextWrapper::ReadFrame(AVFrameWrapper &output_frame)
+int video::SwrContextWrapper::ReadData(AVFrameWrapper &output_frame)
 {
 	lock_guard l(_not_private_methods_lock);
 	output_frame = AVFrameWrapper{_out_frame_infos};

@@ -1,7 +1,7 @@
 #include "ffmpeg-wrapper/container/HysteresisBlockingFrameQueue.h"
 #include <ffmpeg-wrapper/ErrorCode.h>
 
-int video::HysteresisBlockingFrameQueue::ReadFrame(AVFrameWrapper &frame)
+int video::HysteresisBlockingFrameQueue::ReadData(AVFrameWrapper &frame)
 {
 	try
 	{

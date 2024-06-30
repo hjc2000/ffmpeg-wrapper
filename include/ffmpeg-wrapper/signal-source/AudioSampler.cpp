@@ -20,7 +20,7 @@ void video::AudioSampler::Open()
 	_opened = true;
 }
 
-int video::AudioSampler::ReadFrame(AVFrameWrapper &frame)
+int video::AudioSampler::ReadData(AVFrameWrapper &frame)
 {
 	if (!_opened)
 	{

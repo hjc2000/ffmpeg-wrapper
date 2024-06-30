@@ -25,7 +25,7 @@ namespace video
 			_frame_queue.Dispose();
 		}
 
-		int ReadFrame(AVFrameWrapper &frame) override;
+		int ReadData(AVFrameWrapper &frame) override;
 		void SendData(AVFrameWrapper *frame) override;
 	};
 }

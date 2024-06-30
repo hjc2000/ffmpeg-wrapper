@@ -198,7 +198,7 @@ namespace video
 		 *   则会将输出帧后面没被填充的空隙填充为静音。此时也是返回 0
 		 * - 如果重采样器内部没有数据，则返回 ErrorCode::eof，表示到达文件尾。
 		 */
-		int ReadFrame(AVFrameWrapper &output_frame);
+		int ReadData(AVFrameWrapper &output_frame);
 
 		/// <summary>
 		///		向重采样器中送入指定数量的静音采样点。

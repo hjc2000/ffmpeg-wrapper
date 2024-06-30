@@ -13,7 +13,7 @@ void video::SwrPipe::read_and_send_frame()
 {
 	while (1)
 	{
-		int ret = _swr->ReadFrame(_swr_out_frame);
+		int ret = _swr->ReadData(_swr_out_frame);
 		switch (ret)
 		{
 		case 0:
@@ -44,7 +44,7 @@ void video::SwrPipe::read_and_send_frame_without_flushing_consumer()
 {
 	while (1)
 	{
-		int ret = _swr->ReadFrame(_swr_out_frame);
+		int ret = _swr->ReadData(_swr_out_frame);
 		switch (ret)
 		{
 		case 0:

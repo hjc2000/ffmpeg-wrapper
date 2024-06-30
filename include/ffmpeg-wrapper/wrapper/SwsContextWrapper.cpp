@@ -51,7 +51,7 @@ void video::SwsContextWrapper::SendData(AVFrameWrapper *frame)
 	_out_frame_avaliable = true;
 }
 
-int video::SwsContextWrapper::ReadFrame(AVFrameWrapper &frame)
+int video::SwsContextWrapper::ReadData(AVFrameWrapper &frame)
 {
 	std::lock_guard l(_lock);
 	if (_flushed && !_out_frame_avaliable)
