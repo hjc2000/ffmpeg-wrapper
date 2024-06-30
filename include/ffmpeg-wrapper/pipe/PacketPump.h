@@ -19,6 +19,7 @@ namespace video
 		  public IPump,
 		  public IDisposable
 	{
+	private:
 		std::atomic_bool _disposed = false;
 		std::shared_ptr<base::ISource<AVPacketWrapper>> _packet_source;
 		base::List<std::shared_ptr<IPacketConsumer>> _consumer_list;
@@ -37,7 +38,10 @@ namespace video
 		void Dispose() override
 		{
 			if (_disposed)
+			{
 				return;
+			}
+
 			_disposed = true;
 		}
 
