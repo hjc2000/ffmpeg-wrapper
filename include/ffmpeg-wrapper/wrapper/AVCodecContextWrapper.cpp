@@ -150,7 +150,7 @@ void AVCodecContextWrapper::Open(AVDictionary **dic)
 }
 
 #pragma region 编码
-void AVCodecContextWrapper::SendData(AVFrameWrapper *frame)
+void AVCodecContextWrapper::SendFrame(AVFrameWrapper *frame)
 {
 	int ret;
 	if (frame)

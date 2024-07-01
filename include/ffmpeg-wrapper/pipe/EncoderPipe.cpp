@@ -86,6 +86,6 @@ void EncoderPipe::SendData(AVFrameWrapper *frame)
 {
 	// 防止编码器中有数据残留
 	ReadAndSendPacketToOutputFormat();
-	_encoder_ctx->SendData(frame);
+	_encoder_ctx->SendFrame(frame);
 	ReadAndSendPacketToOutputFormat();
 }

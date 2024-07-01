@@ -23,7 +23,6 @@ namespace video
 		: public base::Wrapper<AVCodecContext>,
 		  public IAudioStreamInfoCollection,
 		  public IVideoStreamInfoCollection,
-		  public base::ISource<AVFrameWrapper>,
 		  public IPacketConsumer
 	{
 	private:
@@ -116,13 +115,13 @@ namespace video
 		}
 
 #pragma region 编码
-		void SendData(AVFrameWrapper *frame);
+		void SendFrame(AVFrameWrapper *frame);
 		int ReadData(AVPacketWrapper &packet);
 #pragma endregion
 
 #pragma region 解码
 		void SendPacket(AVPacketWrapper *packet) override;
-		int ReadData(AVFrameWrapper &frame) override;
+		int ReadData(AVFrameWrapper &frame);
 #pragma endregion
 
 #pragma region IAudioStreamInfoCollection, IVideoStreamInfoCollection
