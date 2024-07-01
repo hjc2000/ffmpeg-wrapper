@@ -180,7 +180,7 @@ void AVCodecContextWrapper::SendFrame(AVFrameWrapper *frame)
 	}
 }
 
-int AVCodecContextWrapper::ReadData(AVPacketWrapper &packet)
+int AVCodecContextWrapper::ReadPacket(AVPacketWrapper &packet)
 {
 	int ret = ::avcodec_receive_packet(_wrapped_obj, packet);
 	if (!ret)

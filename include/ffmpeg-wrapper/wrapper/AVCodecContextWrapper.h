@@ -116,7 +116,7 @@ namespace video
 
 #pragma region 编码
 		void SendFrame(AVFrameWrapper *frame);
-		int ReadData(AVPacketWrapper &packet);
+		int ReadPacket(AVPacketWrapper &packet);
 #pragma endregion
 
 #pragma region 解码

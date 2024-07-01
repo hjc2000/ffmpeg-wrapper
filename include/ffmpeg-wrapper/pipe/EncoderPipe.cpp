@@ -8,7 +8,7 @@ void EncoderPipe::ReadAndSendPacketToOutputFormat()
 	AVPacketWrapper packet;
 	while (1)
 	{
-		int ret = _encoder_ctx->ReadData(packet);
+		int ret = _encoder_ctx->ReadPacket(packet);
 		switch (ret)
 		{
 		case 0:
