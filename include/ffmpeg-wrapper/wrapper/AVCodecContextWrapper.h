@@ -22,8 +22,7 @@ namespace video
 	class AVCodecContextWrapper
 		: public base::Wrapper<AVCodecContext>,
 		  public IAudioStreamInfoCollection,
-		  public IVideoStreamInfoCollection,
-		  public IPacketConsumer
+		  public IVideoStreamInfoCollection
 	{
 	private:
 		AVCodec const *_codec = nullptr;
@@ -120,7 +119,7 @@ namespace video
 #pragma endregion
 
 #pragma region 解码
-		void SendPacket(AVPacketWrapper *packet) override;
+		void SendPacket(AVPacketWrapper *packet);
 		int ReadFrame(AVFrameWrapper &frame);
 #pragma endregion
 
