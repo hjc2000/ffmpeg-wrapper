@@ -54,7 +54,7 @@ void DecoderPipe::read_and_send_frame()
 {
 	while (!_disposed)
 	{
-		int ret = _decoder->ReadData(_decoder_out_frame);
+		int ret = _decoder->ReadFrame(_decoder_out_frame);
 		switch (ret)
 		{
 		case 0:
@@ -86,7 +86,7 @@ void DecoderPipe::FlushDecoderButNotFlushConsumers()
 	_decoder->SendPacket(nullptr);
 	while (!_disposed)
 	{
-		int ret = _decoder->ReadData(_decoder_out_frame);
+		int ret = _decoder->ReadFrame(_decoder_out_frame);
 		switch (ret)
 		{
 		case 0:

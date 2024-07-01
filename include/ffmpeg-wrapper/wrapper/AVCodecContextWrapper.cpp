@@ -216,7 +216,7 @@ void AVCodecContextWrapper::SendPacket(AVPacketWrapper *packet)
 	}
 }
 
-int AVCodecContextWrapper::ReadData(AVFrameWrapper &frame)
+int AVCodecContextWrapper::ReadFrame(AVFrameWrapper &frame)
 {
 	// avcodec_receive_frame 内部在执行工作之前会先调用 av_frame_unref
 	int ret = avcodec_receive_frame(_wrapped_obj, frame);

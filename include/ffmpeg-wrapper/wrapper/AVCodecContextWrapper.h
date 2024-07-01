@@ -121,7 +121,7 @@ namespace video
 
 #pragma region 解码
 		void SendPacket(AVPacketWrapper *packet) override;
-		int ReadData(AVFrameWrapper &frame);
+		int ReadFrame(AVFrameWrapper &frame);
 #pragma endregion
 
 #pragma region IAudioStreamInfoCollection, IVideoStreamInfoCollection
