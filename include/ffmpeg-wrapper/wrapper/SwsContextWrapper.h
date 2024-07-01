@@ -54,6 +54,10 @@ namespace video
 		 */
 		void SendData(AVFrameWrapper *frame) override;
 
+		void Flush() override
+		{
+		}
+
 		/**
 		 * @brief 读出帧。
 		 * @param frame

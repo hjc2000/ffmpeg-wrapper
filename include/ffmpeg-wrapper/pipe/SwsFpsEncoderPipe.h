@@ -20,5 +20,9 @@ namespace video
 			int64_t video_out_bitrate_in_bps);
 
 		void SendData(AVFrameWrapper *frame) override;
+
+		void Flush() override
+		{
+		}
 	};
 }

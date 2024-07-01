@@ -20,7 +20,10 @@ namespace video
 		void Dispose()
 		{
 			if (_disposed)
+			{
 				return;
+			}
+
 			_disposed = true;
 
 			_frame_queue.Dispose();
@@ -28,5 +31,9 @@ namespace video
 
 		int ReadData(AVFrameWrapper &frame) override;
 		void SendData(AVFrameWrapper *frame) override;
+
+		void Flush() override
+		{
+		}
 	};
 }

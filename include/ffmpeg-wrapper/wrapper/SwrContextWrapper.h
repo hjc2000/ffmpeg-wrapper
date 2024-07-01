@@ -182,6 +182,10 @@ namespace video
 		 */
 		void SendData(AVFrameWrapper *input_frame) override;
 
+		void Flush() override
+		{
+		}
+
 		/**
 		 * @brief 将重采样器中的数据取出来
 		 *

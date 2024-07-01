@@ -51,5 +51,9 @@ namespace video
 
 		int ReadData(AVFrameWrapper &frame) override;
 		void SendData(AVFrameWrapper *frame) override;
+
+		void Flush() override
+		{
+		}
 	};
 }

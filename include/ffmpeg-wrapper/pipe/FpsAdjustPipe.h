@@ -51,5 +51,9 @@ namespace video
 		/// </summary>
 		/// <param name="frame"></param>
 		void SendData(AVFrameWrapper *frame) override;
+
+		void Flush() override
+		{
+		}
 	};
 }
