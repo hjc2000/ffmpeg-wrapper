@@ -1,4 +1,5 @@
 #include "ffmpeg-wrapper/pipe/SwrPipe.h"
+#include "SwrPipe.h"
 #include <ffmpeg-wrapper/ErrorCode.h>
 
 video::SwrPipe::SwrPipe(IAudioFrameInfoCollection &desired_out_frame_infos)
@@ -75,14 +76,14 @@ void video::SwrPipe::change_swr()
 	cout << CODE_POS_STR << "重新构造 swr" << endl;
 
 	// 冲洗旧的重采样器
-	_swr->SendData(nullptr);
+	_swr->Flush();
 	read_and_send_frame_without_flushing_consumer();
 
 	// 构造新的重采样器
 	_swr = shared_ptr<SwrContextWrapper>{new SwrContextWrapper{_in_stream_infos, _desired_out_frame_infos}};
 }
 
-void video::SwrPipe::SendData(AVFrameWrapper *frame)
+void video::SwrPipe::SendData(AVFrameWrapper &frame)
 {
 	if (FrameConsumerList().Count() == 0)
 	{
@@ -90,12 +91,24 @@ void video::SwrPipe::SendData(AVFrameWrapper *frame)
 	}
 
 	read_and_send_frame();
-	if (frame && *frame != _in_stream_infos)
+	if (frame != _in_stream_infos)
 	{
-		_in_stream_infos = *frame;
+		_in_stream_infos = frame;
 		change_swr();
 	}
 
 	_swr->SendData(frame);
+	read_and_send_frame();
+}
+
+void video::SwrPipe::Flush()
+{
+	if (FrameConsumerList().Count() == 0)
+	{
+		return;
+	}
+
+	read_and_send_frame();
+	_swr->Flush();
 	read_and_send_frame();
 }

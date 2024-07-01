@@ -13,7 +13,7 @@ namespace video
 {
 	class SwsContextWrapper
 		: public base::Wrapper<SwsContext>,
-		  public base::IConsumer<AVFrameWrapper *>,
+		  public base::IConsumer<AVFrameWrapper>,
 		  public base::ISource<AVFrameWrapper>
 	{
 		SwsContext *_wrapped_obj = nullptr;
@@ -52,11 +52,9 @@ namespace video
 		 * @brief 送入帧后应该立刻调用 read_frame 读取，如果没有读取就继续送入，会抛出异常。
 		 * @param frame 要送入的帧。可以送入空指针。虽然 sws 不需要冲洗，它的内部没有队列。
 		 */
-		void SendData(AVFrameWrapper *frame) override;
+		void SendData(AVFrameWrapper &frame) override;
 
-		void Flush() override
-		{
-		}
+		void Flush() override;
 
 		/**
 		 * @brief 读出帧。

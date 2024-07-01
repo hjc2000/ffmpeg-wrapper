@@ -1,10 +1,16 @@
 #include "ffmpeg-wrapper/pipe/SwrEncoderPipe.h"
+#include "SwrEncoderPipe.h"
 #include <ffmpeg-wrapper/AVSampleFormatExtention.h>
 #include <ffmpeg-wrapper/factory/EncoderPipeFactory.h>
 
-void video::SwrEncoderPipe::SendData(AVFrameWrapper *frame)
+void video::SwrEncoderPipe::SendData(AVFrameWrapper &frame)
 {
 	_swr_pipe->SendData(frame);
+}
+
+void video::SwrEncoderPipe::Flush()
+{
+	_swr_pipe->Flush();
 }
 
 video::SwrEncoderPipe::SwrEncoderPipe(

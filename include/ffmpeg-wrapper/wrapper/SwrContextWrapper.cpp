@@ -1,4 +1,5 @@
 #include "ffmpeg-wrapper/wrapper/SwrContextWrapper.h"
+#include "SwrContextWrapper.h"
 #include <ffmpeg-wrapper/AVCalculate.h>
 
 using namespace video;
@@ -38,43 +39,40 @@ SwrContextWrapper::~SwrContextWrapper()
 	swr_free(&_wrapped_obj);
 }
 
-void video::SwrContextWrapper::SendData(AVFrameWrapper *input_frame)
+void video::SwrContextWrapper::SendData(AVFrameWrapper &input_frame)
 {
 	lock_guard l(_not_private_methods_lock);
-
-	if (!input_frame)
-	{
-		// 冲洗模式
-		_flushed = true;
-
-		/* _in_pts_when_send_frame 是输出端未来的时间戳，只要将重采样器缓冲区播放完了，
-		 * 输出端的时间戳就会等于 _in_pts_when_send_frame。当然，这是在输入端的时间基上讨论的，
-		 * 转换为输出端的时间基，则时间戳不等于 _in_pts_when_send_frame。
-		 *
-		 * _in_pts_when_send_frame 每次在 send_frame 中都要被设置为未来的值，但是冲洗模式时不用设置，
-		 * 因为 _in_pts_when_send_frame 已经是重采样器缓冲区播放完时的值了。
-		 */
-		int ret = convert(nullptr, 0, nullptr, 0);
-		if (ret < 0)
-		{
-			throw std::runtime_error{ToString((ErrorCode)ret)};
-		}
-
-		return;
-	}
-
 	_in_pts_when_send_frame = ConvertTimeStamp(
-		input_frame->Pts(),
-		input_frame->TimeBase(),
+		input_frame.Pts(),
+		input_frame.TimeBase(),
 		AVRational{1, 90000});
 
 	// 非冲洗模式
-	if (input_frame->TimeBase() != _in_stream_infos.TimeBase())
+	if (input_frame.TimeBase() != _in_stream_infos.TimeBase())
 	{
-		input_frame->ChangeTimeBase(_in_stream_infos.TimeBase());
+		input_frame.ChangeTimeBase(_in_stream_infos.TimeBase());
 	}
 
-	int ret = convert(nullptr, 0, (*input_frame)->extended_data, input_frame->SampleCount());
+	int ret = convert(nullptr, 0, input_frame->extended_data, input_frame.SampleCount());
+	if (ret < 0)
+	{
+		throw std::runtime_error{ToString((ErrorCode)ret)};
+	}
+}
+
+void video::SwrContextWrapper::Flush()
+{
+	// 冲洗模式
+	_flushed = true;
+
+	/* _in_pts_when_send_frame 是输出端未来的时间戳，只要将重采样器缓冲区播放完了，
+	 * 输出端的时间戳就会等于 _in_pts_when_send_frame。当然，这是在输入端的时间基上讨论的，
+	 * 转换为输出端的时间基，则时间戳不等于 _in_pts_when_send_frame。
+	 *
+	 * _in_pts_when_send_frame 每次在 send_frame 中都要被设置为未来的值，但是冲洗模式时不用设置，
+	 * 因为 _in_pts_when_send_frame 已经是重采样器缓冲区播放完时的值了。
+	 */
+	int ret = convert(nullptr, 0, nullptr, 0);
 	if (ret < 0)
 	{
 		throw std::runtime_error{ToString((ErrorCode)ret)};
@@ -208,7 +206,7 @@ int SwrContextWrapper::send_silence_samples(uint32_t nb_samples)
 	uint32_t loop_times = nb_samples / _silence_frame->SampleCount();
 	for (uint32_t i = 0; i < loop_times; i++)
 	{
-		SendData(_silence_frame.get());
+		SendData(*_silence_frame);
 	}
 
 	// 求模，取余数，看用 _silence_frame 填充 loop_times 次后还会剩下几个采样点才能达到 nb_samples

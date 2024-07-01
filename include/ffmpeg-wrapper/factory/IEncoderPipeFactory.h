@@ -19,7 +19,7 @@ namespace video
 		/// @param output_format
 		/// @param out_bit_rate_in_bps
 		/// @return
-		virtual std::shared_ptr<base::IConsumer<AVFrameWrapper *>> CreateEncoderPipe(
+		virtual std::shared_ptr<base::IConsumer<AVFrameWrapper>> CreateEncoderPipe(
 			std::string codec_name,
 			IVideoStreamInfoCollection const &in_stream_infos,
 			std::shared_ptr<OutputFormat> output_format,
@@ -30,7 +30,7 @@ namespace video
 		/// @param in_stream_infos
 		/// @param output_format
 		/// @return
-		virtual std::shared_ptr<base::IConsumer<AVFrameWrapper *>> CreateEncoderPipe(
+		virtual std::shared_ptr<base::IConsumer<AVFrameWrapper>> CreateEncoderPipe(
 			std::string codec_name,
 			IAudioStreamInfoCollection const &in_stream_infos,
 			std::shared_ptr<OutputFormat> output_format) = 0;

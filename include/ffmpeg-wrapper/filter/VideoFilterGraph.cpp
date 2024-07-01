@@ -1,4 +1,5 @@
 #include "ffmpeg-wrapper/filter/VideoFilterGraph.h"
+#include "VideoFilterGraph.h"
 
 using namespace video;
 using namespace std;
@@ -131,28 +132,26 @@ int VideoFilterGraph::ReadData(AVFrameWrapper &frame)
 	return av_buffersink_get_frame(_buffer_sink_filter, frame);
 }
 
-void VideoFilterGraph::SendData(AVFrameWrapper *frame)
+void VideoFilterGraph::SendData(AVFrameWrapper &frame)
 {
-	if (!frame)
-	{
-		// 冲洗模式
-		int ret = av_buffersrc_add_frame_flags(
-			_buffer_filter,
-			nullptr,
-			AV_BUFFERSRC_FLAG_KEEP_REF);
-
-		if (ret < 0)
-		{
-			throw std::runtime_error{ToString((ErrorCode)ret)};
-		}
-
-		return;
-	}
-
 	// 非冲洗模式
 	int ret = av_buffersrc_add_frame_flags(
 		_buffer_filter,
-		*frame,
+		frame,
+		AV_BUFFERSRC_FLAG_KEEP_REF);
+
+	if (ret < 0)
+	{
+		throw std::runtime_error{ToString((ErrorCode)ret)};
+	}
+}
+
+void video::VideoFilterGraph::Flush()
+{
+	// 冲洗模式
+	int ret = av_buffersrc_add_frame_flags(
+		_buffer_filter,
+		nullptr,
 		AV_BUFFERSRC_FLAG_KEEP_REF);
 
 	if (ret < 0)

@@ -8,7 +8,7 @@
 namespace video
 {
 	class HysteresisBlockingFrameQueue
-		: public base::IConsumer<AVFrameWrapper *>,
+		: public base::IConsumer<AVFrameWrapper>,
 		  public base::ISource<AVFrameWrapper>,
 		  public IDisposable
 	{
@@ -30,10 +30,11 @@ namespace video
 		}
 
 		int ReadData(AVFrameWrapper &frame) override;
-		void SendData(AVFrameWrapper *frame) override;
+		void SendData(AVFrameWrapper &frame) override;
 
 		void Flush() override
 		{
+			_frame_queue.Flush();
 		}
 	};
 }

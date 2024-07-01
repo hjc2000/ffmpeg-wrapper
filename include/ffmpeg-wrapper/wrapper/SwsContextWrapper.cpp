@@ -1,4 +1,5 @@
 #include "ffmpeg-wrapper/wrapper/SwsContextWrapper.h"
+#include "SwsContextWrapper.h"
 #include <ffmpeg-wrapper/wrapper/SwrContextWrapper.h>
 
 using namespace video;
@@ -28,7 +29,7 @@ video::SwsContextWrapper::SwsContextWrapper(
 	}
 }
 
-void video::SwsContextWrapper::SendData(AVFrameWrapper *frame)
+void video::SwsContextWrapper::SendData(AVFrameWrapper &frame)
 {
 	std::lock_guard l(_lock);
 	if (_flushed)
@@ -36,19 +37,18 @@ void video::SwsContextWrapper::SendData(AVFrameWrapper *frame)
 		throw std::runtime_error{CODE_POS_STR + std::string{"冲洗后不允许再送入"}};
 	}
 
-	if (!frame)
-	{
-		_flushed = true;
-		return;
-	}
-
 	if (_out_frame_avaliable)
 	{
 		throw std::runtime_error{CODE_POS_STR + std::string{"还没有读出帧却继续送入帧"}};
 	}
 
-	_in_frame = *frame;
+	_in_frame = frame;
 	_out_frame_avaliable = true;
+}
+
+void video::SwsContextWrapper::Flush()
+{
+	_flushed = true;
 }
 
 int video::SwsContextWrapper::ReadData(AVFrameWrapper &frame)

@@ -5,11 +5,11 @@
 
 namespace video
 {
-	class SwsFpsEncoderPipe : public base::IConsumer<AVFrameWrapper *>
+	class SwsFpsEncoderPipe : public base::IConsumer<AVFrameWrapper>
 	{
 	private:
 		std::shared_ptr<SwsFpsPipe> _sws_fps_pipe;
-		std::shared_ptr<base::IConsumer<AVFrameWrapper *>> _video_encode_pipe;
+		std::shared_ptr<base::IConsumer<AVFrameWrapper>> _video_encode_pipe;
 
 	public:
 		SwsFpsEncoderPipe(
@@ -19,10 +19,8 @@ namespace video
 			std::string video_codec_name,
 			int64_t video_out_bitrate_in_bps);
 
-		void SendData(AVFrameWrapper *frame) override;
+		void SendData(AVFrameWrapper &frame) override;
 
-		void Flush() override
-		{
-		}
+		void Flush() override;
 	};
 }

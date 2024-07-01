@@ -21,7 +21,7 @@ namespace video
 	/// </summary>
 	class SwrContextWrapper
 		: public base::Wrapper<SwrContext>,
-		  public base::IConsumer<AVFrameWrapper *>,
+		  public base::IConsumer<AVFrameWrapper>,
 		  public base::ISource<AVFrameWrapper>
 	{
 		SwrContext *_wrapped_obj = nullptr;
@@ -180,11 +180,9 @@ namespace video
 		 *
 		 * @exception SendFrameException
 		 */
-		void SendData(AVFrameWrapper *input_frame) override;
+		void SendData(AVFrameWrapper &input_frame) override;
 
-		void Flush() override
-		{
-		}
+		void Flush() override;
 
 		/**
 		 * @brief 将重采样器中的数据取出来

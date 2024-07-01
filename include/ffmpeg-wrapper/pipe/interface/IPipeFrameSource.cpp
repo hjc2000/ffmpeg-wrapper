@@ -5,11 +5,18 @@ using namespace video;
 
 void IPipeFrameSource::SendFrameToEachConsumer(AVFrameWrapper *frame)
 {
-	for (std::shared_ptr<base::IConsumer<AVFrameWrapper *>> &consumer : FrameConsumerList())
+	for (std::shared_ptr<base::IConsumer<AVFrameWrapper>> &consumer : FrameConsumerList())
 	{
 		if (consumer)
 		{
-			consumer->SendData(frame);
+			if (frame)
+			{
+				consumer->SendData(*frame);
+			}
+			else
+			{
+				consumer->Flush();
+			}
 		}
 	}
 }

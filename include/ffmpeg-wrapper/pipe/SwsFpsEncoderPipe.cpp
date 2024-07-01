@@ -19,7 +19,12 @@ video::SwsFpsEncoderPipe::SwsFpsEncoderPipe(
 	_sws_fps_pipe->FrameConsumerList().Add(_video_encode_pipe);
 }
 
-void video::SwsFpsEncoderPipe::SendData(AVFrameWrapper *frame)
+void video::SwsFpsEncoderPipe::SendData(AVFrameWrapper &frame)
 {
 	_sws_fps_pipe->SendData(frame);
+}
+
+void video::SwsFpsEncoderPipe::Flush()
+{
+	_sws_fps_pipe->Flush();
 }

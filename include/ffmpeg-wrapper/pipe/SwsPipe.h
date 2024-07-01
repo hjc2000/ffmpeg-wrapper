@@ -9,10 +9,10 @@ namespace video
 {
 	class SwsPipe
 		: public IPipeFrameSource,
-		  public base::IConsumer<AVFrameWrapper *>
+		  public base::IConsumer<AVFrameWrapper>
 	{
 	private:
-		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper *>>> _consumer_list;
+		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> _consumer_list;
 		std::shared_ptr<SwsContextWrapper> _sws_context;
 		VideoFrameInfoCollection _in_video_frame_infos;
 		VideoFrameInfoCollection _desire_out_video_frame_infos;
@@ -24,15 +24,13 @@ namespace video
 	public:
 		SwsPipe(IVideoFrameInfoCollection const &desire_out_video_frame_infos);
 
-		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper *>>> &FrameConsumerList() override
+		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> &FrameConsumerList() override
 		{
 			return _consumer_list;
 		}
 
-		void SendData(AVFrameWrapper *frame) override;
+		void SendData(AVFrameWrapper &frame) override;
 
-		void Flush() override
-		{
-		}
+		void Flush() override;
 	};
 }

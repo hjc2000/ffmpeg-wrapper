@@ -11,7 +11,7 @@ namespace video
 	/// @brief 视频滤镜图
 	class VideoFilterGraph
 		: public base::Wrapper<AVFilterGraph>,
-		  public base::IConsumer<AVFrameWrapper *>,
+		  public base::IConsumer<AVFrameWrapper>,
 		  public base::ISource<AVFrameWrapper>
 	{
 	private:
@@ -50,10 +50,8 @@ namespace video
 		void config_graph();
 
 		int ReadData(AVFrameWrapper &frame) override;
-		void SendData(AVFrameWrapper *frame) override;
+		void SendData(AVFrameWrapper &frame) override;
 
-		void Flush() override
-		{
-		}
+		void Flush() override;
 	};
 }
