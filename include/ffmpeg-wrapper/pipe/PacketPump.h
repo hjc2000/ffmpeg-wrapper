@@ -4,7 +4,6 @@
 #include <base/task/CancellationToken.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/pipe/interface/IPipePacketSource.h>
-#include <ffmpeg-wrapper/pipe/interface/IPump.h>
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include <jccpp/IDisposable.h>
 #include <memory>
@@ -16,7 +15,6 @@ namespace video
 	/// </summary>
 	class PacketPump
 		: public IPipePacketSource,
-		  public IPump,
 		  public IDisposable
 	{
 	private:
@@ -55,6 +53,6 @@ namespace video
 		/// </summary>
 		std::function<void(AVPacketWrapper *packet)> _on_before_send_packet_to_consumer;
 
-		void Pump(std::shared_ptr<base::CancellationToken> cancellation_token) override;
+		void Pump(std::shared_ptr<base::CancellationToken> cancellation_token);
 	};
 }
