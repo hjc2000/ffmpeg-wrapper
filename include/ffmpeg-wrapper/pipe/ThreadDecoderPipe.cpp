@@ -92,13 +92,13 @@ void video::ThreadDecoderPipe::SendPacket(AVPacketWrapper *packet)
 		_do_not_flush_consumer = false;
 	}
 
-	_packet_queue.SendPacket(packet);
+	_packet_queue.SendData(*packet);
 }
 
 void video::ThreadDecoderPipe::FlushDecoderButNotFlushConsumers()
 {
 	_do_not_flush_consumer = true;
-	_packet_queue.SendPacket(nullptr);
+	_packet_queue.Flush();
 }
 
 AVRational video::ThreadDecoderPipe::TimeBase() const
