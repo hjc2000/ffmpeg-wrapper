@@ -13,8 +13,8 @@ namespace video
 {
 	class SwsContextWrapper
 		: public base::Wrapper<SwsContext>,
-		  public base::IConsumer<AVFrameWrapper>,
-		  public base::ISource<AVFrameWrapper>
+		  public thread::IConsumer<AVFrameWrapper>,
+		  public thread::ISource<AVFrameWrapper>
 	{
 		SwsContext *_wrapped_obj = nullptr;
 		VideoFrameInfoCollection _in_video_frame_infos;

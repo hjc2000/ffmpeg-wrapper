@@ -21,8 +21,8 @@ namespace video
 	/// </summary>
 	class SwrContextWrapper
 		: public base::Wrapper<SwrContext>,
-		  public base::IConsumer<AVFrameWrapper>,
-		  public base::ISource<AVFrameWrapper>
+		  public thread::IConsumer<AVFrameWrapper>,
+		  public thread::ISource<AVFrameWrapper>
 	{
 		SwrContext *_wrapped_obj = nullptr;
 

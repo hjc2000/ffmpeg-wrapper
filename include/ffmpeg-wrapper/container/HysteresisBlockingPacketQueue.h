@@ -11,8 +11,8 @@ namespace video
 	///		包队列。内部使用带有滞回特性的 HysteresisBlockingQueue
 	/// </summary>
 	class HysteresisBlockingPacketQueue
-		: public base::IConsumer<AVPacketWrapper>,
-		  public base::ISource<AVPacketWrapper>,
+		: public thread::IConsumer<AVPacketWrapper>,
+		  public thread::ISource<AVPacketWrapper>,
 		  public IDisposable
 	{
 	private:

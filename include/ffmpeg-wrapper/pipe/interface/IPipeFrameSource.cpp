@@ -5,7 +5,7 @@ using namespace video;
 
 void IPipeFrameSource::SendFrameToEachConsumer(AVFrameWrapper *frame)
 {
-	for (std::shared_ptr<base::IConsumer<AVFrameWrapper>> &consumer : FrameConsumerList())
+	for (std::shared_ptr<thread::IConsumer<AVFrameWrapper>> &consumer : FrameConsumerList())
 	{
 		if (consumer)
 		{

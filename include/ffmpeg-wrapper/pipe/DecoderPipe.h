@@ -21,7 +21,7 @@ namespace video
 		std::atomic_bool _disposed = false;
 		std::shared_ptr<AVCodecContextWrapper> _decoder;
 		AVFrameWrapper _decoder_out_frame;
-		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> _consumer_list;
+		base::List<std::shared_ptr<thread::IConsumer<AVFrameWrapper>>> _consumer_list;
 
 		void read_and_send_frame();
 
@@ -35,7 +35,7 @@ namespace video
 		/// </summary>
 		void Dispose() override;
 
-		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> &FrameConsumerList() override
+		base::List<std::shared_ptr<thread::IConsumer<AVFrameWrapper>>> &FrameConsumerList() override
 		{
 			return _consumer_list;
 		}

@@ -8,8 +8,8 @@
 namespace video
 {
 	class HysteresisBlockingFrameQueue
-		: public base::IConsumer<AVFrameWrapper>,
-		  public base::ISource<AVFrameWrapper>,
+		: public thread::IConsumer<AVFrameWrapper>,
+		  public thread::ISource<AVFrameWrapper>,
 		  public IDisposable
 	{
 	private:

@@ -17,11 +17,11 @@ namespace video
 	///		- 帧从这里输入后再输出，帧率就变了。这里会插帧或删帧。
 	/// </summary>
 	class FpsAdjustPipe
-		: public base::IConsumer<AVFrameWrapper>,
+		: public thread::IConsumer<AVFrameWrapper>,
 		  public IPipeFrameSource
 	{
 	private:
-		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> _consumer_list;
+		base::List<std::shared_ptr<thread::IConsumer<AVFrameWrapper>>> _consumer_list;
 		VideoStreamInfoCollection _input_video_stream_infos;
 		VideoFilterGraph _graph;
 		AVRational _desired_out_fps;
@@ -37,7 +37,7 @@ namespace video
 		/// <param name="desired_out_fps">期望的输出帧率</param>
 		FpsAdjustPipe(IVideoStreamInfoCollection const &input_video_stream_infos, AVRational desired_out_fps);
 
-		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> &FrameConsumerList() override
+		base::List<std::shared_ptr<thread::IConsumer<AVFrameWrapper>>> &FrameConsumerList() override
 		{
 			return _consumer_list;
 		}

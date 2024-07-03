@@ -11,8 +11,8 @@ namespace video
 	/// @brief 视频滤镜图
 	class VideoFilterGraph
 		: public base::Wrapper<AVFilterGraph>,
-		  public base::IConsumer<AVFrameWrapper>,
-		  public base::ISource<AVFrameWrapper>
+		  public thread::IConsumer<AVFrameWrapper>,
+		  public thread::ISource<AVFrameWrapper>
 	{
 	private:
 		AVFilterGraph *_wrapped_obj = nullptr;

@@ -71,12 +71,12 @@ void video::SptsEncodeMux::WriteHeader()
 	_out_format->DumpFormat();
 }
 
-shared_ptr<base::IConsumer<AVFrameWrapper>> video::SptsEncodeMux::VideoEncodePipe()
+shared_ptr<thread::IConsumer<AVFrameWrapper>> video::SptsEncodeMux::VideoEncodePipe()
 {
 	return _video_encoder_pipe;
 }
 
-shared_ptr<base::IConsumer<AVFrameWrapper>> video::SptsEncodeMux::AudioEncodePipe()
+shared_ptr<thread::IConsumer<AVFrameWrapper>> video::SptsEncodeMux::AudioEncodePipe()
 {
 	return _audio_encode_pipe;
 }

@@ -17,7 +17,7 @@ namespace video
 	class AVCodecContextWrapper;
 
 	class InputFormat : public base::Wrapper<AVFormatContext>,
-						public base::ISource<AVPacketWrapper>
+						public thread::ISource<AVPacketWrapper>
 	{
 	private:
 		AVFormatContext *_wrapped_obj = nullptr;

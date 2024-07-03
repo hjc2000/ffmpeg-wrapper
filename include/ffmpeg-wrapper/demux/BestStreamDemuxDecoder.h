@@ -16,8 +16,8 @@ namespace video
 	public:
 		BestStreamDemuxDecoder(std::shared_ptr<InputFormat> input_format);
 
-		void AddVideoFrameConsumer(std::shared_ptr<base::IConsumer<AVFrameWrapper>> consumer);
-		void AddAudioFrameConsumer(std::shared_ptr<base::IConsumer<AVFrameWrapper>> consumer);
+		void AddVideoFrameConsumer(std::shared_ptr<thread::IConsumer<AVFrameWrapper>> consumer);
+		void AddAudioFrameConsumer(std::shared_ptr<thread::IConsumer<AVFrameWrapper>> consumer);
 
 		void Pump(std::shared_ptr<base::CancellationToken> cancel_pump);
 	};

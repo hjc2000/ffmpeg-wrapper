@@ -21,7 +21,7 @@ video::BestStreamDemuxDecoder::BestStreamDemuxDecoder(shared_ptr<InputFormat> in
 	}
 }
 
-void video::BestStreamDemuxDecoder::AddVideoFrameConsumer(shared_ptr<base::IConsumer<AVFrameWrapper>> consumer)
+void video::BestStreamDemuxDecoder::AddVideoFrameConsumer(shared_ptr<thread::IConsumer<AVFrameWrapper>> consumer)
 {
 	if (_video_decode_pipe)
 	{
@@ -29,7 +29,7 @@ void video::BestStreamDemuxDecoder::AddVideoFrameConsumer(shared_ptr<base::ICons
 	}
 }
 
-void video::BestStreamDemuxDecoder::AddAudioFrameConsumer(shared_ptr<base::IConsumer<AVFrameWrapper>> consumer)
+void video::BestStreamDemuxDecoder::AddAudioFrameConsumer(shared_ptr<thread::IConsumer<AVFrameWrapper>> consumer)
 {
 	if (_audio_decode_pipe)
 	{

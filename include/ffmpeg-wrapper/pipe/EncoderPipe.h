@@ -17,7 +17,7 @@ namespace video
 	/// 会在那个 OutputFormat 中创建新的流并与本 EncoderPipe 对象绑定。
 	/// 向本对象送入帧后会编码，然后写入 OutputFormat。
 	class EncoderPipe
-		: public base::IConsumer<AVFrameWrapper>
+		: public thread::IConsumer<AVFrameWrapper>
 	{
 	private:
 		std::shared_ptr<AVCodecContextWrapper> _encoder_ctx;
