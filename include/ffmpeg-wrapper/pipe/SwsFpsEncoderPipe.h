@@ -1,5 +1,5 @@
 #pragma once
-#include <ffmpeg-wrapper/factory/IEncoderPipeFactory.h>
+#include <ffmpeg-wrapper/factory/EncoderPipeFactory.h>
 #include <ffmpeg-wrapper/pipe/SwsFpsPipe.h>
 #include <memory>
 
@@ -13,7 +13,7 @@ namespace video
 
 	public:
 		SwsFpsEncoderPipe(
-			std::shared_ptr<IEncoderPipeFactory> facroty,
+			std::shared_ptr<EncoderPipeFactory> facroty,
 			std::shared_ptr<OutputFormat> out_format,
 			IVideoStreamInfoCollection const &video_stream_infos,
 			std::string video_codec_name,

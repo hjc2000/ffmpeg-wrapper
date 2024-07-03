@@ -1,5 +1,7 @@
 #pragma once
-#include <ffmpeg-wrapper/factory/IEncoderPipeFactory.h>
+#include <ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
+#include <ffmpeg-wrapper/info-collection/IVideoStreamInfoCollection.h>
+#include <ffmpeg-wrapper/output-format/OutputFormat.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include <memory>
 #include <thread/pipe/IConsumer.h>
@@ -11,7 +13,6 @@ namespace video
 	/// @note 如果移植到特殊平台，需要硬件编码加速，可以自己实现一个编码器工厂，
 	/// 继承 video::IEncoderPipeFactory 接口，在这里提供硬件加速的编码器。
 	class EncoderPipeFactory
-		: public video::IEncoderPipeFactory
 	{
 	private:
 		EncoderPipeFactory() = default;
@@ -34,7 +35,7 @@ namespace video
 			std::string codec_name,
 			IVideoStreamInfoCollection const &in_stream_infos,
 			std::shared_ptr<OutputFormat> output_format,
-			int64_t out_bit_rate_in_bps = -1) override;
+			int64_t out_bit_rate_in_bps = -1);
 
 		/// @brief 构造音频编码管道
 		/// @param codec_name
@@ -44,6 +45,6 @@ namespace video
 		std::shared_ptr<base::IConsumer<AVFrameWrapper>> CreateEncoderPipe(
 			std::string codec_name,
 			IAudioStreamInfoCollection const &in_stream_infos,
-			std::shared_ptr<OutputFormat> output_format) override;
+			std::shared_ptr<OutputFormat> output_format);
 	};
 }

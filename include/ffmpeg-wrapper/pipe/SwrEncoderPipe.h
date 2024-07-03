@@ -1,6 +1,6 @@
 #pragma once
 #include <ffmpeg-wrapper/base_include.h>
-#include <ffmpeg-wrapper/factory/IEncoderPipeFactory.h>
+#include <ffmpeg-wrapper/factory/EncoderPipeFactory.h>
 #include <ffmpeg-wrapper/output-format/OutputFormat.h>
 #include <ffmpeg-wrapper/pipe/SwrPipe.h>
 #include <string>
@@ -28,7 +28,7 @@ namespace video
 		/// </param>
 		/// <param name="output_format">编码后要将包写入的封装。</param>
 		SwrEncoderPipe(
-			std::shared_ptr<IEncoderPipeFactory> facroty,
+			std::shared_ptr<EncoderPipeFactory> facroty,
 			std::string codec_name,
 			IAudioStreamInfoCollection &infos,
 			shared_ptr<OutputFormat> output_format);

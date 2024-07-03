@@ -1,10 +1,10 @@
-#include "ffmpeg-wrapper/mux/SptsEncodeMux.h"
+#include "SptsEncodeMux.h"
 
 using namespace video;
 using namespace std;
 
 video::SptsEncodeMux::SptsEncodeMux(
-	std::shared_ptr<video::IEncoderPipeFactory> factory,
+	std::shared_ptr<video::EncoderPipeFactory> factory,
 	shared_ptr<OutputFormat> out_format,
 	// 视频相关参数
 	IVideoStreamInfoCollection const &video_stream_infos,

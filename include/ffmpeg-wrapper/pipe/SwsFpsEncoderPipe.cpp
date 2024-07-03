@@ -4,7 +4,7 @@ using namespace std;
 using namespace video;
 
 video::SwsFpsEncoderPipe::SwsFpsEncoderPipe(
-	std::shared_ptr<IEncoderPipeFactory> facroty,
+	std::shared_ptr<EncoderPipeFactory> facroty,
 	shared_ptr<OutputFormat> out_format,
 	IVideoStreamInfoCollection const &video_stream_infos,
 	std::string video_codec_name,

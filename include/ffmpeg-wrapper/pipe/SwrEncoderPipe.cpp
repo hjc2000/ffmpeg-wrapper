@@ -14,7 +14,7 @@ void video::SwrEncoderPipe::Flush()
 }
 
 video::SwrEncoderPipe::SwrEncoderPipe(
-	std::shared_ptr<IEncoderPipeFactory> facroty,
+	std::shared_ptr<EncoderPipeFactory> facroty,
 	std::string codec_name,
 	IAudioStreamInfoCollection &infos,
 	shared_ptr<OutputFormat> output_format)
