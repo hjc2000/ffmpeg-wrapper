@@ -6,7 +6,7 @@ using namespace std;
 using namespace video;
 
 video::ThreadDecoderPipe::ThreadDecoderPipe(
-	std::shared_ptr<IDecoderPipeFactory> factory,
+	std::shared_ptr<DecoderPipeFactory> factory,
 	AVStreamInfoCollection stream)
 {
 	_factory = factory;
