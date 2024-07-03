@@ -1,8 +1,8 @@
 #pragma once
-#include <base/pipe/IConsumer.h>
 #include <ffmpeg-wrapper/input-format/InputFormat.h>
 #include <ffmpeg-wrapper/pipe/ThreadDecoderPipe.h>
 #include <memory>
+#include <thread/pipe/IConsumer.h>
 
 namespace video
 {

@@ -1,7 +1,6 @@
 #pragma once
 #include <atomic>
 #include <base/container/List.h>
-#include <base/pipe/IConsumer.h>
 #include <ffmpeg-wrapper/AVToString.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
@@ -11,6 +10,7 @@
 #include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
 #include <jccpp/TaskCompletionSignal.h>
 #include <memory>
+#include <thread/pipe/IConsumer.h>
 #include <vector>
 
 namespace video

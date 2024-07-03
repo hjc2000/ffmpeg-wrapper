@@ -1,8 +1,8 @@
 #pragma once
 #include <base/container/List.h>
-#include <base/pipe/IConsumer.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include <memory>
+#include <thread/pipe/IConsumer.h>
 
 namespace video
 {

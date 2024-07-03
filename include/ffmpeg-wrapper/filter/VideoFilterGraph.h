@@ -1,10 +1,10 @@
 #pragma once
-#include <base/pipe/IConsumer.h>
-#include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/info-collection/VideoStreamInfoCollection.h>
 #include <ffmpeg-wrapper/wrapper/AVDictionaryWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVFilterContextWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
+#include <thread/pipe/IConsumer.h>
+#include <thread/pipe/ISource.h>
 
 namespace video
 {

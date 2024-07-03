@@ -1,6 +1,6 @@
 #pragma once
-#include <base/pipe/IConsumer.h>
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
+#include <thread/pipe/IConsumer.h>
 
 namespace video
 {

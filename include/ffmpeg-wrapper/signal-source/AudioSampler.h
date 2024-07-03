@@ -1,10 +1,10 @@
 #pragma once
 #include <base/math/Fraction.h>
-#include <base/pipe/ISource.h>
 #include <base/signal/ISignalSource.h>
 #include <ffmpeg-wrapper/info-collection/AudioFrameInfoCollection.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include <memory>
+#include <thread/pipe/ISource.h>
 
 namespace video
 {

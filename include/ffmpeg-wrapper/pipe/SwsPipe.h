@@ -1,9 +1,9 @@
 #pragma once
-#include <base/pipe/IConsumer.h>
 #include <ffmpeg-wrapper/info-collection/VideoFrameInfoCollection.h>
 #include <ffmpeg-wrapper/pipe/interface/IPipeFrameSource.h>
 #include <ffmpeg-wrapper/wrapper/SwsContextWrapper.h>
 #include <memory>
+#include <thread/pipe/IConsumer.h>
 
 namespace video
 {

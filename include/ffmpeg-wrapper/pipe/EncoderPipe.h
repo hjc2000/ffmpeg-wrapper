@@ -1,7 +1,5 @@
 #pragma once
 #include <atomic>
-#include <base/pipe/IConsumer.h>
-#include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/IVideoStreamInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/VideoStreamInfoCollection.h>
@@ -10,6 +8,8 @@
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
 #include <jccpp/IDisposable.h>
+#include <thread/pipe/IConsumer.h>
+#include <thread/pipe/ISource.h>
 
 namespace video
 {

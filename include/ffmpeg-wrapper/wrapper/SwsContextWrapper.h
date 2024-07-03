@@ -1,13 +1,13 @@
 #pragma once
 #include <atomic>
 #include <base/Wrapper.h>
-#include <base/pipe/IConsumer.h>
-#include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/info-collection/VideoFrameInfoCollection.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include <mutex>
+#include <thread/pipe/IConsumer.h>
+#include <thread/pipe/ISource.h>
 
 namespace video
 {
