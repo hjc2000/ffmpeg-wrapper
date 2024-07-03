@@ -13,7 +13,8 @@ namespace video
 	///		内部包装了一个线程的解码管道。
 	///		本类依赖 DecoderPipeFactory 来创建内部的解码管道。
 	/// </summary>
-	class ThreadDecoderPipe final : public IDecoderPipe
+	class ThreadDecoderPipe final
+		: public IDecoderPipe
 	{
 	private:
 		std::shared_ptr<IDecoderPipeFactory> _factory;

@@ -15,15 +15,14 @@ void HysteresisBlockingPacketQueue::Dispose()
 	_packet_queue.Dispose();
 }
 
-void HysteresisBlockingPacketQueue::SendPacket(AVPacketWrapper *packet)
+void video::HysteresisBlockingPacketQueue::SendData(AVPacketWrapper &data)
 {
-	if (!packet)
-	{
-		_packet_queue.Flush();
-		return;
-	}
+	_packet_queue.Enqueue(data);
+}
 
-	_packet_queue.Enqueue(*packet);
+void video::HysteresisBlockingPacketQueue::Flush()
+{
+	_packet_queue.Flush();
 }
 
 int HysteresisBlockingPacketQueue::ReadData(AVPacketWrapper &packet)

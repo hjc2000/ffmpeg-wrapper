@@ -1,4 +1,5 @@
 #pragma once
+#include <base/pipe/IConsumer.h>
 #include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/pipe/interface/IPacketConsumer.h>
@@ -11,7 +12,7 @@ namespace video
 	///		包队列。内部使用带有滞回特性的 HysteresisBlockingQueue
 	/// </summary>
 	class HysteresisBlockingPacketQueue
-		: public IPacketConsumer,
+		: public base::IConsumer<AVPacketWrapper>,
 		  public base::ISource<AVPacketWrapper>,
 		  public IDisposable
 	{
@@ -25,14 +26,8 @@ namespace video
 		/// </summary>
 		void Dispose() override;
 
-		/// <summary>
-		///		向队列送入包
-		/// </summary>
-		/// <param name="packet">
-		///		送入空指针冲洗内部队列。
-		///		冲洗后，送入包不会再被阻塞，而是会抛出异常。
-		/// </param>
-		void SendPacket(AVPacketWrapper *packet);
+		void SendData(AVPacketWrapper &data) override;
+		void Flush() override;
 
 		/// <summary>
 		///		读取包。
