@@ -19,7 +19,7 @@ void video::SwrPipe::read_and_send_frame()
 		{
 		case 0:
 		{
-			SendFrameToEachConsumer(&_swr_out_frame);
+			SendDataToEachConsumer(_swr_out_frame);
 
 			// 下轮循环继续读取
 			break;
@@ -30,7 +30,7 @@ void video::SwrPipe::read_and_send_frame()
 		}
 		case (int)ErrorCode::eof:
 		{
-			SendFrameToEachConsumer(nullptr);
+			FlushEachConsumer();
 			return;
 		}
 		default:
@@ -50,7 +50,7 @@ void video::SwrPipe::read_and_send_frame_without_flushing_consumer()
 		{
 		case 0:
 		{
-			SendFrameToEachConsumer(&_swr_out_frame);
+			SendDataToEachConsumer(_swr_out_frame);
 
 			// 下轮循环继续读取
 			break;
@@ -85,7 +85,7 @@ void video::SwrPipe::change_swr()
 
 void video::SwrPipe::SendData(AVFrameWrapper &frame)
 {
-	if (FrameConsumerList().Count() == 0)
+	if (ConsumerList().Count() == 0)
 	{
 		return;
 	}
@@ -103,7 +103,7 @@ void video::SwrPipe::SendData(AVFrameWrapper &frame)
 
 void video::SwrPipe::Flush()
 {
-	if (FrameConsumerList().Count() == 0)
+	if (ConsumerList().Count() == 0)
 	{
 		return;
 	}

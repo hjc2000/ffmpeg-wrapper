@@ -16,7 +16,7 @@ video::SwsFpsEncoderPipe::SwsFpsEncoderPipe(
 		out_format,
 		video_out_bitrate_in_bps);
 	_sws_fps_pipe = shared_ptr<SwsFpsPipe>{new SwsFpsPipe{video_stream_infos}};
-	_sws_fps_pipe->FrameConsumerList().Add(_video_encode_pipe);
+	_sws_fps_pipe->ConsumerList().Add(_video_encode_pipe);
 }
 
 void video::SwsFpsEncoderPipe::SendData(AVFrameWrapper &frame)

@@ -35,7 +35,7 @@ namespace video
 		/// </summary>
 		void Dispose() override;
 
-		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> &FrameConsumerList() override
+		base::IList<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> &ConsumerList() override
 		{
 			return _consumer_list;
 		}

@@ -38,7 +38,7 @@ namespace video
 		/// <param name="desired_out_frame_infos">期望输出的音频帧是什么样的</param>
 		SwrPipe(IAudioFrameInfoCollection &desired_out_frame_infos);
 
-		base::List<shared_ptr<base::IConsumer<AVFrameWrapper>>> &FrameConsumerList() override
+		base::IList<shared_ptr<base::IConsumer<AVFrameWrapper>>> &ConsumerList() override
 		{
 			return _consumer_list;
 		}

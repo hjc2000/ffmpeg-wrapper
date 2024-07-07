@@ -24,7 +24,7 @@ namespace video
 	public:
 		SwsPipe(IVideoFrameInfoCollection const &desire_out_video_frame_infos);
 
-		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> &FrameConsumerList() override
+		base::IList<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> &ConsumerList() override
 		{
 			return _consumer_list;
 		}

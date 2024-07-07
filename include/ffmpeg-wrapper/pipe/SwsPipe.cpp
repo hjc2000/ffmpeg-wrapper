@@ -8,7 +8,7 @@ void video::SwsPipe::ReadAndSendFrame()
 	{
 	case 0:
 	{
-		SendFrameToEachConsumer(&_sws_out_frame);
+		SendDataToEachConsumer(_sws_out_frame);
 		break;
 	}
 	case (int)ErrorCode::output_is_temporarily_unavailable:
@@ -17,7 +17,7 @@ void video::SwsPipe::ReadAndSendFrame()
 	}
 	case (int)ErrorCode::eof:
 	{
-		SendFrameToEachConsumer(nullptr);
+		FlushEachConsumer();
 		return;
 	}
 	}

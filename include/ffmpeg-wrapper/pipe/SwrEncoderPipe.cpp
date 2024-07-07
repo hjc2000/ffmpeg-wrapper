@@ -23,9 +23,9 @@ video::SwrEncoderPipe::SwrEncoderPipe(
 		infos,
 		AVSampleFormatExtention::ParseRequiredSampleCount(codec_name)};
 	_swr_pipe = shared_ptr<SwrPipe>{new SwrPipe{swr_out_frame_infos}};
-	_encoder_pipe = facroty->CreateEncoderPipe(
-		codec_name,
-		infos,
-		output_format);
-	_swr_pipe->FrameConsumerList().Add(_encoder_pipe);
+	_encoder_pipe = facroty->CreateEncoderPipe(codec_name,
+											   infos,
+											   output_format);
+
+	_swr_pipe->ConsumerList().Add(_encoder_pipe);
 }

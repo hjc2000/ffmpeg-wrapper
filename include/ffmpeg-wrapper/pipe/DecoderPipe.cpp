@@ -22,7 +22,7 @@ void DecoderPipe::Dispose()
 
 void DecoderPipe::SendPacket(AVPacketWrapper *packet)
 {
-	if (FrameConsumerList().Count() == 0)
+	if (ConsumerList().Count() == 0)
 	{
 		// 管道出口没有接收者。直接返回，节省性能。
 		return;
@@ -59,7 +59,7 @@ void DecoderPipe::read_and_send_frame()
 		{
 		case 0:
 		{
-			SendFrameToEachConsumer(&_decoder_out_frame);
+			SendDataToEachConsumer(_decoder_out_frame);
 			break;
 		}
 		case (int)ErrorCode::output_is_temporarily_unavailable:
@@ -70,7 +70,7 @@ void DecoderPipe::read_and_send_frame()
 		case (int)ErrorCode::eof:
 		{
 			// 解码器已被冲洗
-			SendFrameToEachConsumer(nullptr);
+			FlushEachConsumer();
 			return;
 		}
 		default:
@@ -91,7 +91,7 @@ void DecoderPipe::FlushDecoderButNotFlushConsumers()
 		{
 		case 0:
 		{
-			SendFrameToEachConsumer(&_decoder_out_frame);
+			SendDataToEachConsumer(_decoder_out_frame);
 			break;
 		}
 		case (int)ErrorCode::output_is_temporarily_unavailable:

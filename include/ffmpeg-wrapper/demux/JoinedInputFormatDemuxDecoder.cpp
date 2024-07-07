@@ -27,10 +27,8 @@ void video::JoinedInputFormatDemuxDecoder::InitializeVideoDecoderPipe()
 				video::DecoderPipeFactory::Instance(),
 				_video_stream_infos}};
 
-		_video_decode_pipe->FrameConsumerList().Add(
-			_video_frame_consumer_list);
-		_infinite_packet_pipe->PacketConsumerList().Add(
-			_video_decode_pipe);
+		_video_decode_pipe->ConsumerList().Add(_video_frame_consumer_list);
+		_infinite_packet_pipe->PacketConsumerList().Add(_video_decode_pipe);
 	}
 	else
 	{
@@ -65,11 +63,9 @@ void video::JoinedInputFormatDemuxDecoder::InitializeAudioDecoderPipe()
 			},
 		};
 
-		_audio_decode_pipe->FrameConsumerList().Add(
-			_audio_frame_consumer_list);
+		_audio_decode_pipe->ConsumerList().Add(_audio_frame_consumer_list);
 
-		_infinite_packet_pipe->PacketConsumerList().Add(
-			_audio_decode_pipe);
+		_infinite_packet_pipe->PacketConsumerList().Add(_audio_decode_pipe);
 	}
 	else
 	{

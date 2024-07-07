@@ -25,7 +25,7 @@ void video::BestStreamDemuxDecoder::AddVideoFrameConsumer(shared_ptr<base::ICons
 {
 	if (_video_decode_pipe)
 	{
-		_video_decode_pipe->FrameConsumerList().Add(consumer);
+		_video_decode_pipe->ConsumerList().Add(consumer);
 	}
 }
 
@@ -33,7 +33,7 @@ void video::BestStreamDemuxDecoder::AddAudioFrameConsumer(shared_ptr<base::ICons
 {
 	if (_audio_decode_pipe)
 	{
-		_audio_decode_pipe->FrameConsumerList().Add(consumer);
+		_audio_decode_pipe->ConsumerList().Add(consumer);
 	}
 }
 

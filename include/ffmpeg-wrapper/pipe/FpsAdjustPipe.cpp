@@ -33,7 +33,7 @@ void FpsAdjustPipe::ReadAndSendFrame()
 			// 滤镜出来的 pts 与输入端的 pts 有误差，则本轮循环读取的每一个帧的 pts 都要加上 delta_pts。
 			frame.SetPts(frame.Pts() + delta_pts);
 			frame.SetTimeBase(AVRational{_desired_out_fps.den, _desired_out_fps.num});
-			SendFrameToEachConsumer(&frame);
+			SendDataToEachConsumer(frame);
 
 			// 下轮循环继续读取
 			break;
@@ -44,7 +44,7 @@ void FpsAdjustPipe::ReadAndSendFrame()
 		}
 		case (int)ErrorCode::eof:
 		{
-			SendFrameToEachConsumer(nullptr);
+			FlushEachConsumer();
 			return;
 		}
 		}
@@ -66,7 +66,7 @@ FpsAdjustPipe::FpsAdjustPipe(IVideoStreamInfoCollection const &input_video_strea
 
 void FpsAdjustPipe::SendData(AVFrameWrapper &frame)
 {
-	if (FrameConsumerList().Count() == 0)
+	if (ConsumerList().Count() == 0)
 	{
 		return;
 	}
