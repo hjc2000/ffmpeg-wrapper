@@ -53,8 +53,8 @@ namespace video
 		///		送进来的包的时间基必须是 1/90000，否则会抛出异常。
 		/// </summary>
 		/// <param name="packet"></param>
-		void SendPacket(AVPacketWrapper *packet) override;
+		void SendData(AVPacketWrapper &packet) override;
 
-		void FlushConsumer();
+		void Flush();
 	};
 }

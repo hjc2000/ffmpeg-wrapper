@@ -45,7 +45,13 @@ namespace video
 		///		另一个线程会负责从队列中取出包进行解码。
 		/// </summary>
 		/// <param name="packet"></param>
-		void SendPacket(AVPacketWrapper *packet) override;
+		void SendData(AVPacketWrapper &packet) override;
+
+		/// @brief 冲洗消费者
+		void Flush() override
+		{
+			_do_not_flush_consumer = false;
+		}
 
 		/// <summary>
 		///		冲洗解码器，但是不冲洗消费者。

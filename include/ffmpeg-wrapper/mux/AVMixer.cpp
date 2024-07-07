@@ -52,7 +52,7 @@ bool video::AVMixer::ReadVideoPacketOnce(shared_ptr<base::CancellationToken> can
 			_temp_packet.SetStreamIndex(0);
 			_temp_packet.ChangeTimeBase(AVRational{1, 90000});
 			_video_time = _temp_packet.Dts();
-			_out_format->SendPacket(&_temp_packet);
+			_out_format->SendData(_temp_packet);
 			if (_video_time < _audio_time)
 			{
 				continue;
@@ -87,7 +87,7 @@ bool video::AVMixer::ReadAudioPacketOnce(shared_ptr<base::CancellationToken> can
 			_temp_packet.SetStreamIndex(1);
 			_temp_packet.ChangeTimeBase(AVRational{1, 90000});
 			_audio_time = _temp_packet.Dts();
-			_out_format->SendPacket(&_temp_packet);
+			_out_format->SendData(_temp_packet);
 			if (_audio_time < _video_time)
 			{
 				continue;
@@ -127,8 +127,8 @@ void video::AVMixer::Pump(shared_ptr<base::CancellationToken> cancel_pump)
 		bool read_audio_packet_result = ReadAudioPacketOnce(cancel_pump);
 		if (!read_video_packet_result && !read_audio_packet_result)
 		{
-			_out_format->SendPacket(nullptr);
-			_out_format->SendPacket(nullptr);
+			_out_format->Flush();
+			_out_format->Flush();
 			return;
 		}
 	}

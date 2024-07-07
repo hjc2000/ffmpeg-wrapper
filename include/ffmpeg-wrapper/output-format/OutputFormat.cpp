@@ -8,36 +8,36 @@
 
 using namespace video;
 
-void video::OutputFormat::SendPacket(AVPacketWrapper *packet)
+void video::OutputFormat::SendData(AVPacketWrapper &packet)
 {
 	std::lock_guard l(_not_private_methods_lock);
-	if (!packet)
-	{
-		_flush_times++;
-		if (_flush_times == WrappedObj()->nb_streams)
-		{
-			std::cout << CODE_POS_STR << "所有流都被冲洗了。" << std::endl;
-			WriteTrailer();
-			if (_on_all_stream_flushed_async)
-			{
-				auto thread_func = [&]()
-				{
-					_on_all_stream_flushed_async();
-				};
-				std::thread(thread_func).detach();
-			}
-		}
-
-		return;
-	}
-
-	int ret = av_interleaved_write_frame(WrappedObj(), *packet);
+	int ret = av_interleaved_write_frame(WrappedObj(), packet);
 	if (ret < 0)
 	{
 		std::cout << CODE_POS_STR
 				  << "错误代码："
 				  << ret << " -- "
 				  << ToString((ErrorCode)ret);
+	}
+}
+
+void video::OutputFormat::Flush()
+{
+	std::lock_guard l(_not_private_methods_lock);
+
+	_flush_times++;
+	if (_flush_times == WrappedObj()->nb_streams)
+	{
+		std::cout << CODE_POS_STR << "所有流都被冲洗了。" << std::endl;
+		WriteTrailer();
+		if (_on_all_stream_flushed_async)
+		{
+			auto thread_func = [&]()
+			{
+				_on_all_stream_flushed_async();
+			};
+			std::thread(thread_func).detach();
+		}
 	}
 }
 

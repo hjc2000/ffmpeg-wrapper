@@ -9,7 +9,7 @@ void IPipePacketSource::SendPacketToEachConsumer(AVPacketWrapper *packet)
 	{
 		if (consumer)
 		{
-			consumer->SendPacket(packet);
+			consumer->SendData(*packet);
 		}
 	}
 }

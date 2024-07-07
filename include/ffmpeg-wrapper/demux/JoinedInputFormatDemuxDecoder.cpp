@@ -111,7 +111,7 @@ void video::JoinedInputFormatDemuxDecoder::Pump(
 		OpenInputIfNull();
 		if (_current_input_format == nullptr)
 		{
-			_infinite_packet_pipe->FlushConsumer();
+			_infinite_packet_pipe->Flush();
 			return;
 		}
 

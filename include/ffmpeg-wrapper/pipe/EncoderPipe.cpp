@@ -14,7 +14,7 @@ void EncoderPipe::ReadAndSendPacketToOutputFormat()
 		case 0:
 		{
 			packet.SetStreamIndex(_new_stream.Index());
-			_output_format->SendPacket(&packet);
+			_output_format->SendData(packet);
 
 			// 下一轮循环继续读取包
 			break;
@@ -25,7 +25,7 @@ void EncoderPipe::ReadAndSendPacketToOutputFormat()
 		}
 		case (int)ErrorCode::eof:
 		{
-			_output_format->SendPacket(nullptr);
+			_output_format->Flush();
 			return;
 		}
 		default:

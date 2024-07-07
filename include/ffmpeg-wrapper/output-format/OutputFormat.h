@@ -49,7 +49,8 @@ namespace video
 		///		* 冲洗后，会自动调用 WriteTrailer 方法。
 		/// </summary>
 		/// <param name="packet"></param>
-		void SendPacket(AVPacketWrapper *packet) override;
+		void SendData(AVPacketWrapper &packet) override;
+		void Flush() override;
 
 		void WriteHeader(AVDictionary **dic = nullptr);
 

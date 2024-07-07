@@ -46,7 +46,9 @@ namespace video
 		///		如果送入的包的流索引和初始化本对象时的流索引不匹配，会直接返回，不会执行解码。
 		/// </summary>
 		/// <param name="packet"></param>
-		void SendPacket(AVPacketWrapper *packet) override;
+		void SendData(AVPacketWrapper &packet) override;
+		void Flush() override;
+
 		void FlushDecoderButNotFlushConsumers() override;
 
 #pragma region 通过 IAudioStreamInfoCollection 继承

@@ -4,12 +4,5 @@
 
 namespace video
 {
-	class IPacketConsumer
-	{
-	public:
-		virtual ~IPacketConsumer() = default;
-
-	public:
-		virtual void SendPacket(AVPacketWrapper *packet) = 0;
-	};
+	using IPacketConsumer = base::IConsumer<AVPacketWrapper>;
 }

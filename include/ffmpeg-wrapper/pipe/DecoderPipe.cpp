@@ -20,7 +20,7 @@ void DecoderPipe::Dispose()
 	_disposed = true;
 }
 
-void DecoderPipe::SendPacket(AVPacketWrapper *packet)
+void DecoderPipe::SendData(AVPacketWrapper &packet)
 {
 	if (ConsumerList().Count() == 0)
 	{
@@ -31,22 +31,21 @@ void DecoderPipe::SendPacket(AVPacketWrapper *packet)
 	// 防止解码器中有数据残留，会导致送入包失败
 	read_and_send_frame();
 
-	if (!packet)
-	{
-		// 冲洗解码器
-		_decoder->SendPacket(nullptr);
-		read_and_send_frame();
-		return;
-	}
-
 	// packet 不是空指针
-	if (packet->StreamIndex() != _stream_infos._index)
+	if (packet.StreamIndex() != _stream_infos._index)
 	{
 		// 索引不匹配，直接返回。
 		return;
 	}
 
-	_decoder->SendPacket(packet);
+	_decoder->SendPacket(&packet);
+	read_and_send_frame();
+}
+
+void video::DecoderPipe::Flush()
+{
+	// 冲洗解码器
+	_decoder->SendPacket(nullptr);
 	read_and_send_frame();
 }
 

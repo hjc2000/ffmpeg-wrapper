@@ -5,9 +5,8 @@
 using namespace std;
 using namespace video;
 
-video::ThreadDecoderPipe::ThreadDecoderPipe(
-	std::shared_ptr<DecoderPipeFactory> factory,
-	AVStreamInfoCollection stream)
+video::ThreadDecoderPipe::ThreadDecoderPipe(std::shared_ptr<DecoderPipeFactory> factory,
+											AVStreamInfoCollection stream)
 {
 	_factory = factory;
 	_decoder_pipe = _factory->CreateDecoderPipe(stream);
@@ -61,7 +60,7 @@ void video::ThreadDecoderPipe::DecodeThreadFunc()
 		{
 		case 0:
 		{
-			_decoder_pipe->SendPacket(&packet);
+			_decoder_pipe->SendData(packet);
 			break;
 		}
 		case (int)ErrorCode::eof:
@@ -72,7 +71,7 @@ void video::ThreadDecoderPipe::DecodeThreadFunc()
 			}
 			else
 			{
-				_decoder_pipe->SendPacket(nullptr);
+				_decoder_pipe->Flush();
 			}
 
 			return;
@@ -85,14 +84,9 @@ void video::ThreadDecoderPipe::DecodeThreadFunc()
 	}
 }
 
-void video::ThreadDecoderPipe::SendPacket(AVPacketWrapper *packet)
+void video::ThreadDecoderPipe::SendData(AVPacketWrapper &packet)
 {
-	if (packet == nullptr)
-	{
-		_do_not_flush_consumer = false;
-	}
-
-	_packet_queue.SendData(*packet);
+	_packet_queue.SendData(packet);
 }
 
 void video::ThreadDecoderPipe::FlushDecoderButNotFlushConsumers()
