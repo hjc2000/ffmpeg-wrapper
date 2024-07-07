@@ -6,8 +6,10 @@
 
 namespace video
 {
-	class AVIOContextWrapper : public base::Wrapper<AVIOContext>
+	class AVIOContextWrapper
+		: public base::Wrapper<AVIOContext>
 	{
+	private:
 		AVIOContext *_wrapped_obj = nullptr;
 		int _buffer_size;
 		uint8_t *_buffer;

@@ -15,15 +15,13 @@ namespace video
 {
 	using namespace std;
 
-	/// <summary>
-	///		重采样器。
-	///		* 本类线程安全，因为所有的公共方法都加了互斥锁。
-	/// </summary>
+	/// @brief 重采样器。
 	class SwrContextWrapper
 		: public base::Wrapper<SwrContext>,
 		  public base::IConsumer<AVFrameWrapper>,
 		  public base::ISource<AVFrameWrapper>
 	{
+	private:
 		SwrContext *_wrapped_obj = nullptr;
 
 		/// <summary>

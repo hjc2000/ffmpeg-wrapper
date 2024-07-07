@@ -42,10 +42,9 @@ SwrContextWrapper::~SwrContextWrapper()
 void video::SwrContextWrapper::SendData(AVFrameWrapper &input_frame)
 {
 	lock_guard l(_not_private_methods_lock);
-	_in_pts_when_send_frame = ConvertTimeStamp(
-		input_frame.Pts(),
-		input_frame.TimeBase(),
-		AVRational{1, 90000});
+	_in_pts_when_send_frame = ConvertTimeStamp(input_frame.Pts(),
+											   input_frame.TimeBase(),
+											   AVRational{1, 90000});
 
 	// 非冲洗模式
 	if (input_frame.TimeBase() != _in_stream_infos.TimeBase())
@@ -53,7 +52,11 @@ void video::SwrContextWrapper::SendData(AVFrameWrapper &input_frame)
 		input_frame.ChangeTimeBase(_in_stream_infos.TimeBase());
 	}
 
-	int ret = convert(nullptr, 0, input_frame->extended_data, input_frame.SampleCount());
+	int ret = convert(nullptr,
+					  0,
+					  input_frame->extended_data,
+					  input_frame.SampleCount());
+
 	if (ret < 0)
 	{
 		throw std::runtime_error{ToString((ErrorCode)ret)};
@@ -111,10 +114,10 @@ int video::SwrContextWrapper::ReadData(AVFrameWrapper &output_frame)
 		delay = 0;
 	}
 
-	int64_t out_pts = ConvertTimeStamp(
-		_in_pts_when_send_frame - delay,
-		AVRational{1, 90000},
-		_out_frame_infos.TimeBase());
+	int64_t out_pts = ConvertTimeStamp(_in_pts_when_send_frame - delay,
+									   AVRational{1, 90000},
+									   _out_frame_infos.TimeBase());
+
 	output_frame.SetPts(out_pts);
 	output_frame.SetTimeBase(_out_frame_infos.TimeBase());
 	return ret;
@@ -122,12 +125,11 @@ int video::SwrContextWrapper::ReadData(AVFrameWrapper &output_frame)
 
 int SwrContextWrapper::convert(uint8_t **out, int out_count, uint8_t **in, int in_count)
 {
-	int ret = swr_convert(
-		_wrapped_obj,
-		out,
-		out_count,
-		(const uint8_t **)in,
-		in_count);
+	int ret = swr_convert(_wrapped_obj,
+						  out,
+						  out_count,
+						  (const uint8_t **)in,
+						  in_count);
 
 	return ret;
 }
@@ -177,7 +179,7 @@ int SwrContextWrapper::read_frame_in_non_flushing_mode(AVFrameWrapper &output_fr
 		int count = convert(nullptr, &output_frame);
 		if (count != output_frame.SampleCount())
 		{
-			throw std::runtime_error("read_frame 没有填充完整的 output_frame，本来认为这里一定会填充完整的帧的。");
+			throw std::runtime_error{"read_frame 没有填充完整的 output_frame，本来认为这里一定会填充完整的帧的。"};
 		}
 
 		return 0;

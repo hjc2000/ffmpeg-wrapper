@@ -1,25 +1,25 @@
 #pragma once
-#include<base/Wrapper.h>
-#include<ffmpeg-wrapper/base_include.h>
-#include<ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
-#include<ffmpeg-wrapper/info-collection/IVideoStreamInfoCollection.h>
-#include<memory>
+#include <base/Wrapper.h>
+#include <ffmpeg-wrapper/base_include.h>
+#include <ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
+#include <ffmpeg-wrapper/info-collection/IVideoStreamInfoCollection.h>
+#include <memory>
 
 namespace video
 {
 	class AVCodecWrapper;
 	class AVCodecContextWrapper;
 
-	/// <summary>
-	///		AVStream 的生命周期是 AVFormat 管理的，所以本类指示包装它，不拥有它，
-	///		析构时不会释放被包装的 AVStream 对象。拷贝构造时不会深度拷贝，仅仅是
-	///		将被包装对象的指针拷贝。
-	/// </summary>
-	class AVStreamWrapper :
-		public base::Wrapper<AVStream>,
-		public IAudioStreamInfoCollection,
-		public IVideoStreamInfoCollection
+	/// @brief AVStream 包装器
+	/// @note AVStream 的生命周期是 AVFormat 管理的，所以本类指示包装它，不拥有它，
+	/// 析构时不会释放被包装的 AVStream 对象。拷贝构造时不会深度拷贝，仅仅是
+	/// 将被包装对象的指针拷贝。
+	class AVStreamWrapper
+		: public base::Wrapper<AVStream>,
+		  public IAudioStreamInfoCollection,
+		  public IVideoStreamInfoCollection
 	{
+	private:
 		AVStream *_wrapped_obj = nullptr;
 
 	public:
@@ -73,7 +73,7 @@ namespace video
 		int Index() const;
 		void SetIndex(int value);
 
-		#pragma region IAudioStreamInfoCollection,IVideoStreamInfoCollection
+#pragma region IAudioStreamInfoCollection,IVideoStreamInfoCollection
 		AVSampleFormat SampleFormat() const override;
 		void SetSampleFormat(AVSampleFormat value) override;
 		AVChannelLayout ChannelLayout() const override;
@@ -91,6 +91,6 @@ namespace video
 		void SetTimeBase(AVRational value) override;
 		AVRational FrameRate() const override;
 		void SetFrameRate(AVRational value) override;
-		#pragma endregion
+#pragma endregion
 	};
 }

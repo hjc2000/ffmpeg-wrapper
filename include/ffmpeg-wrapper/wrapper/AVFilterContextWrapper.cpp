@@ -1,13 +1,12 @@
-#include"ffmpeg-wrapper/wrapper/AVFilterContextWrapper.h"
-#include<ffmpeg-wrapper/AVToString.h>
-#include<ffmpeg-wrapper/ErrorCode.h>
+#include "ffmpeg-wrapper/wrapper/AVFilterContextWrapper.h"
+#include <ffmpeg-wrapper/AVToString.h>
+#include <ffmpeg-wrapper/ErrorCode.h>
 
 using namespace video;
 using namespace std;
 
 AVFilterContextWrapper::AVFilterContextWrapper()
 {
-
 }
 
 AVFilterContextWrapper::AVFilterContextWrapper(AVFilterContext *filter_ctx)
@@ -31,7 +30,7 @@ void AVFilterContextWrapper::link(AVFilterContextWrapper &next_filter)
 	int ret = avfilter_link(_wrapped_obj, 0, next_filter, 0);
 	if (ret)
 	{
-		throw std::runtime_error{ ToString((ErrorCode)ret) };
+		throw std::runtime_error{ToString((ErrorCode)ret)};
 	}
 }
 

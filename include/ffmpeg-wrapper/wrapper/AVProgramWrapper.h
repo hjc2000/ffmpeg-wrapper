@@ -1,10 +1,10 @@
 #pragma once
-#include<base/container/List.h>
-#include<base/Wrapper.h>
-#include<ffmpeg-wrapper/base_include.h>
-#include<ffmpeg-wrapper/wrapper/AVDictionaryWrapper.h>
-#include<ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
-#include<jccpp/ToString.h>
+#include <base/Wrapper.h>
+#include <base/container/List.h>
+#include <ffmpeg-wrapper/base_include.h>
+#include <ffmpeg-wrapper/wrapper/AVDictionaryWrapper.h>
+#include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
+#include <jccpp/ToString.h>
 
 namespace video
 {
@@ -14,35 +14,37 @@ namespace video
 	 * @brief AVProgramWrapper 不拥有 AVProgram 对象，只是接收一个 AVProgram * 然后包装起来方便操作而已。
 	 * AVProgramWrapper 析构的时候不会释放有关 AVProgram 的资源。这是由 AVFormatContext 的 avformat_free_context
 	 * 函数负责释放的。
-	*/
-	class AVProgramWrapper :public base::Wrapper<AVProgram>, public ICanToString
+	 */
+	class AVProgramWrapper
+		: public base::Wrapper<AVProgram>,
+		  public ICanToString
 	{
+	private:
 		AVProgram *_wrapped_obj = nullptr;
 		std::shared_ptr<AVDictionaryWrapper> _dic;
 
 	public:
 		/**
-		* @brief 构造一个空的 AVProgramWrapper 对象，没有包装任何的 AVProgram 对象。
-		* 此时调用 AVProgramWrapper 的任何方法都会引发访问空指针的错误。
-		*
-		* 设置此构造函数只是为了能够将 AVProgramWrapper 变量的定义和初始化分开。通过此构造函数构造的
-		* AVProgramWrapper 对象必须通过赋值运算符进行初始化。
-		*/
+		 * @brief 构造一个空的 AVProgramWrapper 对象，没有包装任何的 AVProgram 对象。
+		 * 此时调用 AVProgramWrapper 的任何方法都会引发访问空指针的错误。
+		 *
+		 * 设置此构造函数只是为了能够将 AVProgramWrapper 变量的定义和初始化分开。通过此构造函数构造的
+		 * AVProgramWrapper 对象必须通过赋值运算符进行初始化。
+		 */
 		AVProgramWrapper()
 		{
-
 		}
 
 		/**
-		* @brief 包装一个 AVProgram 对象，但不拥有它，不会释放 AVProgram 对象内的资源。
-		* AVProgram 对象的主人是 AVFormatContext，avformat_free_context 函数会释放它的资源。
-		*
-		* @param program
-		*/
+		 * @brief 包装一个 AVProgram 对象，但不拥有它，不会释放 AVProgram 对象内的资源。
+		 * AVProgram 对象的主人是 AVFormatContext，avformat_free_context 函数会释放它的资源。
+		 *
+		 * @param program
+		 */
 		AVProgramWrapper(AVProgram *program)
 		{
 			_wrapped_obj = program;
-			_dic = std::unique_ptr<AVDictionaryWrapper> { new AVDictionaryWrapper { _wrapped_obj->metadata } };
+			_dic = std::unique_ptr<AVDictionaryWrapper>{new AVDictionaryWrapper{_wrapped_obj->metadata}};
 
 			// 需要设置为不释放字典，否则会与 avformat_free_context 函数重复释放。
 			_dic->DoNotFreeInnerDictionary();
@@ -96,7 +98,7 @@ namespace video
 		 * 流索引用来在格式中找到流。
 		 *
 		 * @return
-		*/
+		 */
 		int StreamIndexCount()
 		{
 			return _wrapped_obj->nb_stream_indexes;
@@ -106,7 +108,7 @@ namespace video
 		 * @brief 获取指定位置的流索引。
 		 * @param index 与 StreamIndexCount 属性对应。表示你想要第几个流索引。
 		 * @return 返回指定位置的流索引。
-		*/
+		 */
 		int GetStreamIndex(int index)
 		{
 			return _wrapped_obj->stream_index[index];

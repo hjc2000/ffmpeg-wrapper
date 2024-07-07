@@ -65,6 +65,7 @@ namespace video
 	 */
 	class AVDictionaryWrapper : public base::Wrapper<AVDictionary>, public ICanToString
 	{
+	private:
 		bool _do_not_free_dic = false;
 		AVDictionary *_wrapped_obj = nullptr;
 
@@ -151,10 +152,9 @@ namespace video
 		 * @param flags
 		 * @return int
 		 */
-		int SetValueByKey(
-			const char *key,
-			const char *value,
-			AVDictionaryFlag flags = AVDictionaryFlag::None)
+		int SetValueByKey(char const *key,
+						  char const *value,
+						  AVDictionaryFlag flags = AVDictionaryFlag::None)
 		{
 			return ::av_dict_set(&_wrapped_obj, key, value, (int)flags);
 		}
@@ -168,10 +168,9 @@ namespace video
 		 * @param flags
 		 * @return 如果找到了，返回该节点的指针。如果没找到，返回空指针。
 		 */
-		AVDictionaryEntry *GetEntryByKey(
-			const char *key,
-			const AVDictionaryEntry *previous_entry = nullptr,
-			AVDictionaryFlag flags = AVDictionaryFlag::None) const
+		AVDictionaryEntry *GetEntryByKey(char const *key,
+										 AVDictionaryEntry const *previous_entry = nullptr,
+										 AVDictionaryFlag flags = AVDictionaryFlag::None) const
 		{
 			return ::av_dict_get(_wrapped_obj, key, previous_entry, (int)flags);
 		}
@@ -179,6 +178,10 @@ namespace video
 #pragma region 迭代器
 		class AVDictionaryIterator
 		{
+		private:
+			AVDictionary *_dic;
+			AVDictionaryEntry *_current_entry;
+
 		public:
 			AVDictionaryIterator(AVDictionary *dic, AVDictionaryEntry *current_entry)
 			{
@@ -206,10 +209,6 @@ namespace video
 			{
 				return _current_entry != other._current_entry;
 			}
-
-		private:
-			AVDictionary *_dic;
-			AVDictionaryEntry *_current_entry;
 		};
 
 		AVDictionaryIterator begin() const;

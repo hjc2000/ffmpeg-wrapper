@@ -9,14 +9,13 @@ AVIOContextWrapper::AVIOContextWrapper(bool is_write, std::shared_ptr<base::Stre
 	_buffer_size = 1024 * 64;
 	_buffer = (uint8_t *)av_malloc(_buffer_size);
 
-	_wrapped_obj = avio_alloc_context(
-		_buffer,
-		_buffer_size,
-		is_write,
-		this,
-		StaticReadPacket,
-		StaticWritePacket,
-		StaticSeek);
+	_wrapped_obj = avio_alloc_context(_buffer,
+									  _buffer_size,
+									  is_write,
+									  this,
+									  StaticReadPacket,
+									  StaticWritePacket,
+									  StaticSeek);
 }
 
 AVIOContextWrapper::~AVIOContextWrapper()

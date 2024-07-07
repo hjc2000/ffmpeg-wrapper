@@ -68,7 +68,7 @@ namespace video
 		///
 		/// @return
 		static std::shared_ptr<AVCodecContextWrapper> CreateEncoder(
-			const char *encoder_name,
+			char const *encoder_name,
 			IAudioStreamInfoCollection const &infos,
 			bool set_global_header,
 			bool auto_open = true);
@@ -87,7 +87,7 @@ namespace video
 		///
 		/// @return
 		static std::shared_ptr<AVCodecContextWrapper> CreateEncoder(
-			const char *encoder_name,
+			char const *encoder_name,
 			IVideoStreamInfoCollection const &infos,
 			bool set_global_header,
 			bool auto_open = true);

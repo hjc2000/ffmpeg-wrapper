@@ -16,6 +16,7 @@ namespace video
 		  public base::IConsumer<AVFrameWrapper>,
 		  public base::ISource<AVFrameWrapper>
 	{
+	private:
 		SwsContext *_wrapped_obj = nullptr;
 		VideoFrameInfoCollection _in_video_frame_infos;
 		VideoFrameInfoCollection _out_video_frame_infos;
@@ -29,9 +30,8 @@ namespace video
 		std::mutex _lock;
 
 	public:
-		SwsContextWrapper(
-			IVideoFrameInfoCollection &in_video_frame_infos,
-			IVideoFrameInfoCollection &out_video_frame_infos);
+		SwsContextWrapper(IVideoFrameInfoCollection &in_video_frame_infos,
+						  IVideoFrameInfoCollection &out_video_frame_infos);
 
 		~SwsContextWrapper()
 		{

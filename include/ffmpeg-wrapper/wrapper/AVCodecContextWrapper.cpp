@@ -24,7 +24,7 @@ AVCodecContextWrapper::AVCodecContextWrapper(AVCodec const *codec)
 	}
 }
 
-AVCodecContextWrapper::AVCodecContextWrapper(const AVCodec *codec, AVCodecParameters *param)
+AVCodecContextWrapper::AVCodecContextWrapper(AVCodec const *codec, AVCodecParameters *param)
 	: AVCodecContextWrapper(codec)
 {
 	SetCodecParams(param);
@@ -55,7 +55,7 @@ std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateDecoder(
 }
 
 std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
-	const char *encoder_name,
+	char const *encoder_name,
 	IAudioStreamInfoCollection const &infos,
 	bool set_global_header,
 	bool auto_open)
@@ -92,7 +92,7 @@ std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
 }
 
 std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
-	const char *encoder_name,
+	char const *encoder_name,
 	IVideoStreamInfoCollection const &infos,
 	bool set_global_header,
 	bool auto_open)

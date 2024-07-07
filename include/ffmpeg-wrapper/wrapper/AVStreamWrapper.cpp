@@ -1,15 +1,14 @@
-#include<ffmpeg-wrapper/AVCodecExtention.h>
-#include<ffmpeg-wrapper/base_include.h>
-#include<ffmpeg-wrapper/ErrorCode.h>
-#include<ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h>
-#include<ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
-#include<memory>
+#include <ffmpeg-wrapper/AVCodecExtention.h>
+#include <ffmpeg-wrapper/ErrorCode.h>
+#include <ffmpeg-wrapper/base_include.h>
+#include <ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h>
+#include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
+#include <memory>
 
 using namespace video;
 
 AVStreamWrapper::AVStreamWrapper()
 {
-
 }
 
 AVStreamWrapper::AVStreamWrapper(AVStream *p)
@@ -152,4 +151,3 @@ void video::AVStreamWrapper::SetFrameRate(AVRational value)
 	_wrapped_obj->avg_frame_rate = value;
 }
 #pragma endregion
-
