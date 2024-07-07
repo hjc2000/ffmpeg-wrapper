@@ -1,6 +1,6 @@
 #pragma once
 #include <base/FactoryManager.h>
-#include <ffmpeg-wrapper/factory/IDecoderPipeFactory.h>
+#include <ffmpeg-wrapper/factory/interface/IDecoderPipeFactory.h>
 
 namespace video
 {

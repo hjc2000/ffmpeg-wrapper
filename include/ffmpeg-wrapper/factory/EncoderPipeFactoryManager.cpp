@@ -10,21 +10,7 @@ using namespace video;
 class EncoderPipeFactory
 	: public video::IEncoderPipeFactory
 {
-private:
-	EncoderPipeFactory() = default;
-
 public:
-	/// @brief 返回单例
-	/// @note 这里返回共享指针而不是引用，是因为工厂实例是作为依赖注入到需要它的类中，
-	/// 并且在那个类的生命周期内都要存在。
-	///
-	/// @return
-	static std::shared_ptr<EncoderPipeFactory> Instance()
-	{
-		static std::shared_ptr<EncoderPipeFactory> o{new EncoderPipeFactory{}};
-		return o;
-	}
-
 	/// @brief 构造视频编码管道
 	/// @param codec_name
 	/// @param in_stream_infos
@@ -69,5 +55,6 @@ public:
 
 std::shared_ptr<video::IEncoderPipeFactory> video::EncoderPipeFactoryManager::DefaultFactory()
 {
-	return std::shared_ptr<video::IEncoderPipeFactory>();
+	static std::shared_ptr<EncoderPipeFactory> o{new EncoderPipeFactory{}};
+	return o;
 }
