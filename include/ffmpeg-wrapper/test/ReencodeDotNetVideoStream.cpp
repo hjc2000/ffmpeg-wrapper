@@ -1,6 +1,6 @@
 #include "ReencodeDotNetVideoStream.h"
 #include <base/task/CancellationTokenSource.h>
-#include <ffmpeg-wrapper/factory/EncoderPipeFactory.h>
+#include <ffmpeg-wrapper/factory/EncoderPipeFactoryManager.h>
 #include <ffmpeg-wrapper/info-collection/VideoStreamInfoCollection.h>
 #include <jccpp/TaskCompletionSignal.h>
 
@@ -26,14 +26,15 @@ void ReencodeDotNetVideoStream(DotNetStream *dotnet_video_stream)
 	// 编码封装管道
 	shared_ptr<base::Stream> out_fs = jccpp::FileStream::CreateNewAnyway("mux_out.ts");
 	shared_ptr<StreamOutputFormat> out_fmt_ctx{new StreamOutputFormat{".ts", out_fs}};
-	shared_ptr<SptsEncodeMux> spts_encode_mux{new SptsEncodeMux{
-		video::EncoderPipeFactory::Instance(),
-		out_fmt_ctx,
-		output_video_stream_infos,
-		"hevc_amf",
-		-1,
-		output_audio_stream_infos,
-		"aac"}};
+	shared_ptr<SptsEncodeMux> spts_encode_mux{
+		new SptsEncodeMux{
+			out_fmt_ctx,
+			output_video_stream_infos,
+			"hevc_amf",
+			-1,
+			output_audio_stream_infos,
+			"aac"},
+	};
 
 	// 输入格式
 	shared_ptr<JoinedInputFormatDemuxDecoder> joined_input_format_demux_decoder{

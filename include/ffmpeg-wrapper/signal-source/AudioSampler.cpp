@@ -136,7 +136,7 @@ void video::AudioSampler::SetSampleCount(int value)
 }
 #pragma endregion
 
-#include <ffmpeg-wrapper/factory/EncoderPipeFactory.h>
+#include <ffmpeg-wrapper/factory/EncoderPipeFactoryManager.h>
 #include <ffmpeg-wrapper/output-format/FileOutputFormat.h>
 
 void video::TestAudioSampler()
@@ -150,9 +150,7 @@ void video::TestAudioSampler()
 
 	std::shared_ptr<video::FileOutputFormat> out_format{new video::FileOutputFormat{"sin_audio.ts"}};
 
-	video::EncoderPipeFactory::Instance()
-		->CreateEncoderPipe(
-			"eac3",
-			audio_frame_infos,
-			out_format);
+	video::EncoderPipeFactoryManager::Instance().Factory()->CreateEncoderPipe("eac3",
+																			  audio_frame_infos,
+																			  out_format);
 }
