@@ -5,11 +5,11 @@
 
 namespace video
 {
-	class SwsFpsEncoderPipe : public thread::IConsumer<AVFrameWrapper>
+	class SwsFpsEncoderPipe : public base::IConsumer<AVFrameWrapper>
 	{
 	private:
 		std::shared_ptr<SwsFpsPipe> _sws_fps_pipe;
-		std::shared_ptr<thread::IConsumer<AVFrameWrapper>> _video_encode_pipe;
+		std::shared_ptr<base::IConsumer<AVFrameWrapper>> _video_encode_pipe;
 
 	public:
 		SwsFpsEncoderPipe(

@@ -1,5 +1,6 @@
 #pragma once
 #include <base/Wrapper.h>
+#include <base/pipe/ISource.h>
 #include <chrono>
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/wrapper/AVIOContextWrapper.h>
@@ -8,7 +9,6 @@
 #include <functional>
 #include <memory>
 #include <string>
-#include <thread/pipe/ISource.h>
 
 namespace video
 {
@@ -17,7 +17,7 @@ namespace video
 	class AVCodecContextWrapper;
 
 	class InputFormat : public base::Wrapper<AVFormatContext>,
-						public thread::ISource<AVPacketWrapper>
+						public base::ISource<AVPacketWrapper>
 	{
 	private:
 		AVFormatContext *_wrapped_obj = nullptr;

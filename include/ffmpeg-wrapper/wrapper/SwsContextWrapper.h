@@ -1,20 +1,20 @@
 #pragma once
 #include <atomic>
 #include <base/Wrapper.h>
+#include <base/pipe/IConsumer.h>
+#include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/info-collection/VideoFrameInfoCollection.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include <mutex>
-#include <thread/pipe/IConsumer.h>
-#include <thread/pipe/ISource.h>
 
 namespace video
 {
 	class SwsContextWrapper
 		: public base::Wrapper<SwsContext>,
-		  public thread::IConsumer<AVFrameWrapper>,
-		  public thread::ISource<AVFrameWrapper>
+		  public base::IConsumer<AVFrameWrapper>,
+		  public base::ISource<AVFrameWrapper>
 	{
 		SwsContext *_wrapped_obj = nullptr;
 		VideoFrameInfoCollection _in_video_frame_infos;

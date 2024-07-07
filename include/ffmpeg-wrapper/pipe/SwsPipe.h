@@ -1,18 +1,18 @@
 #pragma once
+#include <base/pipe/IConsumer.h>
 #include <ffmpeg-wrapper/info-collection/VideoFrameInfoCollection.h>
 #include <ffmpeg-wrapper/pipe/interface/IPipeFrameSource.h>
 #include <ffmpeg-wrapper/wrapper/SwsContextWrapper.h>
 #include <memory>
-#include <thread/pipe/IConsumer.h>
 
 namespace video
 {
 	class SwsPipe
 		: public IPipeFrameSource,
-		  public thread::IConsumer<AVFrameWrapper>
+		  public base::IConsumer<AVFrameWrapper>
 	{
 	private:
-		base::List<std::shared_ptr<thread::IConsumer<AVFrameWrapper>>> _consumer_list;
+		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> _consumer_list;
 		std::shared_ptr<SwsContextWrapper> _sws_context;
 		VideoFrameInfoCollection _in_video_frame_infos;
 		VideoFrameInfoCollection _desire_out_video_frame_infos;
@@ -24,7 +24,7 @@ namespace video
 	public:
 		SwsPipe(IVideoFrameInfoCollection const &desire_out_video_frame_infos);
 
-		base::List<std::shared_ptr<thread::IConsumer<AVFrameWrapper>>> &FrameConsumerList() override
+		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> &FrameConsumerList() override
 		{
 			return _consumer_list;
 		}

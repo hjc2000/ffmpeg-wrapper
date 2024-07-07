@@ -153,13 +153,13 @@ void video::JoinedInputFormatDemuxDecoder::SetImmediateInputFormatSource(
 }
 
 void video::JoinedInputFormatDemuxDecoder::AddVideoFrameConsumer(
-	shared_ptr<thread::IConsumer<AVFrameWrapper>> consumer)
+	shared_ptr<base::IConsumer<AVFrameWrapper>> consumer)
 {
 	_video_frame_consumer_list.Add(consumer);
 }
 
 void video::JoinedInputFormatDemuxDecoder::AddAudioFrameConsumer(
-	shared_ptr<thread::IConsumer<AVFrameWrapper>> consumer)
+	shared_ptr<base::IConsumer<AVFrameWrapper>> consumer)
 {
 	_audio_frame_consumer_list.Add(consumer);
 }

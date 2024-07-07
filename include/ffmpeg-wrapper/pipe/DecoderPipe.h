@@ -1,6 +1,7 @@
 #pragma once
 #include <atomic>
 #include <base/container/List.h>
+#include <base/pipe/IConsumer.h>
 #include <ffmpeg-wrapper/AVToString.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
@@ -10,7 +11,6 @@
 #include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
 #include <jccpp/TaskCompletionSignal.h>
 #include <memory>
-#include <thread/pipe/IConsumer.h>
 #include <vector>
 
 namespace video
@@ -21,7 +21,7 @@ namespace video
 		std::atomic_bool _disposed = false;
 		std::shared_ptr<AVCodecContextWrapper> _decoder;
 		AVFrameWrapper _decoder_out_frame;
-		base::List<std::shared_ptr<thread::IConsumer<AVFrameWrapper>>> _consumer_list;
+		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> _consumer_list;
 
 		void read_and_send_frame();
 
@@ -35,7 +35,7 @@ namespace video
 		/// </summary>
 		void Dispose() override;
 
-		base::List<std::shared_ptr<thread::IConsumer<AVFrameWrapper>>> &FrameConsumerList() override
+		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> &FrameConsumerList() override
 		{
 			return _consumer_list;
 		}

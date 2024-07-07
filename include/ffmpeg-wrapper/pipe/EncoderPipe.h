@@ -1,5 +1,7 @@
 #pragma once
 #include <atomic>
+#include <base/pipe/IConsumer.h>
+#include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/IVideoStreamInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/VideoStreamInfoCollection.h>
@@ -8,8 +10,6 @@
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
 #include <jccpp/IDisposable.h>
-#include <thread/pipe/IConsumer.h>
-#include <thread/pipe/ISource.h>
 
 namespace video
 {
@@ -17,7 +17,7 @@ namespace video
 	/// 会在那个 OutputFormat 中创建新的流并与本 EncoderPipe 对象绑定。
 	/// 向本对象送入帧后会编码，然后写入 OutputFormat。
 	class EncoderPipe
-		: public thread::IConsumer<AVFrameWrapper>
+		: public base::IConsumer<AVFrameWrapper>
 	{
 	private:
 		std::shared_ptr<AVCodecContextWrapper> _encoder_ctx;

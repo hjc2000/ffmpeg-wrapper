@@ -1,9 +1,9 @@
 #pragma once
+#include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/pipe/interface/IPacketConsumer.h>
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include <jccpp/container/HysteresisBlockingQueue.h>
-#include <thread/pipe/ISource.h>
 
 namespace video
 {
@@ -11,8 +11,8 @@ namespace video
 	///		包队列。内部使用带有滞回特性的 HysteresisBlockingQueue
 	/// </summary>
 	class HysteresisBlockingPacketQueue
-		: public thread::IConsumer<AVPacketWrapper>,
-		  public thread::ISource<AVPacketWrapper>,
+		: public base::IConsumer<AVPacketWrapper>,
+		  public base::ISource<AVPacketWrapper>,
 		  public IDisposable
 	{
 	private:

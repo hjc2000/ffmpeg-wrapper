@@ -1,17 +1,17 @@
 #pragma once
 #include <atomic>
+#include <base/pipe/ISource.h>
 #include <base/task/CancellationToken.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/pipe/interface/IPipePacketSource.h>
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include <jccpp/IDisposable.h>
 #include <memory>
-#include <thread/pipe/ISource.h>
 
 namespace video
 {
 	/// <summary>
-	///		从 thread::ISource<AVPacketWrapper> 中读取包，送入 IPacketConsumer
+	///		从 base::ISource<AVPacketWrapper> 中读取包，送入 IPacketConsumer
 	/// </summary>
 	class PacketPump
 		: public IPipePacketSource,
@@ -19,11 +19,11 @@ namespace video
 	{
 	private:
 		std::atomic_bool _disposed = false;
-		std::shared_ptr<thread::ISource<AVPacketWrapper>> _packet_source;
+		std::shared_ptr<base::ISource<AVPacketWrapper>> _packet_source;
 		base::List<std::shared_ptr<IPacketConsumer>> _consumer_list;
 
 	public:
-		PacketPump(std::shared_ptr<thread::ISource<AVPacketWrapper>> packet_source)
+		PacketPump(std::shared_ptr<base::ISource<AVPacketWrapper>> packet_source)
 		{
 			_packet_source = packet_source;
 		}

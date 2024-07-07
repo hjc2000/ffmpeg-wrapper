@@ -1,4 +1,5 @@
 #pragma once
+#include <base/MutexHandleWrapper.h>
 #include <base/task/CancellationToken.h>
 #include <ffmpeg-wrapper/factory/DecoderPipeFactory.h>
 #include <ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
@@ -8,7 +9,6 @@
 #include <ffmpeg-wrapper/pipe/ThreadDecoderPipe.h>
 #include <functional>
 #include <memory>
-#include <thread/MutexHandleWrapper.h>
 
 namespace video
 {
@@ -27,12 +27,12 @@ namespace video
 		std::shared_ptr<IDecoderPipe> _audio_decode_pipe;
 		int _source_audio_stream_index = -1;
 		std::shared_ptr<InfinitePacketPipe> _infinite_packet_pipe{new InfinitePacketPipe{}};
-		base::List<std::shared_ptr<thread::IConsumer<AVFrameWrapper>>> _video_frame_consumer_list;
-		base::List<std::shared_ptr<thread::IConsumer<AVFrameWrapper>>> _audio_frame_consumer_list;
+		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> _video_frame_consumer_list;
+		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> _audio_frame_consumer_list;
 
 		/// @brief 当需要输入格式时就会触发此回调。
 		/// @return 回调函数返回 InputFormat 对象则视频流继续。回调函数返回空指针则结束视频流。
-		thread::MutexHandleWrapper<std::function<std::shared_ptr<InputFormat>()>> _get_format_callback_wrapper;
+		base::MutexHandleWrapper<std::function<std::shared_ptr<InputFormat>()>> _get_format_callback_wrapper;
 
 		void InitializeVideoDecoderPipe();
 		void InitializeAudioDecoderPipe();
@@ -50,7 +50,7 @@ namespace video
 		/// @note 回调函数返回 InputFormat 对象则视频流继续。回调函数返回空指针则结束视频流。
 		void SetImmediateInputFormatSource(std::function<std::shared_ptr<InputFormat>()> func);
 
-		void AddVideoFrameConsumer(std::shared_ptr<thread::IConsumer<AVFrameWrapper>> consumer);
-		void AddAudioFrameConsumer(std::shared_ptr<thread::IConsumer<AVFrameWrapper>> consumer);
+		void AddVideoFrameConsumer(std::shared_ptr<base::IConsumer<AVFrameWrapper>> consumer);
+		void AddAudioFrameConsumer(std::shared_ptr<base::IConsumer<AVFrameWrapper>> consumer);
 	};
 }
