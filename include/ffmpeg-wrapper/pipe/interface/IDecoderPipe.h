@@ -1,8 +1,8 @@
 #pragma once
+#include <base/pipe/IPipeSource.h>
 #include <ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/IVideoStreamInfoCollection.h>
 #include <ffmpeg-wrapper/pipe/interface/IPacketConsumer.h>
-#include <ffmpeg-wrapper/pipe/interface/IPipeFrameSource.h>
 #include <jccpp/IDisposable.h>
 
 namespace video
@@ -10,7 +10,7 @@ namespace video
 	class IDecoderPipe
 		: public IDisposable,
 		  public IPacketConsumer,
-		  public IPipeFrameSource,
+		  public base::IPipeSource<AVFrameWrapper>,
 		  public IAudioStreamInfoCollection,
 		  public IVideoStreamInfoCollection
 	{

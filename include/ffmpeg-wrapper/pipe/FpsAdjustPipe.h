@@ -3,11 +3,11 @@
 #include <base/Wrapper.h>
 #include <base/container/List.h>
 #include <base/container/Queue.h>
+#include <base/pipe/IPipeSource.h>
 #include <ffmpeg-wrapper/AVCalculate.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/filter/VideoFilterGraph.h>
-#include <ffmpeg-wrapper/pipe/interface/IPipeFrameSource.h>
 #include <memory>
 
 namespace video
@@ -18,7 +18,7 @@ namespace video
 	/// </summary>
 	class FpsAdjustPipe
 		: public base::IConsumer<AVFrameWrapper>,
-		  public IPipeFrameSource
+		  public base::IPipeSource<AVFrameWrapper>
 	{
 	private:
 		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> _consumer_list;

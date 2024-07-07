@@ -1,11 +1,12 @@
 #pragma once
-#include <ffmpeg-wrapper/pipe/interface/IPipeFrameSource.h>
+#include <base/container/List.h>
+#include <base/pipe/IPipeSource.h>
 #include <ffmpeg-wrapper/wrapper/SwrContextWrapper.h>
 
 namespace video
 {
 	class SwrPipe
-		: public IPipeFrameSource,
+		: public base::IPipeSource<AVFrameWrapper>,
 		  public base::IConsumer<AVFrameWrapper>
 	{
 		shared_ptr<SwrContextWrapper> _swr;

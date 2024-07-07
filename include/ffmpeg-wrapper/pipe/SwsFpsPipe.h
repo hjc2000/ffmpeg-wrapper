@@ -1,6 +1,7 @@
 #pragma once
+#include <base/pipe/IPipeSource.h>
 #include <ffmpeg-wrapper/info-collection/VideoStreamInfoCollection.h>
-#include <ffmpeg-wrapper/pipe/interface/IPipeFrameSource.h>
+#include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include <memory>
 
 namespace video
@@ -8,8 +9,9 @@ namespace video
 	class SwsPipe;
 	class FpsAdjustPipe;
 
-	class SwsFpsPipe : public base::IConsumer<AVFrameWrapper>,
-					   public IPipeFrameSource
+	class SwsFpsPipe
+		: public base::IConsumer<AVFrameWrapper>,
+		  public base::IPipeSource<AVFrameWrapper>
 	{
 		std::shared_ptr<SwsPipe> _sws_pipe;
 		std::shared_ptr<FpsAdjustPipe> _fps_adjust_pipe;
