@@ -7,7 +7,7 @@ using namespace video;
 
 video::ThreadDecoderPipe::ThreadDecoderPipe(AVStreamInfoCollection stream)
 {
-	_decoder_pipe = video::DecoderPipeFactoryManager::Factory()->CreateDecoderPipe(stream);
+	_decoder_pipe = video::DecoderPipeFactoryManager::Instance().Factory()->CreateDecoderPipe(stream);
 	InitDecodeThread();
 }
 

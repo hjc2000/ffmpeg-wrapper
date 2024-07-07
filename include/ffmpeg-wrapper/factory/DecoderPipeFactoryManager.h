@@ -1,13 +1,22 @@
 #pragma once
+#include <base/FactoryManager.h>
 #include <ffmpeg-wrapper/factory/IDecoderPipeFactory.h>
 
 namespace video
 {
 	class DecoderPipeFactoryManager
+		: public base::FactoryManager<video::IDecoderPipeFactory>
 	{
+	private:
+		DecoderPipeFactoryManager() = default;
+
 	public:
-		static std::shared_ptr<video::IDecoderPipeFactory> Factory();
-		static void SetCustomFactory(std::shared_ptr<video::IDecoderPipeFactory> o);
-		static std::shared_ptr<video::IDecoderPipeFactory> DefaultFactory();
+		static DecoderPipeFactoryManager &Instance()
+		{
+			static DecoderPipeFactoryManager o;
+			return o;
+		}
+
+		std::shared_ptr<video::IDecoderPipeFactory> DefaultFactory() override;
 	};
 } // namespace video
