@@ -1,5 +1,4 @@
 #include "BestStreamDemuxDecoder.h"
-#include <ffmpeg-wrapper/factory/DecoderPipeFactory.h>
 #include <ffmpeg-wrapper/pipe/PacketPump.h>
 
 using namespace std;
@@ -11,13 +10,13 @@ video::BestStreamDemuxDecoder::BestStreamDemuxDecoder(shared_ptr<InputFormat> in
 	AVStreamWrapper stream = _input_format->FindBestStream(AVMediaType::AVMEDIA_TYPE_VIDEO);
 	if (!stream.IsNull())
 	{
-		_video_decode_pipe = shared_ptr<ThreadDecoderPipe>{new ThreadDecoderPipe{video::DecoderPipeFactory::Instance(), stream}};
+		_video_decode_pipe = shared_ptr<ThreadDecoderPipe>{new ThreadDecoderPipe{stream}};
 	}
 
 	stream = _input_format->FindBestStream(AVMediaType::AVMEDIA_TYPE_AUDIO);
 	if (!stream.IsNull())
 	{
-		_audio_decode_pipe = shared_ptr<ThreadDecoderPipe>{new ThreadDecoderPipe{video::DecoderPipeFactory::Instance(), stream}};
+		_audio_decode_pipe = shared_ptr<ThreadDecoderPipe>{new ThreadDecoderPipe{stream}};
 	}
 }
 

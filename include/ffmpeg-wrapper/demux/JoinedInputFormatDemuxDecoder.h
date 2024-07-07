@@ -1,7 +1,7 @@
 #pragma once
 #include <base/MutexHandleWrapper.h>
 #include <base/task/CancellationToken.h>
-#include <ffmpeg-wrapper/factory/DecoderPipeFactory.h>
+#include <ffmpeg-wrapper/factory/DecoderPipeFactoryManager.h>
 #include <ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
 #include <ffmpeg-wrapper/input-format/InputFormat.h>
 #include <ffmpeg-wrapper/pipe/InfinitePacketPipe.h>
