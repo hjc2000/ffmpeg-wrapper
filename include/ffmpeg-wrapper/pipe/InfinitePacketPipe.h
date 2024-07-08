@@ -1,15 +1,18 @@
 #pragma once
+#include <base/container/List.h>
+#include <base/pipe/IConsumer.h>
+#include <base/pipe/IPipeSource.h>
 #include <ffmpeg-wrapper/AVCalculate.h>
 #include <ffmpeg-wrapper/AVCompare.h>
 #include <ffmpeg-wrapper/AVToString.h>
-#include <ffmpeg-wrapper/pipe/interface/IPipePacketSource.h>
+#include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include <memory>
 
 namespace video
 {
 	class InfinitePacketPipe
 		: public base::IConsumer<AVPacketWrapper>,
-		  public IPipePacketSource
+		  public base::IPipeSource<AVPacketWrapper>
 	{
 		int64_t _last_pts = 0;
 		int64_t _last_dts = 0;

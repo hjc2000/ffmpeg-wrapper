@@ -1,9 +1,11 @@
 #pragma once
 #include <atomic>
+#include <base/container/List.h>
+#include <base/pipe/IConsumer.h>
+#include <base/pipe/IPipeSource.h>
 #include <base/pipe/ISource.h>
 #include <base/task/CancellationToken.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
-#include <ffmpeg-wrapper/pipe/interface/IPipePacketSource.h>
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include <jccpp/IDisposable.h>
 #include <memory>
@@ -14,7 +16,7 @@ namespace video
 	///		从 base::ISource<AVPacketWrapper> 中读取包，送入 IPacketConsumer
 	/// </summary>
 	class PacketPump
-		: public IPipePacketSource,
+		: public base::IPipeSource<AVPacketWrapper>,
 		  public IDisposable
 	{
 	private:
