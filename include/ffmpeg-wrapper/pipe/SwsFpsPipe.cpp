@@ -26,3 +26,8 @@ void video::SwsFpsPipe::SendData(AVFrameWrapper &frame)
 {
 	_sws_pipe->SendData(frame);
 }
+
+void video::SwsFpsPipe::Flush()
+{
+	_sws_pipe->Flush();
+}

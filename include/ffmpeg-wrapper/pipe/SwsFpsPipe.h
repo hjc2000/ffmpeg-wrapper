@@ -21,8 +21,6 @@ namespace video
 		base::IList<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> &ConsumerList() override;
 		void SendData(AVFrameWrapper &frame) override;
 
-		void Flush() override
-		{
-		}
+		void Flush() override;
 	};
 }
