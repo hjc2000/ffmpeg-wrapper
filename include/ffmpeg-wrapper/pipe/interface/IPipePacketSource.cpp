@@ -5,7 +5,7 @@ using namespace video;
 
 void IPipePacketSource::SendPacketToEachConsumer(AVPacketWrapper *packet)
 {
-	for (std::shared_ptr<IPacketConsumer> &consumer : PacketConsumerList())
+	for (std::shared_ptr<base::IConsumer<AVPacketWrapper>> &consumer : PacketConsumerList())
 	{
 		if (consumer)
 		{

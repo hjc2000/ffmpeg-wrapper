@@ -6,7 +6,6 @@
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
 #include <ffmpeg-wrapper/pipe/interface/IDecoderPipe.h>
-#include <ffmpeg-wrapper/pipe/interface/IPacketConsumer.h>
 #include <ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
 #include <jccpp/TaskCompletionSignal.h>

@@ -2,21 +2,20 @@
 #include <ffmpeg-wrapper/AVCalculate.h>
 #include <ffmpeg-wrapper/AVCompare.h>
 #include <ffmpeg-wrapper/AVToString.h>
-#include <ffmpeg-wrapper/pipe/interface/IPacketConsumer.h>
 #include <ffmpeg-wrapper/pipe/interface/IPipePacketSource.h>
 #include <memory>
 
 namespace video
 {
 	class InfinitePacketPipe
-		: public IPacketConsumer,
+		: public base::IConsumer<AVPacketWrapper>,
 		  public IPipePacketSource
 	{
 		int64_t _last_pts = 0;
 		int64_t _last_dts = 0;
 		int64_t _offset = 0;
 		int64_t _last_packet_duration = 0;
-		base::List<std::shared_ptr<IPacketConsumer>> _consumer_list;
+		base::List<std::shared_ptr<base::IConsumer<AVPacketWrapper>>> _consumer_list;
 
 		void UpdateLastPacketDuration(int64_t value);
 		void UpdateLastPts(int64_t value);
@@ -37,7 +36,7 @@ namespace video
 #pragma endregion
 
 	public:
-		base::List<std::shared_ptr<IPacketConsumer>> &PacketConsumerList() override
+		base::List<std::shared_ptr<base::IConsumer<AVPacketWrapper>>> &PacketConsumerList() override
 		{
 			return _consumer_list;
 		}

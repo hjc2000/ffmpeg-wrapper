@@ -7,7 +7,6 @@
 #include <ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/IAudioFrameInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/IVideoStreamInfoCollection.h>
-#include <ffmpeg-wrapper/pipe/interface/IPacketConsumer.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
 #include <memory>

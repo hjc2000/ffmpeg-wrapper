@@ -1,8 +1,8 @@
 #pragma once
 #include <base/Wrapper.h>
 #include <base/container/List.h>
+#include <base/pipe/IConsumer.h>
 #include <ffmpeg-wrapper/base_include.h>
-#include <ffmpeg-wrapper/pipe/interface/IPacketConsumer.h>
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVProgramWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
@@ -19,7 +19,7 @@ namespace video
 	/// </summary>
 	class OutputFormat
 		: public base::Wrapper<AVFormatContext>,
-		  public IPacketConsumer
+		  public base::IConsumer<AVPacketWrapper>
 	{
 	private:
 		std::mutex _not_private_methods_lock;
