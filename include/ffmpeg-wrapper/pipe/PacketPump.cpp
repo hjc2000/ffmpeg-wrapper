@@ -23,7 +23,7 @@ void video::PacketPump::Pump(shared_ptr<base::CancellationToken> cancellation_to
 				_on_before_send_packet_to_consumer(&packet);
 			}
 
-			SendPacketToEachConsumer(&packet);
+			SendDataToEachConsumer(packet);
 			break;
 		}
 		case (int)ErrorCode::eof:
@@ -33,7 +33,7 @@ void video::PacketPump::Pump(shared_ptr<base::CancellationToken> cancellation_to
 				_on_before_send_packet_to_consumer(nullptr);
 			}
 
-			SendPacketToEachConsumer(nullptr);
+			FlushEachConsumer();
 			return;
 		}
 		default:

@@ -41,12 +41,12 @@ void video::BestStreamDemuxDecoder::Pump(shared_ptr<base::CancellationToken> can
 	shared_ptr<PacketPump> packet_pump{new PacketPump{_input_format}};
 	if (_video_decode_pipe)
 	{
-		packet_pump->PacketConsumerList().Add(_video_decode_pipe);
+		packet_pump->ConsumerList().Add(_video_decode_pipe);
 	}
 
 	if (_audio_decode_pipe)
 	{
-		packet_pump->PacketConsumerList().Add(_audio_decode_pipe);
+		packet_pump->ConsumerList().Add(_audio_decode_pipe);
 	}
 
 	packet_pump->Pump(cancel_pump);

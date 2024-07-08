@@ -25,7 +25,7 @@ void video::JoinedInputFormatDemuxDecoder::InitializeVideoDecoderPipe()
 		_video_decode_pipe = shared_ptr<ThreadDecoderPipe>{new ThreadDecoderPipe{_video_stream_infos}};
 
 		_video_decode_pipe->ConsumerList().Add(_video_frame_consumer_list);
-		_infinite_packet_pipe->PacketConsumerList().Add(_video_decode_pipe);
+		_infinite_packet_pipe->ConsumerList().Add(_video_decode_pipe);
 	}
 	else
 	{
@@ -57,7 +57,7 @@ void video::JoinedInputFormatDemuxDecoder::InitializeAudioDecoderPipe()
 
 		_audio_decode_pipe->ConsumerList().Add(_audio_frame_consumer_list);
 
-		_infinite_packet_pipe->PacketConsumerList().Add(_audio_decode_pipe);
+		_infinite_packet_pipe->ConsumerList().Add(_audio_decode_pipe);
 	}
 	else
 	{
@@ -90,7 +90,7 @@ void video::JoinedInputFormatDemuxDecoder::OpenInputIfNull()
 		_audio_decode_pipe->FlushDecoderButNotFlushConsumers();
 	}
 
-	_infinite_packet_pipe->PacketConsumerList().Clear();
+	_infinite_packet_pipe->ConsumerList().Clear();
 	InitializeVideoDecoderPipe();
 	InitializeAudioDecoderPipe();
 }
@@ -108,7 +108,7 @@ void video::JoinedInputFormatDemuxDecoder::Pump(
 		}
 
 		shared_ptr<PacketPump> packet_pump{new PacketPump{_current_input_format}};
-		packet_pump->PacketConsumerList().Add(_infinite_packet_pipe);
+		packet_pump->ConsumerList().Add(_infinite_packet_pipe);
 		packet_pump->_on_before_send_packet_to_consumer = [&](AVPacketWrapper *packet)
 		{
 			if (!packet)

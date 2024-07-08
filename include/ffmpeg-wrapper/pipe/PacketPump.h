@@ -43,7 +43,7 @@ namespace video
 			_disposed = true;
 		}
 
-		base::List<std::shared_ptr<base::IConsumer<AVPacketWrapper>>> &PacketConsumerList() override
+		base::IList<std::shared_ptr<base::IConsumer<AVPacketWrapper>>> &ConsumerList() override
 		{
 			return _consumer_list;
 		}

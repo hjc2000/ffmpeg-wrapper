@@ -58,7 +58,7 @@ void InfinitePacketPipe::SendData(AVPacketWrapper &packet)
 	UpdateLastPacketDuration(packet.Duration());
 	packet.SetPts(packet.Pts() + _offset);
 	packet.SetDts(packet.Dts() + _offset);
-	SendPacketToEachConsumer(&packet);
+	SendDataToEachConsumer(packet);
 }
 
 void InfinitePacketPipe::Flush()
