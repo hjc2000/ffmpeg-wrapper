@@ -1,12 +1,13 @@
 #pragma once
 #include <base/MutexHandleWrapper.h>
+#include <base/pipe/Pump.h>
 #include <base/task/CancellationToken.h>
 #include <ffmpeg-wrapper/factory/DecoderPipeFactoryManager.h>
 #include <ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
 #include <ffmpeg-wrapper/input-format/InputFormat.h>
 #include <ffmpeg-wrapper/pipe/InfinitePacketPipe.h>
-#include <ffmpeg-wrapper/pipe/PacketPump.h>
 #include <ffmpeg-wrapper/pipe/ThreadDecoderPipe.h>
+#include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include <functional>
 #include <memory>
 

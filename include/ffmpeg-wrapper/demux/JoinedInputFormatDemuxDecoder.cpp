@@ -107,29 +107,25 @@ void video::JoinedInputFormatDemuxDecoder::Pump(
 			return;
 		}
 
-		shared_ptr<PacketPump> packet_pump{new PacketPump{_current_input_format}};
+		shared_ptr<base::Pump<AVPacketWrapper>> packet_pump{new base::Pump<AVPacketWrapper>{_current_input_format}};
 		packet_pump->ConsumerList().Add(_infinite_packet_pipe);
-		packet_pump->_on_before_send_packet_to_consumer = [&](AVPacketWrapper *packet)
-		{
-			if (!packet)
-			{
-				return;
-			}
 
-			packet->ChangeTimeBase(AVRational{1, 90000});
-			if (packet->StreamIndex() == _source_video_stream_index)
+		auto event_handler = [&](AVPacketWrapper &packet)
+		{
+			packet.ChangeTimeBase(AVRational{1, 90000});
+			if (packet.StreamIndex() == _source_video_stream_index)
 			{
 				// 视频流的索引更改为 0.
-				packet->SetStreamIndex(0);
+				packet.SetStreamIndex(0);
 			}
-			else if (packet->StreamIndex() == _source_audio_stream_index)
+			else if (packet.StreamIndex() == _source_audio_stream_index)
 			{
 				// 音频流的索引更改为 1.
-				packet->SetStreamIndex(1);
+				packet.SetStreamIndex(1);
 			}
 		};
-
-		packet_pump->Pump(cancel_pump);
+		packet_pump->BeforeSendingDataToConsumersEvent().Subscribe(event_handler);
+		packet_pump->PumpDataToConsumers(cancel_pump);
 		_current_input_format = nullptr;
 	}
 }

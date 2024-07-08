@@ -1,5 +1,5 @@
 #include "BestStreamDemuxDecoder.h"
-#include <ffmpeg-wrapper/pipe/PacketPump.h>
+#include <base/pipe/Pump.h>
 
 using namespace std;
 using namespace video;
@@ -38,7 +38,7 @@ void video::BestStreamDemuxDecoder::AddAudioFrameConsumer(shared_ptr<base::ICons
 
 void video::BestStreamDemuxDecoder::Pump(shared_ptr<base::CancellationToken> cancel_pump)
 {
-	shared_ptr<PacketPump> packet_pump{new PacketPump{_input_format}};
+	shared_ptr<base::Pump<AVPacketWrapper>> packet_pump{new base::Pump<AVPacketWrapper>{_input_format}};
 	if (_video_decode_pipe)
 	{
 		packet_pump->ConsumerList().Add(_video_decode_pipe);
@@ -49,5 +49,5 @@ void video::BestStreamDemuxDecoder::Pump(shared_ptr<base::CancellationToken> can
 		packet_pump->ConsumerList().Add(_audio_decode_pipe);
 	}
 
-	packet_pump->Pump(cancel_pump);
+	packet_pump->PumpDataToConsumers(cancel_pump);
 }
