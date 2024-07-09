@@ -1,6 +1,6 @@
 #pragma once
 #include <base/Wrapper.h>
-#include <base/string/ToString.h>
+#include <base/string/ICanToString.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <format>
 #include <iostream>
