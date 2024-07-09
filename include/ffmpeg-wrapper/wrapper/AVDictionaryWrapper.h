@@ -1,9 +1,9 @@
 #pragma once
 #include <base/Wrapper.h>
+#include <base/string/ToString.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <format>
 #include <iostream>
-#include <jccpp/ToString.h>
 #include <sstream>
 #include <string>
 
@@ -63,7 +63,9 @@ namespace video
 	 * 则在调用 ffmpeg 释放函数之前将那个对象的 AVDictionary* 字段设为 nullprt，
 	 * 就可避免重复释放。
 	 */
-	class AVDictionaryWrapper : public base::Wrapper<AVDictionary>, public ICanToString
+	class AVDictionaryWrapper
+		: public base::Wrapper<AVDictionary>,
+		  public base::ICanToString
 	{
 	private:
 		bool _do_not_free_dic = false;

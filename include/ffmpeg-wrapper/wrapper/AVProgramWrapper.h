@@ -1,10 +1,10 @@
 #pragma once
 #include <base/Wrapper.h>
 #include <base/container/List.h>
+#include <base/string/ToString.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/wrapper/AVDictionaryWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
-#include <jccpp/ToString.h>
 
 namespace video
 {
@@ -17,7 +17,7 @@ namespace video
 	 */
 	class AVProgramWrapper
 		: public base::Wrapper<AVProgram>,
-		  public ICanToString
+		  public base::ICanToString
 	{
 	private:
 		AVProgram *_wrapped_obj = nullptr;
