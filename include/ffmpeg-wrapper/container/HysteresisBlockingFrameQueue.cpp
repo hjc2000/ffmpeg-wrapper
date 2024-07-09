@@ -8,7 +8,7 @@ int video::HysteresisBlockingFrameQueue::ReadData(AVFrameWrapper &frame)
 		frame = _frame_queue.Dequeue();
 		return 0;
 	}
-	catch (std::runtime_error &e)
+	catch (std::exception const &e)
 	{
 		return (int)ErrorCode::eof;
 	}

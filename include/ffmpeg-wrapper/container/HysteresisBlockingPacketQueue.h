@@ -12,7 +12,7 @@ namespace video
 	class HysteresisBlockingPacketQueue
 		: public base::IConsumer<AVPacketWrapper>,
 		  public base::ISource<AVPacketWrapper>,
-		  public IDisposable
+		  public base::IDisposable
 	{
 	private:
 		jc::HysteresisBlockingQueue<AVPacketWrapper> _packet_queue{10};

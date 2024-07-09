@@ -1,8 +1,8 @@
 #pragma once
+#include <base/IDisposable.h>
 #include <base/pipe/IConsumer.h>
 #include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
-#include <jccpp/IDisposable.h>
 #include <jccpp/container/HysteresisBlockingQueue.h>
 
 namespace video
@@ -10,7 +10,7 @@ namespace video
 	class HysteresisBlockingFrameQueue
 		: public base::IConsumer<AVFrameWrapper>,
 		  public base::ISource<AVFrameWrapper>,
-		  public IDisposable
+		  public base::IDisposable
 	{
 	private:
 		std::atomic_bool _disposed = false;

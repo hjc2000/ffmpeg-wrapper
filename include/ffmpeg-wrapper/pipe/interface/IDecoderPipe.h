@@ -1,15 +1,15 @@
 #pragma once
+#include <base/IDisposable.h>
 #include <base/pipe/IConsumer.h>
 #include <base/pipe/IPipeSource.h>
 #include <ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/IVideoStreamInfoCollection.h>
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
-#include <jccpp/IDisposable.h>
 
 namespace video
 {
 	class IDecoderPipe
-		: public IDisposable,
+		: public base::IDisposable,
 		  public base::IConsumer<AVPacketWrapper>,
 		  public base::IPipeSource<AVFrameWrapper>,
 		  public IAudioStreamInfoCollection,

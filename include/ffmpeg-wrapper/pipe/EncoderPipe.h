@@ -1,5 +1,6 @@
 #pragma once
 #include <atomic>
+#include <base/IDisposable.h>
 #include <base/pipe/IConsumer.h>
 #include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
@@ -9,7 +10,6 @@
 #include <ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
-#include <jccpp/IDisposable.h>
 
 namespace video
 {
