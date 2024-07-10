@@ -1,9 +1,9 @@
 #pragma once
 #include <base/IDisposable.h>
+#include <base/container/HysteresisBlockingQueue.h>
 #include <base/pipe/IConsumer.h>
 #include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
-#include <jccpp/container/HysteresisBlockingQueue.h>
 
 namespace video
 {
@@ -14,7 +14,7 @@ namespace video
 	{
 	private:
 		std::atomic_bool _disposed = false;
-		jc::HysteresisBlockingQueue<AVFrameWrapper> _frame_queue{10};
+		base::HysteresisBlockingQueue<AVFrameWrapper> _frame_queue{10};
 
 	public:
 		void Dispose()

@@ -1,8 +1,8 @@
 #pragma once
+#include <base/container/HysteresisBlockingQueue.h>
 #include <base/pipe/ISource.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
-#include <jccpp/container/HysteresisBlockingQueue.h>
 
 namespace video
 {
@@ -15,7 +15,7 @@ namespace video
 		  public base::IDisposable
 	{
 	private:
-		jc::HysteresisBlockingQueue<AVPacketWrapper> _packet_queue{10};
+		base::HysteresisBlockingQueue<AVPacketWrapper> _packet_queue{10};
 		std::atomic_bool _disposed = false;
 
 	public:

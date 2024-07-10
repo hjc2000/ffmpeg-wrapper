@@ -1,7 +1,6 @@
 #include "HysteresisBlockingPacketQueue.h"
 
 using namespace video;
-using namespace jc;
 
 void HysteresisBlockingPacketQueue::Dispose()
 {
