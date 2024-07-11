@@ -1,7 +1,7 @@
 #include "OutputFormat.h"
+#include <base/string/define.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <iostream>
-#include <jccpp/define.h>
 #include <memory>
 #include <mutex>
 #include <thread>

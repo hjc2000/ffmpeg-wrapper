@@ -1,5 +1,5 @@
 #include "AVPacketWrapper.h"
-#include <jccpp/define.h>
+#include <base/string/define.h>
 
 using namespace video;
 using namespace std;

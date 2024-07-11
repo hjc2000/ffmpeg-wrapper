@@ -1,8 +1,8 @@
 #pragma once
+#include <base/string/define.h>
 #include <exception>
 #include <ffmpeg-wrapper/base_include.h>
 #include <iostream>
-#include <jccpp/define.h>
 #include <sstream>
 #include <string>
 

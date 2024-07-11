@@ -1,10 +1,10 @@
 #pragma once
+#include <base/string/define.h>
 #include <ffmpeg-wrapper/container/HysteresisBlockingPacketQueue.h>
 #include <ffmpeg-wrapper/factory/DecoderPipeFactoryManager.h>
 #include <ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
 #include <ffmpeg-wrapper/pipe/interface/IDecoderPipe.h>
 #include <jccpp/TaskCompletionSignal.h>
-#include <jccpp/define.h>
 #include <memory>
 
 namespace video

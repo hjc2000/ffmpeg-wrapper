@@ -1,6 +1,6 @@
 #include "AVParse.h"
+#include <base/string/define.h>
 #include <iostream>
-#include <jccpp/define.h>
 
 AVMediaType video::ParseAVMediaType(std::string str)
 {
