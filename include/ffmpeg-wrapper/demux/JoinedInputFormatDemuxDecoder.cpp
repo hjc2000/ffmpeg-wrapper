@@ -64,10 +64,9 @@ void video::JoinedInputFormatDemuxDecoder::InitializeAudioDecoderPipe()
 
 void video::JoinedInputFormatDemuxDecoder::OpenInputIfNull()
 {
-	if (_current_input_format == nullptr &&
-		_get_format_callback_wrapper.Handle() != nullptr)
+	if (_current_input_format == nullptr)
 	{
-		_current_input_format = _get_format_callback_wrapper.Handle()();
+		_need_input_format_event.Invoke(_current_input_format);
 	}
 
 	if (_current_input_format == nullptr)
@@ -123,12 +122,6 @@ void video::JoinedInputFormatDemuxDecoder::PumpDataToConsumers(shared_ptr<base::
 		packet_pump->PumpDataToConsumers(cancel_pump);
 		_current_input_format = nullptr;
 	}
-}
-
-void video::JoinedInputFormatDemuxDecoder::SetImmediateInputFormatSource(
-	std::function<std::shared_ptr<InputFormat>()> func)
-{
-	_get_format_callback_wrapper.SetHandle(func);
 }
 
 void video::JoinedInputFormatDemuxDecoder::AddVideoFrameConsumer(

@@ -46,19 +46,19 @@ void ReencodeDotNetVideoStream(DotNetStream *dotnet_video_stream)
 
 	int loop_times = 0;
 
-	auto get_input_format_func = [&]() -> shared_ptr<InputFormat>
+	auto get_input_format_func = [&](shared_ptr<InputFormat> &current_input_format)
 	{
 		if (loop_times > 2)
 		{
-			return nullptr;
+			return;
 		}
 
 		dotnet_video_stream->SetPosition(0);
 		shared_ptr<InputFormat> in_fmt_ctx{new InputFormat{dotnet_video_stream->ToSharePtr()}};
 		loop_times++;
-		return in_fmt_ctx;
+		current_input_format = in_fmt_ctx;
 	};
-	joined_input_format_demux_decoder->SetImmediateInputFormatSource(get_input_format_func);
+	joined_input_format_demux_decoder->NeedInputFormatEvent().Subscribe(get_input_format_func);
 
 	// 解码管道
 	base::CancellationTokenSource cancel_pump_source;

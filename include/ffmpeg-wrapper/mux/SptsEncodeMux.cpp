@@ -98,14 +98,14 @@ void test_SptsEncodeMux()
 		new JoinedInputFormatDemuxDecoder{},
 	};
 
-	auto get_input_format_func = [&]() -> shared_ptr<InputFormat>
+	auto get_input_format_func = [&](shared_ptr<InputFormat> &current_input_format)
 	{
 		try
 		{
 			std::string file = file_queue.Dequeue();
 			shared_ptr<InputFormat> in_fmt_ctx{new InputFormat{file}};
 			in_fmt_ctx->DumpFormat();
-			return in_fmt_ctx;
+			current_input_format = in_fmt_ctx;
 		}
 		catch (std::runtime_error &e)
 		{
@@ -118,10 +118,8 @@ void test_SptsEncodeMux()
 		{
 			cerr << CODE_POS_STR << "发生未知异常" << endl;
 		}
-
-		return nullptr;
 	};
-	joined_input_format_demux_decoder->SetImmediateInputFormatSource(get_input_format_func);
+	joined_input_format_demux_decoder->NeedInputFormatEvent().Subscribe(get_input_format_func);
 
 	// 想要输出的视频信息
 	VideoStreamInfoCollection output_video_stream_infos;

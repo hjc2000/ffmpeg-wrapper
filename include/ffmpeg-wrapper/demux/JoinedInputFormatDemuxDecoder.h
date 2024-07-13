@@ -1,5 +1,6 @@
 #pragma once
 #include <base/MutexHandleWrapper.h>
+#include <base/delegate/Delegate.h>
 #include <base/pipe/Pump.h>
 #include <base/task/CancellationToken.h>
 #include <ffmpeg-wrapper/factory/DecoderPipeFactoryManager.h>
@@ -32,9 +33,7 @@ namespace video
 		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> _video_frame_consumer_list;
 		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> _audio_frame_consumer_list;
 
-		/// @brief 当需要输入格式时就会触发此回调。
-		/// @return 回调函数返回 InputFormat 对象则视频流继续。回调函数返回空指针则结束视频流。
-		base::MutexHandleWrapper<std::function<std::shared_ptr<InputFormat>()>> _get_format_callback_wrapper;
+		base::Delegate<std::shared_ptr<InputFormat> &> _need_input_format_event;
 
 		void InitializeVideoDecoderPipe();
 		void InitializeAudioDecoderPipe();
@@ -43,14 +42,10 @@ namespace video
 	public:
 		void PumpDataToConsumers(std::shared_ptr<base::CancellationToken> cancel_pump) override;
 
-		/// @brief 设置输入格式的源。
-		/// @note Immediate 是形容词，意为 “立即的”。通过一个回调函数来获取输入格式，这个函数就
-		/// 可以理解为立即的输入格式源。与之相对的是非立即的，即；一个类继承了输入格式源接口，然后
-		/// 传入这个对象的实例，这种方式就是非立即的。
-		///
-		/// @param func 用来获取输入格式的函数。
-		/// @note 回调函数返回 InputFormat 对象则视频流继续。回调函数返回空指针则结束视频流。
-		void SetImmediateInputFormatSource(std::function<std::shared_ptr<InputFormat>()> func);
+		base::IEvent<std::shared_ptr<InputFormat> &> &NeedInputFormatEvent()
+		{
+			return _need_input_format_event;
+		}
 
 		void AddVideoFrameConsumer(std::shared_ptr<base::IConsumer<AVFrameWrapper>> consumer);
 		void AddAudioFrameConsumer(std::shared_ptr<base::IConsumer<AVFrameWrapper>> consumer);
