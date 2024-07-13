@@ -1,6 +1,6 @@
 #pragma once
+#include <base/pipe/PipeBlockingQueue.h>
 #include <base/string/define.h>
-#include <ffmpeg-wrapper/container/HysteresisBlockingPacketQueue.h>
 #include <ffmpeg-wrapper/factory/DecoderPipeFactoryManager.h>
 #include <ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
 #include <ffmpeg-wrapper/pipe/interface/IDecoderPipe.h>
@@ -18,7 +18,7 @@ namespace video
 	{
 	private:
 		std::shared_ptr<IDecoderPipe> _decoder_pipe;
-		HysteresisBlockingPacketQueue _packet_queue{};
+		base::PipeBlockingQueue<AVPacketWrapper> _packet_queue{};
 		TaskCompletionSignal _decode_thread_exit{true};
 		std::atomic_bool _do_not_flush_consumer = false;
 		std::atomic_bool _disposed = false;
