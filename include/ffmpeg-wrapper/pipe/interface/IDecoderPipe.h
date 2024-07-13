@@ -23,11 +23,11 @@ namespace video
 		/// 中的帧，又不会把下级的消费者也一起冲洗了。
 		virtual void FlushDecoderButNotFlushConsumers() = 0;
 
-		/// @brief 因为 IAudioStreamInfoCollection 和 IVideoStreamInfoCollection
+		/// @brief 时间基
+		/// @note 因为 IAudioStreamInfoCollection 和 IVideoStreamInfoCollection
 		/// 都有 TimeBase 和 SetTimeBase，所以这里重复一下，否则会报错，说不明确。
 		/// 这里重复后，就可以同时重写 IAudioStreamInfoCollection 和 IVideoStreamInfoCollection
 		/// 中的 TimeBase 和 SetTimeBase。
-		///
 		/// @return
 		virtual AVRational TimeBase() const = 0;
 		virtual void SetTimeBase(AVRational value) = 0;

@@ -36,34 +36,40 @@ namespace video
 			return _all_streams_flushed_event;
 		}
 
+		/// @brief 以官方格式打印信息。
+		/// @param url 仅仅用来显示而已，没有其他任何用途。
 		void DumpFormat(char const *url = "");
 
 		/// @brief 检查此输出格式是否需要设置全局头部。
 		/// @return
 		bool NeedGlobalHeader();
 
-		/// <summary>
-		///		送入包。
-		///		* 送入空指针进行冲洗。会对冲洗进行计数，只有当冲洗次数
-		///		  等于流的数量的那一刻才会真正执行冲洗工作。注意，这里只是进行计数，
-		///		  不会检查是是真的对每一路流进行冲洗了，还是只是对一路流多次冲洗。
-		///		  所以，不要对同一路流进行多次冲洗。
-		///		* 冲洗后，会自动调用 WriteTrailer 方法。
-		/// </summary>
-		/// <param name="packet"></param>
-		void SendData(AVPacketWrapper &packet) override;
-		void Flush() override;
-
-		void WriteHeader(AVDictionary **dic = nullptr);
-
+		/// @brief 创建一个新的流。
+		/// @note 此流没有任何信息，需要手动填写流的信息，然后才能 WriteHeader。
+		/// @return
 		AVStreamWrapper CreateNewStream();
 
-		/// <summary>
-		///		创建流，并用传进来的编码器来设置流的参数。设置的参数中包括时间基和帧率。
-		///		对于音频流，帧率是无用的，但是设置了也没什么不好的影响。
-		/// </summary>
-		/// <param name="codec_ctx"></param>
-		/// <returns>创建流成功则返回流</returns>
+		/// @brief 创建流
+		/// @note 会用传进来的编码器来设置流的参数。设置的参数中包括时间基和帧率。
+		/// 对于音频流，帧率是无用的，但是设置了也没什么不好的影响。
+		///
+		/// @param codec_ctx 编码器
+		/// @return 创建流成功则返回流
 		AVStreamWrapper CreateNewStream(std::shared_ptr<AVCodecContextWrapper> codec_ctx);
+
+		/// @brief 写入头部信息。
+		/// @param dic
+		void WriteHeader(AVDictionary **dic = nullptr);
+
+		/// @brief 送入包。
+		/// @param packet
+		void SendData(AVPacketWrapper &packet) override;
+
+		/// @brief 冲洗
+		/// @note 会对冲洗进行计数，只有当冲洗次数等于流的数量的那一刻才会真正去冲洗底层的 ffmpeg
+		/// 对象。这是为了适应管道。将本对象连接到多个管道中时，本对象会被冲洗多次，只有每个管道都
+		/// 冲洗了本对象，才算写入格式完成了，这时候才能冲洗底层的 ffmpeg 对象。
+		/// @note 冲洗后，会自动调用 WriteTrailer 方法。
+		void Flush() override;
 	};
 }
