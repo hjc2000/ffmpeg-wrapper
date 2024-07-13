@@ -1,4 +1,5 @@
 #pragma once
+#include <base/pipe/IPump.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/input-format/InputFormat.h>
 #include <ffmpeg-wrapper/output-format/OutputFormat.h>
@@ -11,6 +12,7 @@ namespace video
 	/// 写入输出格式。
 	/// @note 视频包的流索引会调整为 0，音频包的流索引会调整为 1.
 	class AVMixer
+		: base::IPump
 	{
 	private:
 		std::shared_ptr<InputFormat> _input_video_format;
@@ -32,6 +34,6 @@ namespace video
 				std::shared_ptr<InputFormat> input_audio_format,
 				std::shared_ptr<OutputFormat> out_format);
 
-		void Pump(std::shared_ptr<base::CancellationToken> cancel_pump);
+		void PumpDataToConsumers(std::shared_ptr<base::CancellationToken> cancel_pump) override;
 	};
 }

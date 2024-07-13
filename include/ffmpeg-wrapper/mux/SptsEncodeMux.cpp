@@ -84,9 +84,6 @@ shared_ptr<base::IConsumer<AVFrameWrapper>> video::SptsEncodeMux::AudioEncodePip
 #include <ffmpeg-wrapper/output-format/StreamOutputFormat.h>
 #include <jccpp/stream/FileStream.h>
 
-/// <summary>
-///		测试函数
-/// </summary>
 void test_SptsEncodeMux()
 {
 	base::Queue<std::string> file_queue;
@@ -146,20 +143,17 @@ void test_SptsEncodeMux()
 		},
 	};
 
-	joined_input_format_demux_decoder->AddVideoFrameConsumer(
-		spts_encode_mux->VideoEncodePipe());
+	joined_input_format_demux_decoder->AddVideoFrameConsumer(spts_encode_mux->VideoEncodePipe());
+	joined_input_format_demux_decoder->AddAudioFrameConsumer(spts_encode_mux->AudioEncodePipe());
 
-	joined_input_format_demux_decoder->AddAudioFrameConsumer(
-		spts_encode_mux->AudioEncodePipe());
-
-	base::CancellationTokenSource cancel_pump_source;
+	base::CancellationTokenSource cancel_pump;
 	TaskCompletionSignal pump_thread_exit{false};
 
 	auto pump_thread_func = [&]()
 	{
 		try
 		{
-			joined_input_format_demux_decoder->PumpDataToConsumers(cancel_pump_source.Token());
+			joined_input_format_demux_decoder->PumpDataToConsumers(cancel_pump.Token());
 		}
 		catch (std::exception &e)
 		{
@@ -176,6 +170,6 @@ void test_SptsEncodeMux()
 	std::thread(pump_thread_func).detach();
 
 	cin.get();
-	cancel_pump_source.Cancel();
+	cancel_pump.Cancel();
 	pump_thread_exit.Wait();
 }

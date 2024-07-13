@@ -37,78 +37,92 @@ void video::AVMixer::CreateNewAudioStream()
 
 bool video::AVMixer::ReadVideoPacketOnce(shared_ptr<base::CancellationToken> cancel_pump)
 {
-	while (!cancel_pump->IsCancellationRequested())
+	while (true)
 	{
-		int result = _input_video_format->ReadData(_temp_packet);
-		switch (result)
-		{
-		case 0:
-		{
-			if (_temp_packet.StreamIndex() != _src_video_stream_index)
-			{
-				continue;
-			}
-
-			_temp_packet.SetStreamIndex(0);
-			_temp_packet.ChangeTimeBase(AVRational{1, 90000});
-			_video_time = _temp_packet.Dts();
-			_out_format->SendData(_temp_packet);
-			if (_video_time < _audio_time)
-			{
-				continue;
-			}
-
-			return true;
-		}
-		default:
+		if (cancel_pump->IsCancellationRequested())
 		{
 			return false;
 		}
-		}
-	}
 
-	return false;
+		int result = _input_video_format->ReadData(_temp_packet);
+		if (result < 0)
+		{
+			return false;
+		}
+
+		// 读取成功
+		if (_temp_packet.StreamIndex() != _src_video_stream_index)
+		{
+			continue;
+		}
+
+		_temp_packet.SetStreamIndex(0);
+		_temp_packet.ChangeTimeBase(AVRational{1, 90000});
+		_video_time = _temp_packet.Dts();
+		_out_format->SendData(_temp_packet);
+		if (_video_time < _audio_time)
+		{
+			// 让落后的视频追上音频
+			continue;
+		}
+
+		return true;
+	}
 }
 
 bool video::AVMixer::ReadAudioPacketOnce(shared_ptr<base::CancellationToken> cancel_pump)
 {
-	while (!cancel_pump->IsCancellationRequested())
+	while (true)
 	{
-		int result = _input_audio_format->ReadData(_temp_packet);
-		switch (result)
-		{
-		case 0:
-		{
-			if (_temp_packet.StreamIndex() != _src_audio_stream_index)
-			{
-				continue;
-			}
-
-			_temp_packet.SetStreamIndex(1);
-			_temp_packet.ChangeTimeBase(AVRational{1, 90000});
-			_audio_time = _temp_packet.Dts();
-			_out_format->SendData(_temp_packet);
-			if (_audio_time < _video_time)
-			{
-				continue;
-			}
-
-			return true;
-		}
-		default:
+		if (cancel_pump->IsCancellationRequested())
 		{
 			return false;
 		}
-		}
-	}
 
-	return false;
+		int result = _input_audio_format->ReadData(_temp_packet);
+		if (result < 0)
+		{
+			return false;
+		}
+
+		if (_temp_packet.StreamIndex() != _src_audio_stream_index)
+		{
+			continue;
+		}
+
+		_temp_packet.SetStreamIndex(1);
+		_temp_packet.ChangeTimeBase(AVRational{1, 90000});
+		_audio_time = _temp_packet.Dts();
+		_out_format->SendData(_temp_packet);
+		if (_audio_time < _video_time)
+		{
+			// 让落后的音频追上视频
+			continue;
+		}
+
+		return true;
+	}
 }
 
 video::AVMixer::AVMixer(shared_ptr<InputFormat> input_video_format,
 						shared_ptr<InputFormat> input_audio_format,
 						shared_ptr<OutputFormat> out_format)
 {
+	if (input_video_format == nullptr)
+	{
+		throw std::invalid_argument{"input_video_format 不能是空指针"};
+	}
+
+	if (input_audio_format == nullptr)
+	{
+		throw std::invalid_argument{"input_audio_format 不能是空指针"};
+	}
+
+	if (out_format == nullptr)
+	{
+		throw std::invalid_argument{"out_format 不能是空指针"};
+	}
+
 	_input_video_format = input_video_format;
 	_input_audio_format = input_audio_format;
 	_out_format = out_format;
@@ -117,12 +131,17 @@ video::AVMixer::AVMixer(shared_ptr<InputFormat> input_video_format,
 	CreateNewAudioStream();
 }
 
-void video::AVMixer::Pump(shared_ptr<base::CancellationToken> cancel_pump)
+void video::AVMixer::PumpDataToConsumers(shared_ptr<base::CancellationToken> cancel_pump)
 {
 	_out_format->WriteHeader();
 	_out_format->DumpFormat();
-	while (!cancel_pump->IsCancellationRequested())
+	while (true)
 	{
+		if (cancel_pump->IsCancellationRequested())
+		{
+			return;
+		}
+
 		bool read_video_packet_result = ReadVideoPacketOnce(cancel_pump);
 		bool read_audio_packet_result = ReadAudioPacketOnce(cancel_pump);
 		if (!read_video_packet_result && !read_audio_packet_result)

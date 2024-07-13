@@ -34,9 +34,8 @@ namespace video
 		void WriteHeader();
 
 	public:
-		/// @brief
+		/// @brief 构造函数
 		///
-		/// @param factory
 		/// @param out_format 输出格式
 		///
 		/// @param video_stream_infos 期望输出的视频流信息。
