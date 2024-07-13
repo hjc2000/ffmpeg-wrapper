@@ -87,13 +87,12 @@ void InputFormat::FindStreamInfo(::AVDictionary **options)
 
 AVStreamWrapper InputFormat::FindBestStream(AVMediaType type)
 {
-	int ret = ::av_find_best_stream(
-		_wrapped_obj,
-		type,
-		-1,
-		-1,
-		nullptr,
-		0);
+	int ret = ::av_find_best_stream(_wrapped_obj,
+									type,
+									-1,
+									-1,
+									nullptr,
+									0);
 
 	if (ret < 0)
 	{

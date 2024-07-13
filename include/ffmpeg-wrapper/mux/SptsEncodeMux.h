@@ -49,15 +49,14 @@ namespace video
 		/// @note 时间基会强制使用 1/90000，audio_stream_infos 中的时间基会被忽略。
 		///
 		/// @param audio_codec_name 输出音频所使用的编码器名称
-		SptsEncodeMux(
-			std::shared_ptr<OutputFormat> out_format,
-			// 视频相关参数
-			IVideoStreamInfoCollection const &video_stream_infos,
-			std::string video_codec_name,
-			int64_t video_out_bitrate_in_bps,
-			// 音频相关参数
-			IAudioStreamInfoCollection const &audio_stream_infos,
-			std::string audio_codec_name);
+		SptsEncodeMux(std::shared_ptr<OutputFormat> out_format,
+					  // 视频相关参数
+					  IVideoStreamInfoCollection const &video_stream_infos,
+					  std::string video_codec_name,
+					  int64_t video_out_bitrate_in_bps,
+					  // 音频相关参数
+					  IAudioStreamInfoCollection const &audio_stream_infos,
+					  std::string audio_codec_name);
 
 		std::shared_ptr<base::IConsumer<AVFrameWrapper>> VideoEncodePipe();
 		std::shared_ptr<base::IConsumer<AVFrameWrapper>> AudioEncodePipe();

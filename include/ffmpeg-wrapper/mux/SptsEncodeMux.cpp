@@ -4,15 +4,14 @@
 using namespace video;
 using namespace std;
 
-video::SptsEncodeMux::SptsEncodeMux(
-	shared_ptr<OutputFormat> out_format,
-	// 视频相关参数
-	IVideoStreamInfoCollection const &video_stream_infos,
-	std::string video_codec_name,
-	int64_t video_out_bitrate_in_bps,
-	// 音频相关参数
-	IAudioStreamInfoCollection const &audio_stream_infos,
-	std::string audio_codec_name)
+video::SptsEncodeMux::SptsEncodeMux(shared_ptr<OutputFormat> out_format,
+									// 视频相关参数
+									IVideoStreamInfoCollection const &video_stream_infos,
+									std::string video_codec_name,
+									int64_t video_out_bitrate_in_bps,
+									// 音频相关参数
+									IAudioStreamInfoCollection const &audio_stream_infos,
+									std::string audio_codec_name)
 {
 	_out_format = out_format;
 
@@ -95,9 +94,7 @@ void test_SptsEncodeMux()
 	file_queue.Enqueue("越权访问.mkv");
 	file_queue.Enqueue("moon.mp4");
 	file_queue.Enqueue("fallen-down.ts");
-	shared_ptr<JoinedInputFormatDemuxDecoder> joined_input_format_demux_decoder{
-		new JoinedInputFormatDemuxDecoder{},
-	};
+	shared_ptr<JoinedInputFormatDemuxDecoder> joined_input_format_demux_decoder{new JoinedInputFormatDemuxDecoder{}};
 
 	auto get_input_format_func = [&](shared_ptr<InputFormat> &current_input_format)
 	{

@@ -12,6 +12,7 @@ namespace video
 	/// @note 视频包的流索引会调整为 0，音频包的流索引会调整为 1.
 	class AVMixer
 	{
+	private:
 		std::shared_ptr<InputFormat> _input_video_format;
 		std::shared_ptr<InputFormat> _input_audio_format;
 		std::shared_ptr<OutputFormat> _out_format;
