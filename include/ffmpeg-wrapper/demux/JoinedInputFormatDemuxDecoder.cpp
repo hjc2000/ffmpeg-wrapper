@@ -6,9 +6,7 @@ using namespace std;
 void video::JoinedInputFormatDemuxDecoder::InitializeVideoDecoderPipe()
 {
 	// 如果有视频流，初始化视频解码管道
-	AVStreamWrapper stream = _current_input_format->FindBestStream(
-		AVMediaType::AVMEDIA_TYPE_VIDEO);
-
+	AVStreamWrapper stream = _current_input_format->FindBestStream(AVMediaType::AVMEDIA_TYPE_VIDEO);
 	if (!stream.IsNull())
 	{
 		_video_stream_infos = stream;
@@ -37,9 +35,7 @@ void video::JoinedInputFormatDemuxDecoder::InitializeVideoDecoderPipe()
 void video::JoinedInputFormatDemuxDecoder::InitializeAudioDecoderPipe()
 {
 	// 如果有音频流，初始化音频解码管道
-	AVStreamWrapper stream = _current_input_format->FindBestStream(
-		AVMediaType::AVMEDIA_TYPE_AUDIO);
-
+	AVStreamWrapper stream = _current_input_format->FindBestStream(AVMediaType::AVMEDIA_TYPE_AUDIO);
 	if (!stream.IsNull())
 	{
 		_audio_stream_infos = stream;
@@ -95,8 +91,7 @@ void video::JoinedInputFormatDemuxDecoder::OpenInputIfNull()
 	InitializeAudioDecoderPipe();
 }
 
-void video::JoinedInputFormatDemuxDecoder::Pump(
-	shared_ptr<base::CancellationToken> cancel_pump)
+void video::JoinedInputFormatDemuxDecoder::PumpDataToConsumers(shared_ptr<base::CancellationToken> cancel_pump)
 {
 	while (!cancel_pump->IsCancellationRequested())
 	{

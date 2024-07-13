@@ -164,7 +164,7 @@ void test_SptsEncodeMux()
 	{
 		try
 		{
-			joined_input_format_demux_decoder->Pump(cancel_pump_source.Token());
+			joined_input_format_demux_decoder->PumpDataToConsumers(cancel_pump_source.Token());
 		}
 		catch (std::exception &e)
 		{

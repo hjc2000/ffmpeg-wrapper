@@ -18,6 +18,7 @@ namespace video
 	/// 这些视频帧、音频帧的时间戳是连续的，但是因为来自不同文件，分辨率、像素格式、采样率、
 	/// 采样格式等信息可能会变。编码侧要能够自适应，必要时进行重采样。
 	class JoinedInputFormatDemuxDecoder
+		: base::IPump
 	{
 	private:
 		std::shared_ptr<InputFormat> _current_input_format;
@@ -40,7 +41,7 @@ namespace video
 		void OpenInputIfNull();
 
 	public:
-		void Pump(std::shared_ptr<base::CancellationToken> cancel_pump);
+		void PumpDataToConsumers(std::shared_ptr<base::CancellationToken> cancel_pump) override;
 
 		/// @brief 设置输入格式的源。
 		/// @note Immediate 是形容词，意为 “立即的”。通过一个回调函数来获取输入格式，这个函数就
