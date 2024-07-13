@@ -1,10 +1,12 @@
 #pragma once
-#include<ffmpeg-wrapper/info-collection/IVideoStreamInfoCollection.h>
-#include<memory>
+#include <ffmpeg-wrapper/info-collection/IVideoStreamInfoCollection.h>
+#include <memory>
 
 namespace video
 {
-	class VideoStreamInfoCollection :public IVideoStreamInfoCollection
+	/// @brief 视频流信息集合。
+	class VideoStreamInfoCollection
+		: public IVideoStreamInfoCollection
 	{
 	public:
 		VideoStreamInfoCollection() = default;
@@ -27,6 +29,12 @@ namespace video
 		}
 
 		int _width = 0;
+		int _height = 0;
+		AVPixelFormat _pixel_format = AVPixelFormat{};
+		AVRational _frame_rate = AVRational{};
+		AVRational _time_base = AVRational{};
+
+#pragma region IVideoStreamInfoCollection
 		int Width() const override
 		{
 			return _width;
@@ -36,7 +44,6 @@ namespace video
 			_width = value;
 		}
 
-		int _height = 0;
 		int Height() const override
 		{
 			return _height;
@@ -46,7 +53,6 @@ namespace video
 			_height = value;
 		}
 
-		AVPixelFormat _pixel_format = AVPixelFormat { };
 		AVPixelFormat PixelFormat() const override
 		{
 			return _pixel_format;
@@ -56,7 +62,6 @@ namespace video
 			_pixel_format = value;
 		}
 
-		AVRational _frame_rate = AVRational { };
 		AVRational FrameRate() const override
 		{
 			return _frame_rate;
@@ -66,7 +71,6 @@ namespace video
 			_frame_rate = value;
 		}
 
-		AVRational _time_base = AVRational { };
 		virtual AVRational TimeBase() const override
 		{
 			return _time_base;
@@ -75,5 +79,6 @@ namespace video
 		{
 			_time_base = value;
 		}
+#pragma endregion
 	};
 }

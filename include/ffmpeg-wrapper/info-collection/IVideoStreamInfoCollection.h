@@ -1,12 +1,14 @@
 #pragma once
-#include<ffmpeg-wrapper/AVCompare.h>
-#include<ffmpeg-wrapper/base_include.h>
-#include<ffmpeg-wrapper/info-collection/IVideoFrameInfoCollection.h>
+#include <ffmpeg-wrapper/AVCompare.h>
+#include <ffmpeg-wrapper/base_include.h>
+#include <ffmpeg-wrapper/info-collection/IVideoFrameInfoCollection.h>
 
 namespace video
 {
-	class IVideoStreamInfoCollection :
-		public IVideoFrameInfoCollection
+	/// @brief 视频流信息集合接口。
+	/// @note 视频流比起视频帧多了 2 个信息：帧率，时间基。
+	class IVideoStreamInfoCollection
+		: public IVideoFrameInfoCollection
 	{
 	public:
 		virtual ~IVideoStreamInfoCollection() = default;

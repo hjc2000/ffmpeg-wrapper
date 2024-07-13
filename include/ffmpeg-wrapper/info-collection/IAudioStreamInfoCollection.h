@@ -29,27 +29,15 @@ namespace video
 		/// @note 其实就是采样率的倒数。
 		///
 		/// @return
-		double DoubleSampleInterval() const
-		{
-			return 1.0 / SampleRate();
-		}
+		double DoubleSampleInterval() const;
 
 		/// @brief 两个采样点之间的时间间隔，单位毫秒。
 		/// @return
-		double sample_interval_in_milliseconds() const
-		{
-			return 1.0 * 1000 / SampleRate();
-		}
+		double sample_interval_in_milliseconds() const;
 
-		/// <summary>
-		///		将 sample_format 属性转化为字符串。
-		/// </summary>
-		/// <returns>返回 sample_format 的名称。如果是未知类型，返回空字符串</returns>
-		std::string sample_format_string() const
-		{
-			const char *name = av_get_sample_fmt_name(SampleFormat());
-			return name ? std::string(name) : "";
-		}
+		/// @brief 将 sample_format 属性转化为字符串。
+		/// @return 返回 sample_format 的名称。如果是未知类型，返回空字符串
+		std::string sample_format_string() const;
 
 		/// @brief 获取声道布局的描述字符串
 		/// @return
@@ -57,17 +45,11 @@ namespace video
 
 		/// @brief 判断本音频帧是不是平面类型。当然，本帧首先得是音频帧。
 		/// @return
-		bool IsPlanar() const
-		{
-			return av_sample_fmt_is_planar(SampleFormat());
-		}
+		bool IsPlanar() const;
 
 		/// @brief 获取每个采样点的字节数
 		/// @return 每个采样点的字节数
-		int BytesPerSample() const
-		{
-			return av_get_bytes_per_sample(SampleFormat());
-		}
+		int BytesPerSample() const;
 
 		bool operator==(IAudioStreamInfoCollection const &another) const;
 	};

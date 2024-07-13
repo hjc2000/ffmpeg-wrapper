@@ -1,9 +1,11 @@
 #pragma once
-#include<ffmpeg-wrapper/info-collection/IVideoFrameInfoCollection.h>
+#include <ffmpeg-wrapper/info-collection/IVideoFrameInfoCollection.h>
 
 namespace video
 {
-	class VideoFrameInfoCollection :public IVideoFrameInfoCollection
+	/// @brief 视频帧信息集合。
+	class VideoFrameInfoCollection
+		: public IVideoFrameInfoCollection
 	{
 	public:
 		VideoFrameInfoCollection() = default;
@@ -19,6 +21,11 @@ namespace video
 			return *this;
 		}
 
+		int _width = 0;
+		int _height = 0;
+		AVPixelFormat _pixel_format{};
+
+#pragma region IVideoFrameInfoCollection
 		int Width() const override;
 		void SetWidth(int value) override;
 
@@ -27,9 +34,6 @@ namespace video
 
 		AVPixelFormat PixelFormat() const override;
 		void SetPixelFormat(AVPixelFormat value) override;
-
-		int _width = 0;
-		int _height = 0;
-		AVPixelFormat _pixel_format{};
+#pragma endregion
 	};
 }

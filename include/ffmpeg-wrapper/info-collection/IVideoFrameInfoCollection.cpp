@@ -1,18 +1,18 @@
-#include"IVideoFrameInfoCollection.h"
+#include "IVideoFrameInfoCollection.h"
 
 using namespace video;
 
-IVideoFrameInfoCollection &video::IVideoFrameInfoCollection::operator=(IVideoFrameInfoCollection const &another)
+IVideoFrameInfoCollection &video::IVideoFrameInfoCollection::operator=(IVideoFrameInfoCollection const &o)
 {
-	SetWidth(another.Width());
-	SetHeight(another.Height());
-	SetPixelFormat(another.PixelFormat());
+	SetWidth(o.Width());
+	SetHeight(o.Height());
+	SetPixelFormat(o.PixelFormat());
 	return *this;
 }
 
-bool IVideoFrameInfoCollection::operator==(IVideoFrameInfoCollection const &another) const
+bool IVideoFrameInfoCollection::operator==(IVideoFrameInfoCollection const &o) const
 {
-	return Width() == another.Width() &&
-		Height() == another.Height() &&
-		PixelFormat() == another.PixelFormat();
+	return Width() == o.Width() &&
+		   Height() == o.Height() &&
+		   PixelFormat() == o.PixelFormat();
 }
