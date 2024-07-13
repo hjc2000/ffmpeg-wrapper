@@ -57,19 +57,15 @@ namespace video
 			return name ? std::string(name) : "";
 		}
 
-		/// <summary>
-		///		获取声道布局的描述字符串
-		/// </summary>
-		/// <returns></returns>
+		/// @brief 获取声道布局的描述字符串
+		/// @return
 		std::string channel_layout_description() const
 		{
 			return AVChannelLayoutExtension::channel_layout_description(ChannelLayout());
 		}
 
-		/// <summary>
-		///		判断本音频帧是不是平面类型。当然，本帧首先得是音频帧。
-		/// </summary>
-		/// <returns></returns>
+		/// @brief 判断本音频帧是不是平面类型。当然，本帧首先得是音频帧。
+		/// @return
 		bool IsPlanar() const
 		{
 			return av_sample_fmt_is_planar(SampleFormat());
