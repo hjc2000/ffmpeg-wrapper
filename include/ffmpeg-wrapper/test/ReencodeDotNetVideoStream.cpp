@@ -1,5 +1,6 @@
 #include "ReencodeDotNetVideoStream.h"
 #include <base/task/CancellationTokenSource.h>
+#include <ffmpeg-wrapper/AVChannelLayoutExtension.h>
 #include <ffmpeg-wrapper/factory/EncoderPipeFactoryManager.h>
 #include <ffmpeg-wrapper/info-collection/VideoStreamInfoCollection.h>
 #include <jccpp/TaskCompletionSignal.h>
@@ -18,8 +19,7 @@ void ReencodeDotNetVideoStream(DotNetStream *dotnet_video_stream)
 
 	// 想要输出的音频信息
 	AudioStreamInfoCollection output_audio_stream_infos;
-	output_audio_stream_infos._ch_layout =
-		AVChannelLayoutExtension::GetDefaultChannelLayout(2);
+	output_audio_stream_infos._ch_layout = AVChannelLayoutExtension::GetDefaultChannelLayout(2);
 	output_audio_stream_infos._sample_format = AVSampleFormat::AV_SAMPLE_FMT_FLTP;
 	output_audio_stream_infos._sample_rate = 48000;
 

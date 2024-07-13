@@ -136,6 +136,7 @@ void video::AudioSampler::SetSampleCount(int value)
 }
 #pragma endregion
 
+#include <ffmpeg-wrapper/AVChannelLayoutExtension.h>
 #include <ffmpeg-wrapper/factory/EncoderPipeFactoryManager.h>
 #include <ffmpeg-wrapper/output-format/FileOutputFormat.h>
 

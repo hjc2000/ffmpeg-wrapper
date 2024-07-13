@@ -1,5 +1,4 @@
 #pragma once
-#include <ffmpeg-wrapper/AVChannelLayoutExtension.h>
 #include <ffmpeg-wrapper/AVCompare.h>
 #include <ffmpeg-wrapper/AVSampleFormatExtention.h>
 #include <ffmpeg-wrapper/base_include.h>
@@ -26,22 +25,17 @@ namespace video
 		virtual AVChannelLayout ChannelLayout() const = 0;
 		virtual void SetChannelLayout(AVChannelLayout value) = 0;
 
-		/// @brief 获取两个采样点之间的时间间隔。其实就是采样率的倒数。
+		/// @brief 获取两个采样点之间的时间间隔。
+		/// @note 其实就是采样率的倒数。
+		///
 		/// @return
-		double sample_interval() const
+		double DoubleSampleInterval() const
 		{
 			return 1.0 / SampleRate();
 		}
 
-		/// <summary>
-		///		两个采样点之间的时间间隔，单位毫秒。
-		///
-		///		本属性内部是
-		///		1.0 * 1000 / SampleRate()
-		///		即先 1.0 乘 1000 再除以 SampleRate()，这比先除以 SampleRate()
-		///		再乘 1000 的精度要高。
-		/// </summary>
-		/// <returns></returns>
+		/// @brief 两个采样点之间的时间间隔，单位毫秒。
+		/// @return
 		double sample_interval_in_milliseconds() const
 		{
 			return 1.0 * 1000 / SampleRate();
@@ -59,10 +53,7 @@ namespace video
 
 		/// @brief 获取声道布局的描述字符串
 		/// @return
-		std::string channel_layout_description() const
-		{
-			return AVChannelLayoutExtension::channel_layout_description(ChannelLayout());
-		}
+		std::string channel_layout_description() const;
 
 		/// @brief 判断本音频帧是不是平面类型。当然，本帧首先得是音频帧。
 		/// @return
