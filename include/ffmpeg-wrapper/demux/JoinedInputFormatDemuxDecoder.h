@@ -25,10 +25,10 @@ namespace video
 		std::shared_ptr<InputFormat> _current_input_format;
 		AVStreamInfoCollection _video_stream_infos;
 		std::shared_ptr<IDecoderPipe> _video_decode_pipe;
-		int _source_video_stream_index = -1;
+		int _original_video_stream_index = -1;
 		AVStreamInfoCollection _audio_stream_infos;
 		std::shared_ptr<IDecoderPipe> _audio_decode_pipe;
-		int _source_audio_stream_index = -1;
+		int _original_audio_stream_index = -1;
 		std::shared_ptr<InfinitePacketPipe> _infinite_packet_pipe{new InfinitePacketPipe{}};
 		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> _video_frame_consumer_list;
 		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> _audio_frame_consumer_list;
@@ -37,11 +37,16 @@ namespace video
 
 		void InitializeVideoDecoderPipe();
 		void InitializeAudioDecoderPipe();
-		void OpenInputIfNull();
+		void GetAndOpenNewInputFormatIfCurrentIsNull();
 
 	public:
 		void PumpDataToConsumers(std::shared_ptr<base::CancellationToken> cancel_pump) override;
 
+		/// @brief 本对象需要输入格式时就会触发此回调，传入一个 std::shared_ptr<InputFormat> &
+		/// 这是引用，也就意味着可以被回调函数修改。回调函数可以将一个输入格式赋值给传进去的
+		/// std::shared_ptr<InputFormat> & 参数，函数返回后，本对象就能获取到这个输入格式。
+		///
+		/// @return
 		base::IEvent<std::shared_ptr<InputFormat> &> &NeedInputFormatEvent()
 		{
 			return _need_input_format_event;

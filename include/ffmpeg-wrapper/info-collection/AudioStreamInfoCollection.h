@@ -1,11 +1,12 @@
 #pragma once
-#include<ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
-#include<memory>
+#include <ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
+#include <memory>
 
 namespace video
 {
-	class AudioStreamInfoCollection :
-		public IAudioStreamInfoCollection
+	/// @brief 音频流信息集合。
+	class AudioStreamInfoCollection
+		: public IAudioStreamInfoCollection
 	{
 	public:
 		AudioStreamInfoCollection() = default;
@@ -26,16 +27,16 @@ namespace video
 			return *this;
 		}
 
-		AVRational _time_base { };
-		AVSampleFormat _sample_format { };
+		AVRational _time_base{};
+		AVSampleFormat _sample_format{};
 		int _sample_rate = 0;
-		AVChannelLayout _ch_layout { };
+		AVChannelLayout _ch_layout{};
 
+#pragma region IAudioStreamInfoCollection
 		AVRational TimeBase() const override
 		{
 			return _time_base;
 		}
-
 		void SetTimeBase(AVRational value) override
 		{
 			_time_base = value;
@@ -45,7 +46,6 @@ namespace video
 		{
 			return _sample_format;
 		}
-
 		void SetSampleFormat(AVSampleFormat value) override
 		{
 			_sample_format = value;
@@ -55,7 +55,6 @@ namespace video
 		{
 			return _sample_rate;
 		}
-
 		void SetSampleRate(int value) override
 		{
 			_sample_rate = value;
@@ -65,11 +64,11 @@ namespace video
 		{
 			return _ch_layout;
 		}
-
 		void SetChannelLayout(AVChannelLayout value) override
 		{
 			_ch_layout = value;
 		}
+#pragma endregion
 	};
 
 }

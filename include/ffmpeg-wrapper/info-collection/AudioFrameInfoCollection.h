@@ -3,13 +3,16 @@
 
 namespace video
 {
-	/// @brief 简单的储存音频信息的结构体
+	/// @brief 音频帧信息集合。
 	class AudioFrameInfoCollection
 		: public IAudioFrameInfoCollection
 	{
 	public:
 		AudioFrameInfoCollection() = default;
 
+		/// @brief 构造音频帧信息集合。
+		/// @param infos 音频流信息集合。
+		/// @param nb_samples 音频帧比音频流多了一个信息就是采样点个数。
 		AudioFrameInfoCollection(IAudioStreamInfoCollection const &infos, int nb_samples)
 		{
 			IAudioStreamInfoCollection::operator=(infos);

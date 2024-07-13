@@ -5,10 +5,10 @@ using namespace video;
 using namespace std;
 
 VideoFilterGraph::VideoFilterGraph(IVideoStreamInfoCollection const &infos)
-	: _input_video_stream_infos(infos)
 {
+	_input_video_stream_infos = infos;
 	_wrapped_obj = avfilter_graph_alloc();
-	if (!_wrapped_obj)
+	if (_wrapped_obj == nullptr)
 	{
 		throw std::runtime_error{"avfilter_graph_alloc 失败。"};
 	}
@@ -20,44 +20,40 @@ VideoFilterGraph::VideoFilterGraph(IVideoStreamInfoCollection const &infos)
 void VideoFilterGraph::init_buffer_filter()
 {
 	const AVFilter *buffersrc = avfilter_get_by_name("buffer");
-	AVFilterContext *buffersrc_ctx = avfilter_graph_alloc_filter(
-		_wrapped_obj,
-		buffersrc,
-		"src");
+
+	AVFilterContext *buffersrc_ctx = avfilter_graph_alloc_filter(_wrapped_obj,
+																 buffersrc,
+																 "src");
+
 	if (!buffersrc_ctx)
 	{
 		throw std::runtime_error{"avfilter_graph_alloc_filter 失败。"};
 	}
 
-	av_opt_set_int(
-		buffersrc_ctx,
-		"width",
-		_input_video_stream_infos.Width(),
-		AV_OPT_SEARCH_CHILDREN);
+	av_opt_set_int(buffersrc_ctx,
+				   "width",
+				   _input_video_stream_infos.Width(),
+				   AV_OPT_SEARCH_CHILDREN);
 
-	av_opt_set_int(
-		buffersrc_ctx,
-		"height",
-		_input_video_stream_infos.Height(),
-		AV_OPT_SEARCH_CHILDREN);
+	av_opt_set_int(buffersrc_ctx,
+				   "height",
+				   _input_video_stream_infos.Height(),
+				   AV_OPT_SEARCH_CHILDREN);
 
-	av_opt_set_pixel_fmt(
-		buffersrc_ctx,
-		"pix_fmt",
-		_input_video_stream_infos.PixelFormat(),
-		AV_OPT_SEARCH_CHILDREN);
+	av_opt_set_pixel_fmt(buffersrc_ctx,
+						 "pix_fmt",
+						 _input_video_stream_infos.PixelFormat(),
+						 AV_OPT_SEARCH_CHILDREN);
 
-	av_opt_set_q(
-		buffersrc_ctx,
-		"time_base",
-		_input_video_stream_infos.TimeBase(),
-		AV_OPT_SEARCH_CHILDREN);
+	av_opt_set_q(buffersrc_ctx,
+				 "time_base",
+				 _input_video_stream_infos.TimeBase(),
+				 AV_OPT_SEARCH_CHILDREN);
 
-	av_opt_set_q(
-		buffersrc_ctx,
-		"FrameRate",
-		_input_video_stream_infos.FrameRate(),
-		AV_OPT_SEARCH_CHILDREN);
+	av_opt_set_q(buffersrc_ctx,
+				 "FrameRate",
+				 _input_video_stream_infos.FrameRate(),
+				 AV_OPT_SEARCH_CHILDREN);
 
 	int ret = avfilter_init_str(buffersrc_ctx, nullptr);
 	if (ret < 0)
@@ -71,12 +67,12 @@ void VideoFilterGraph::init_buffer_filter()
 void VideoFilterGraph::init_buffer_sink_filter()
 {
 	const AVFilter *buffersink = avfilter_get_by_name("buffersink");
-	AVFilterContext *buffersink_ctx = avfilter_graph_alloc_filter(
-		_wrapped_obj,
-		buffersink,
-		"sink");
 
-	if (!buffersink_ctx)
+	AVFilterContext *buffersink_ctx = avfilter_graph_alloc_filter(_wrapped_obj,
+																  buffersink,
+																  "sink");
+
+	if (buffersink_ctx == nullptr)
 	{
 		throw std::runtime_error{"AVFilterContext 构造失败"};
 	}
@@ -103,7 +99,7 @@ AVFilterContextWrapper VideoFilterGraph::alloc_fps_filter(AVRational FrameRate)
 {
 	const AVFilter *fps_filter = avfilter_get_by_name("fps");
 	AVFilterContext *fps_ctx = avfilter_graph_alloc_filter(_wrapped_obj, fps_filter, "fps");
-	if (!fps_ctx)
+	if (fps_ctx == nullptr)
 	{
 		throw std::runtime_error{"AVFilterContext 构造失败"};
 	}
@@ -135,10 +131,9 @@ int VideoFilterGraph::ReadData(AVFrameWrapper &frame)
 void VideoFilterGraph::SendData(AVFrameWrapper &frame)
 {
 	// 非冲洗模式
-	int ret = av_buffersrc_add_frame_flags(
-		_buffer_filter,
-		frame,
-		AV_BUFFERSRC_FLAG_KEEP_REF);
+	int ret = av_buffersrc_add_frame_flags(_buffer_filter,
+										   frame,
+										   AV_BUFFERSRC_FLAG_KEEP_REF);
 
 	if (ret < 0)
 	{
@@ -149,10 +144,9 @@ void VideoFilterGraph::SendData(AVFrameWrapper &frame)
 void video::VideoFilterGraph::Flush()
 {
 	// 冲洗模式
-	int ret = av_buffersrc_add_frame_flags(
-		_buffer_filter,
-		nullptr,
-		AV_BUFFERSRC_FLAG_KEEP_REF);
+	int ret = av_buffersrc_add_frame_flags(_buffer_filter,
+										   nullptr,
+										   AV_BUFFERSRC_FLAG_KEEP_REF);
 
 	if (ret < 0)
 	{

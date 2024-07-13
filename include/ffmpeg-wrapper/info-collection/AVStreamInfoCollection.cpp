@@ -1,6 +1,12 @@
-#include"ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h"
+#include "ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h"
 
 using namespace video;
+
+void video::AVStreamInfoCollection::CopyCodecParamFrom(AVCodecParameters const *src)
+{
+	// avcodec_parameters_copy 会先释放 dst，然后再将 src 的数据复制到 dst。
+	avcodec_parameters_copy(_codec_params, src);
+}
 
 AVStreamInfoCollection::AVStreamInfoCollection(AVStreamInfoCollection const &stream)
 {
@@ -55,12 +61,6 @@ AVStreamInfoCollection &AVStreamInfoCollection::operator=(AVStreamWrapper const 
 	_frame_rate = stream.FrameRate();
 
 	return *this;
-}
-
-void video::AVStreamInfoCollection::CopyCodecParamFrom(AVCodecParameters const *src)
-{
-	// avcodec_parameters_copy 会先释放 dst，然后再将 src 的数据复制到 dst。
-	avcodec_parameters_copy(_codec_params, src);
 }
 
 int video::AVStreamInfoCollection::Index() const

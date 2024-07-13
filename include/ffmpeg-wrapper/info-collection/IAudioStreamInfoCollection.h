@@ -1,20 +1,18 @@
 #pragma once
-#include<ffmpeg-wrapper/AVChannelLayoutExtension.h>
-#include<ffmpeg-wrapper/AVCompare.h>
-#include<ffmpeg-wrapper/AVSampleFormatExtention.h>
-#include<ffmpeg-wrapper/base_include.h>
-#include<string>
+#include <ffmpeg-wrapper/AVChannelLayoutExtension.h>
+#include <ffmpeg-wrapper/AVCompare.h>
+#include <ffmpeg-wrapper/AVSampleFormatExtention.h>
+#include <ffmpeg-wrapper/base_include.h>
+#include <string>
 
 namespace video
 {
-	/// <summary>
-	///		继承此接口表示含有：采样格式、采样率、声道布局、时间基 等信息。
-	/// </summary>
+	/// @brief 音频流信息集合接口。
 	class IAudioStreamInfoCollection
 	{
 	public:
 		virtual ~IAudioStreamInfoCollection() = default;
-		IAudioStreamInfoCollection &operator=(IAudioStreamInfoCollection const &value);
+		IAudioStreamInfoCollection &operator=(IAudioStreamInfoCollection const &o);
 
 		virtual AVRational TimeBase() const = 0;
 		virtual void SetTimeBase(AVRational value) = 0;
@@ -28,10 +26,8 @@ namespace video
 		virtual AVChannelLayout ChannelLayout() const = 0;
 		virtual void SetChannelLayout(AVChannelLayout value) = 0;
 
-		/// <summary>
-		///		获取两个采样点之间的时间间隔。其实就是采样率的倒数。
-		/// </summary>
-		/// <returns></returns>
+		/// @brief 获取两个采样点之间的时间间隔。其实就是采样率的倒数。
+		/// @return
 		double sample_interval() const
 		{
 			return 1.0 / SampleRate();
@@ -39,7 +35,7 @@ namespace video
 
 		/// <summary>
 		///		两个采样点之间的时间间隔，单位毫秒。
-		///		
+		///
 		///		本属性内部是
 		///		1.0 * 1000 / SampleRate()
 		///		即先 1.0 乘 1000 再除以 SampleRate()，这比先除以 SampleRate()
@@ -79,10 +75,8 @@ namespace video
 			return av_sample_fmt_is_planar(SampleFormat());
 		}
 
-		/// <summary>
-		///		获取每个采样点的字节数
-		/// </summary>
-		/// <returns>每个采样点的字节数</returns>
+		/// @brief 获取每个采样点的字节数
+		/// @return 每个采样点的字节数
 		int BytesPerSample() const
 		{
 			return av_get_bytes_per_sample(SampleFormat());
