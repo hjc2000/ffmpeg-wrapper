@@ -9,11 +9,10 @@ IOContextOutputFormat::IOContextOutputFormat(
 	std::shared_ptr<AVIOContextWrapper> io_context)
 {
 	_io_context = io_context;
-	int ret = avformat_alloc_output_context2(
-		&_wrapped_obj,
-		nullptr,
-		nullptr,
-		url.c_str());
+	int ret = avformat_alloc_output_context2(&_wrapped_obj,
+											 nullptr,
+											 nullptr,
+											 url.c_str());
 
 	if (ret < 0)
 	{

@@ -7,11 +7,10 @@ using namespace video;
 
 video::FileOutputFormat::FileOutputFormat(std::string url)
 {
-	int ret = avformat_alloc_output_context2(
-		&_wrapped_obj,
-		nullptr,
-		nullptr,
-		url.c_str());
+	int ret = avformat_alloc_output_context2(&_wrapped_obj,
+											 nullptr,
+											 nullptr,
+											 url.c_str());
 
 	if (ret < 0)
 	{

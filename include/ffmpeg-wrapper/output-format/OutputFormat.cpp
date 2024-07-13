@@ -30,14 +30,12 @@ void video::OutputFormat::Flush()
 	{
 		std::cout << CODE_POS_STR << "所有流都被冲洗了。" << std::endl;
 		WriteTrailer();
-		if (_on_all_stream_flushed_async)
+
+		auto thread_func = [&]()
 		{
-			auto thread_func = [&]()
-			{
-				_on_all_stream_flushed_async();
-			};
-			std::thread(thread_func).detach();
-		}
+			_all_streams_flushed_event.Invoke();
+		};
+		std::thread(thread_func).detach();
 	}
 }
 

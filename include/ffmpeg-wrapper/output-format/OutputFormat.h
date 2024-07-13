@@ -1,6 +1,7 @@
 #pragma once
 #include <base/Wrapper.h>
 #include <base/container/List.h>
+#include <base/delegate/Delegate.h>
 #include <base/pipe/IConsumer.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
@@ -13,10 +14,7 @@
 
 namespace video
 {
-	/// <summary>
-	///		输出格式的基类。
-	///		本类的 _wrapped_obj 没有初始化，需要派生类继承后进行初始化。
-	/// </summary>
+	/// @brief 输出格式的基类。
 	class OutputFormat
 		: public base::Wrapper<AVFormatContext>,
 		  public base::IConsumer<AVPacketWrapper>
@@ -24,15 +22,19 @@ namespace video
 	private:
 		std::mutex _not_private_methods_lock;
 		uint32_t _flush_times = 0;
+		base::Delegate<> _all_streams_flushed_event;
 
 		void WriteTrailer();
 
 	public:
 		virtual ~OutputFormat() = default;
 
-		/// @brief 封装的数据结束后会触发此回调。此回调会启动后台线程来执行，避免用户
-		/// 在回调中调用本对象的加了互斥锁的方法，造成死锁。
-		std::function<void()> _on_all_stream_flushed_async;
+		/// @brief 所有流都被冲洗后会触发此事件。此事件会被在后台线程中执行，避免死锁。
+		/// @return
+		base::IEvent<> &AllStreamFlushedEvent()
+		{
+			return _all_streams_flushed_event;
+		}
 
 		void DumpFormat(char const *url = "");
 
