@@ -16,18 +16,17 @@ namespace video
 	class AVStreamWrapper;
 	class AVCodecContextWrapper;
 
-	class InputFormat : public base::Wrapper<AVFormatContext>,
-						public base::ISource<AVPacketWrapper>
+	class InputFormat
+		: public base::Wrapper<AVFormatContext>,
+		  public base::ISource<AVPacketWrapper>
 	{
 	private:
 		AVFormatContext *_wrapped_obj = nullptr;
 		std::string _url;
 		std::shared_ptr<AVIOContextWrapper> _io_context;
 
-		/// <summary>
-		///		通过读几个包来检测流信息。此操作不会导致读取进度向前推移
-		/// </summary>
-		/// <param name="options"></param>
+		/// @brief 通过读几个包来检测流信息。此操作不会导致读取进度向前推移
+		/// @param options
 		void FindStreamInfo(::AVDictionary **options = nullptr);
 
 	public:
@@ -46,45 +45,33 @@ namespace video
 			return _wrapped_obj;
 		}
 
-		/// <summary>
-		///		以官方格式打印流信息。
-		/// </summary>
+		/// @brief 以官方格式打印流信息。
 		void DumpFormat();
 
-		/// <summary>
-		///		找出最好的流
-		/// </summary>
-		/// <param name="type"></param>
-		/// <returns>
-		///		返回 AVStreamWrapper 对象。AVStreamWrapper 是个包装类，包装类重载了 bool 转换运算符，
-		///		可以判断是否为空。
-		/// </returns>
+		/// @brief 找出最好的流
+		/// @param type
+		///
+		/// @return 返回 AVStreamWrapper 对象。
+		/// @note AVStreamWrapper 是个包装类，有 IsNull 方法，
+		/// 可以判断是否为空。为空的话说明找不到此类型的最好的流。
 		AVStreamWrapper FindBestStream(AVMediaType type);
 
-		/// <summary>
-		///		从封装中读取包。
-		/// </summary>
-		/// <param name="packet">读取到的包会写入这里。</param>
-		/// <returns>成功返回 0，失败返回错误代码</returns>
-		int ReadData(AVPacketWrapper &packet) override;
+		/// @brief 从封装中读取包。
+		/// @param data 读取到的包会写入这里。
+		/// @return 成功返回 0，失败返回错误代码
+		int ReadData(AVPacketWrapper &data) override;
 
-		/// <summary>
-		///		获取本格式的播放时长
-		/// </summary>
-		/// <returns></returns>
+		/// @brief 获取本格式的播放时长
+		/// @return
 		std::chrono::seconds DurationInSeconds();
 
-		/// <summary>
-		///		流的数量
-		/// </summary>
-		/// <returns></returns>
+		/// @brief 流的数量
+		/// @return
 		int StreamCount();
 
-		/// <summary>
-		///		获取指定索引的流。流的索引号超出范围会抛出异常
-		/// </summary>
-		/// <param name="stream_index"></param>
-		/// <returns></returns>
+		/// @brief 获取指定索引的流。流的索引号超出范围会抛出异常
+		/// @param stream_index
+		/// @return
 		AVStreamWrapper GetStream(int stream_index);
 	};
 }

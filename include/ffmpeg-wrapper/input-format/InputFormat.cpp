@@ -104,12 +104,13 @@ AVStreamWrapper InputFormat::FindBestStream(AVMediaType type)
 	return AVStreamWrapper{_wrapped_obj->streams[ret]};
 }
 
-int InputFormat::ReadData(AVPacketWrapper &packet)
+int InputFormat::ReadData(AVPacketWrapper &data)
 {
-	int ret = ::av_read_frame(_wrapped_obj, packet);
-	if (!ret)
+	int ret = ::av_read_frame(_wrapped_obj, data);
+	if (ret == 0)
 	{
-		packet->time_base = _wrapped_obj->streams[packet->stream_index]->time_base;
+		// 读取成功
+		data->time_base = _wrapped_obj->streams[data->stream_index]->time_base;
 	}
 
 	return ret;
