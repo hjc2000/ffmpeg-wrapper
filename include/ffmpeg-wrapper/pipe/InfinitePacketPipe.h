@@ -48,8 +48,10 @@ namespace video
 		void SendData(AVPacketWrapper &packet) override;
 
 		/// @brief 冲洗
-		/// @note 本方法不会冲洗管道下级的消费者，冲洗管道下级的消费者需要手动调用继承自 IPipeSource
+		/// @warning 本方法不会冲洗管道下级的消费者，冲洗管道下级的消费者需要手动调用继承自 IPipeSource
 		/// 的 FlushEachConsumer 方法。
+		/// @note 每次调用本方法进行冲洗，仅仅代表当前文件的包读完了，冲洗后本对象会更新时间戳偏移量等
+		/// 信息，随后可以送入下一个文件的包。所以，在这种需求下，本方法不能冲洗管道下级的消费者。
 		void Flush();
 	};
 }
