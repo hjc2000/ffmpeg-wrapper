@@ -70,6 +70,7 @@ void video::JoinedInputFormatDemuxDecoder::GetAndOpenNewInputFormatIfCurrentIsNu
 
 	if (_current_input_format == nullptr)
 	{
+		std::cout << CODE_POS_STR << "GetAndOpenNewInputFormatIfCurrentIsNull 尝试打开新的输入格式失败" << std::endl;
 		return;
 	}
 
