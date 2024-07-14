@@ -5,31 +5,6 @@
 using namespace std;
 using namespace video;
 
-video::ThreadDecoderPipe::ThreadDecoderPipe(AVStreamInfoCollection stream)
-{
-	_decoder_pipe = video::DecoderPipeFactoryManager::Instance().Factory()->CreateDecoderPipe(stream);
-	InitDecodeThread();
-}
-
-video::ThreadDecoderPipe::~ThreadDecoderPipe()
-{
-	if (_disposed)
-	{
-		return;
-	}
-
-	_disposed = true;
-
-	Dispose();
-}
-
-void video::ThreadDecoderPipe::Dispose()
-{
-	_packet_queue.Dispose();
-	_decoder_pipe->Dispose();
-	_decode_thread_exit.Wait();
-}
-
 void video::ThreadDecoderPipe::InitDecodeThread()
 {
 	auto thread_func = [this]()
@@ -82,9 +57,40 @@ void video::ThreadDecoderPipe::DecodeThreadFunc()
 	}
 }
 
+video::ThreadDecoderPipe::ThreadDecoderPipe(AVStreamInfoCollection stream)
+{
+	_decoder_pipe = video::DecoderPipeFactoryManager::Instance().Factory()->CreateDecoderPipe(stream);
+	InitDecodeThread();
+}
+
+video::ThreadDecoderPipe::~ThreadDecoderPipe()
+{
+	if (_disposed)
+	{
+		return;
+	}
+
+	_disposed = true;
+
+	Dispose();
+}
+
+void video::ThreadDecoderPipe::Dispose()
+{
+	_packet_queue.Dispose();
+	_decoder_pipe->Dispose();
+	_decode_thread_exit.Wait();
+}
+
 void video::ThreadDecoderPipe::SendData(AVPacketWrapper &packet)
 {
 	_packet_queue.SendData(packet);
+}
+
+void video::ThreadDecoderPipe::Flush()
+{
+	_do_not_flush_consumer = false;
+	_packet_queue.Flush();
 }
 
 void video::ThreadDecoderPipe::FlushDecoderButNotFlushConsumers()

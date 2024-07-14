@@ -10,7 +10,7 @@ video::SwrPipe::SwrPipe(IAudioFrameInfoCollection &desired_out_frame_infos)
 	_swr = shared_ptr<SwrContextWrapper>{new SwrContextWrapper{_in_stream_infos, _desired_out_frame_infos}};
 }
 
-void video::SwrPipe::read_and_send_frame()
+void video::SwrPipe::ReadAndSendFrame()
 {
 	while (1)
 	{
@@ -41,7 +41,7 @@ void video::SwrPipe::read_and_send_frame()
 	}
 }
 
-void video::SwrPipe::read_and_send_frame_without_flushing_consumer()
+void video::SwrPipe::ReadAndSendFrameWithoutFlushingConsumer()
 {
 	while (1)
 	{
@@ -71,13 +71,13 @@ void video::SwrPipe::read_and_send_frame_without_flushing_consumer()
 	}
 }
 
-void video::SwrPipe::change_swr()
+void video::SwrPipe::ReplaceSwr()
 {
 	cout << CODE_POS_STR << "重新构造 swr" << endl;
 
 	// 冲洗旧的重采样器
 	_swr->Flush();
-	read_and_send_frame_without_flushing_consumer();
+	ReadAndSendFrameWithoutFlushingConsumer();
 
 	// 构造新的重采样器
 	_swr = shared_ptr<SwrContextWrapper>{new SwrContextWrapper{_in_stream_infos, _desired_out_frame_infos}};
@@ -90,15 +90,15 @@ void video::SwrPipe::SendData(AVFrameWrapper &frame)
 		return;
 	}
 
-	read_and_send_frame();
+	ReadAndSendFrame();
 	if (frame != _in_stream_infos)
 	{
 		_in_stream_infos = frame;
-		change_swr();
+		ReplaceSwr();
 	}
 
 	_swr->SendData(frame);
-	read_and_send_frame();
+	ReadAndSendFrame();
 }
 
 void video::SwrPipe::Flush()
@@ -108,7 +108,7 @@ void video::SwrPipe::Flush()
 		return;
 	}
 
-	read_and_send_frame();
+	ReadAndSendFrame();
 	_swr->Flush();
-	read_and_send_frame();
+	ReadAndSendFrame();
 }

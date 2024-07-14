@@ -3,11 +3,10 @@
 using namespace std;
 using namespace video;
 
-video::SwsFpsEncoderPipe::SwsFpsEncoderPipe(
-	shared_ptr<OutputFormat> out_format,
-	IVideoStreamInfoCollection const &video_stream_infos,
-	std::string video_codec_name,
-	int64_t video_out_bitrate_in_bps)
+video::SwsFpsEncoderPipe::SwsFpsEncoderPipe(shared_ptr<OutputFormat> out_format,
+											IVideoStreamInfoCollection const &video_stream_infos,
+											std::string video_codec_name,
+											int64_t video_out_bitrate_in_bps)
 {
 	_video_encode_pipe = video::EncoderPipeFactoryManager::Instance().Factory()->CreateEncoderPipe(video_codec_name,
 																								   video_stream_infos,

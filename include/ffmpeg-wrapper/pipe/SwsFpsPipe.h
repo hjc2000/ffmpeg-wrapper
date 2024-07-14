@@ -13,14 +13,16 @@ namespace video
 		: public base::IConsumer<AVFrameWrapper>,
 		  public base::IPipeSource<AVFrameWrapper>
 	{
+	private:
 		std::shared_ptr<SwsPipe> _sws_pipe;
 		std::shared_ptr<FpsAdjustPipe> _fps_adjust_pipe;
 
 	public:
 		SwsFpsPipe(IVideoStreamInfoCollection const &out_video_stream_infos);
-		base::IList<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> &ConsumerList() override;
-		void SendData(AVFrameWrapper &frame) override;
 
+		base::IList<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> &ConsumerList() override;
+
+		void SendData(AVFrameWrapper &frame) override;
 		void Flush() override;
 	};
 }

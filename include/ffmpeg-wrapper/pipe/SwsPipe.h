@@ -21,7 +21,7 @@ namespace video
 		AVFrameWrapper _sws_out_frame;
 
 		void ReadAndSendFrame();
-		void change_sws();
+		void ReplaceSws();
 
 	public:
 		SwsPipe(IVideoFrameInfoCollection const &desire_out_video_frame_infos);
@@ -32,7 +32,6 @@ namespace video
 		}
 
 		void SendData(AVFrameWrapper &frame) override;
-
 		void Flush() override;
 	};
 }

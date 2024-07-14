@@ -32,6 +32,9 @@ void FpsAdjustPipe::ReadAndSendFrame()
 
 			// 滤镜出来的 pts 与输入端的 pts 有误差，则本轮循环读取的每一个帧的 pts 都要加上 delta_pts。
 			frame.SetPts(frame.Pts() + delta_pts);
+
+			// 从滤镜出来的帧的时间基信息丢失了，需要补上。
+			frame.SetTimeBase(AVRational{_desired_out_fps.den, _desired_out_fps.num});
 			SendDataToEachConsumer(frame);
 
 			// 下轮循环继续读取

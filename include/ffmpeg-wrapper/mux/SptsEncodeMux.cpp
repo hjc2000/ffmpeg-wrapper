@@ -102,9 +102,6 @@ void test_SptsEncodeMux()
 			in_fmt_ctx->DumpFormat();
 			current_input_format = in_fmt_ctx;
 		}
-		catch (std::runtime_error &e)
-		{
-		}
 		catch (std::exception &e)
 		{
 			cerr << CODE_POS_STR << e.what() << endl;

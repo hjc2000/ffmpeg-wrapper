@@ -12,11 +12,10 @@ namespace video
 		std::shared_ptr<base::IConsumer<AVFrameWrapper>> _video_encode_pipe;
 
 	public:
-		SwsFpsEncoderPipe(
-			std::shared_ptr<OutputFormat> out_format,
-			IVideoStreamInfoCollection const &video_stream_infos,
-			std::string video_codec_name,
-			int64_t video_out_bitrate_in_bps);
+		SwsFpsEncoderPipe(std::shared_ptr<OutputFormat> out_format,
+						  IVideoStreamInfoCollection const &video_stream_infos,
+						  std::string video_codec_name,
+						  int64_t video_out_bitrate_in_bps);
 
 		void SendData(AVFrameWrapper &frame) override;
 

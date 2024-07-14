@@ -9,10 +9,6 @@
 
 namespace video
 {
-	/// <summary>
-	///		内部包装了一个线程的解码管道。
-	///		本类依赖 DecoderPipeFactory 来创建内部的解码管道。
-	/// </summary>
 	class ThreadDecoderPipe final
 		: public IDecoderPipe
 	{
@@ -28,12 +24,9 @@ namespace video
 
 	public:
 #pragma region 生命周期
-		/// <summary>
-		///		将根据 stream 的信息构造一个解码管道。
-		/// </summary>
-		/// <param name="stream"></param>
+		/// @brief 将根据 stream 的信息构造一个解码管道。
+		/// @param stream
 		ThreadDecoderPipe(AVStreamInfoCollection stream);
-
 		~ThreadDecoderPipe();
 		void Dispose() override;
 #pragma endregion
@@ -46,10 +39,7 @@ namespace video
 		void SendData(AVPacketWrapper &packet) override;
 
 		/// @brief 冲洗消费者
-		void Flush() override
-		{
-			_do_not_flush_consumer = false;
-		}
+		void Flush() override;
 
 		/// <summary>
 		///		冲洗解码器，但是不冲洗消费者。
