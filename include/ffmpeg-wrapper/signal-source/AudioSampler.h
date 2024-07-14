@@ -24,7 +24,7 @@ namespace video
 		/// @param signal_source 传入一个未打开的信号源。
 		/// @param infos
 		AudioSampler(std::shared_ptr<base::ISignalSource<double>> signal_source,
-					 video::AudioFrameInfoCollection const &infos);
+					 video::IAudioFrameInfoCollection const &infos);
 
 		void Open();
 		int ReadData(AVFrameWrapper &frame) override;

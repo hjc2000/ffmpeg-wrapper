@@ -1,7 +1,7 @@
 #include "AudioSampler.h"
 
 video::AudioSampler::AudioSampler(std::shared_ptr<base::ISignalSource<double>> signal_source,
-								  video::AudioFrameInfoCollection const &infos)
+								  video::IAudioFrameInfoCollection const &infos)
 {
 	_signal_source = signal_source;
 	IAudioFrameInfoCollection::operator=(infos);
@@ -125,6 +125,8 @@ void video::AudioSampler::SetSampleCount(int value)
 }
 #pragma endregion
 
+#include <base/pipe/Pump.h>
+#include <base/signal/SinSignalSource.h>
 #include <ffmpeg-wrapper/AVChannelLayoutExtension.h>
 #include <ffmpeg-wrapper/AVSampleFormatExtension.h>
 #include <ffmpeg-wrapper/factory/EncoderPipeFactoryManager.h>
@@ -139,9 +141,17 @@ void video::TestAudioSampler()
 	audio_frame_infos.SetSampleRate(44100);
 	audio_frame_infos.SetTimeBase(AVRational{1, 90000});
 
+	std::shared_ptr<AudioSampler> audio_sampler{
+		new AudioSampler{
+			std::shared_ptr<base::SinSignalSource>{new base::SinSignalSource{base::Fraction{1, 400}}},
+			audio_frame_infos,
+		},
+	};
+
 	std::shared_ptr<video::FileOutputFormat> out_format{new video::FileOutputFormat{"sin_audio.ts"}};
 
-	video::EncoderPipeFactoryManager::Instance().Factory()->CreateEncoderPipe("eac3",
-																			  audio_frame_infos,
-																			  out_format);
+	auto encoder_pipe_factory = video::EncoderPipeFactoryManager::Instance().Factory();
+	auto encoder = encoder_pipe_factory->CreateEncoderPipe("eac3",
+														   audio_frame_infos,
+														   out_format);
 }
