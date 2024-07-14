@@ -29,31 +29,23 @@ void video::ThreadDecoderPipe::DecodeThreadFunc()
 	while (true)
 	{
 		int read_packet_result = _packet_queue.ReadData(packet);
-		switch (read_packet_result)
-		{
-		case 0:
-		{
-			_decoder_pipe->SendData(packet);
-			break;
-		}
-		case (int)ErrorCode::eof:
+		if (read_packet_result < 0)
 		{
 			if (_do_not_flush_consumer)
 			{
+				std::cout << CODE_POS_STR << "ThreadDecoderPipe FlushDecoderButNotFlushConsumers" << std::endl;
 				_decoder_pipe->FlushDecoderButNotFlushConsumers();
 			}
 			else
 			{
+				std::cout << CODE_POS_STR << "ThreadDecoderPipe Flush" << std::endl;
 				_decoder_pipe->Flush();
 			}
 
 			return;
 		}
-		default:
-		{
-			throw std::runtime_error(ToString((ErrorCode)read_packet_result));
-		}
-		}
+
+		_decoder_pipe->SendData(packet);
 	}
 }
 
