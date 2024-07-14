@@ -1,4 +1,5 @@
 #include "ffmpeg-wrapper/pipe/InfinitePacketPipe.h"
+#include "InfinitePacketPipe.h"
 #include <base/string/define.h>
 
 using namespace video;
@@ -63,6 +64,4 @@ void InfinitePacketPipe::Flush()
 	_last_dts = 0;
 	_last_packet_duration = 0;
 	_first_dts_not_set = true;
-
-	FlushEachConsumer();
 }

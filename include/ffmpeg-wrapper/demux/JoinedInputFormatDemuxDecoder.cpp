@@ -106,7 +106,7 @@ void video::JoinedInputFormatDemuxDecoder::PumpDataToConsumers(shared_ptr<base::
 			/* 经过了 GetAndOpenNewInputFormatIfCurrentIsNull 处理后，_current_input_format
 			 * 仍然为空。该结束了。
 			 */
-			_infinite_packet_pipe->Flush();
+			_infinite_packet_pipe->FlushEachConsumer();
 			return;
 		}
 
