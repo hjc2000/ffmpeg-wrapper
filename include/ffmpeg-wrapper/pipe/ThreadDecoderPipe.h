@@ -20,7 +20,6 @@ namespace video
 		std::atomic_bool _disposed = false;
 
 		void InitDecodeThread();
-		void DecodeThreadFunc();
 
 	public:
 #pragma region 生命周期

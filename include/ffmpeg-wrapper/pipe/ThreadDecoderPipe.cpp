@@ -1,4 +1,5 @@
 #include "ThreadDecoderPipe.h"
+#include <base/Guard.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <iostream>
 
@@ -9,45 +10,45 @@ void video::ThreadDecoderPipe::InitDecodeThread()
 {
 	auto thread_func = [this]()
 	{
+		base::Guard g{
+			[this]()
+			{
+				_decode_thread_exit.SetResult();
+			},
+		};
+
 		try
 		{
-			DecodeThreadFunc();
+			AVPacketWrapper packet;
+			while (true)
+			{
+				int read_packet_result = _packet_queue.ReadData(packet);
+				if (read_packet_result < 0)
+				{
+					if (_do_not_flush_consumer)
+					{
+						std::cout << CODE_POS_STR << "ThreadDecoderPipe FlushDecoderButNotFlushConsumers" << std::endl;
+						_decoder_pipe->FlushDecoderButNotFlushConsumers();
+					}
+					else
+					{
+						std::cout << CODE_POS_STR << "ThreadDecoderPipe Flush" << std::endl;
+						_decoder_pipe->Flush();
+					}
+
+					return;
+				}
+
+				_decoder_pipe->SendData(packet);
+			}
 		}
 		catch (std::exception const &e)
 		{
 			std::cout << CODE_POS_STR << "ThreadDecoderPipe 的线程遇到异常。" << e.what() << std::endl;
 		}
-
-		_decode_thread_exit.SetResult();
 	};
 	std::thread(thread_func).detach();
 	_decode_thread_exit.Reset();
-}
-
-void video::ThreadDecoderPipe::DecodeThreadFunc()
-{
-	AVPacketWrapper packet;
-	while (true)
-	{
-		int read_packet_result = _packet_queue.ReadData(packet);
-		if (read_packet_result < 0)
-		{
-			if (_do_not_flush_consumer)
-			{
-				std::cout << CODE_POS_STR << "ThreadDecoderPipe FlushDecoderButNotFlushConsumers" << std::endl;
-				_decoder_pipe->FlushDecoderButNotFlushConsumers();
-			}
-			else
-			{
-				std::cout << CODE_POS_STR << "ThreadDecoderPipe Flush" << std::endl;
-				_decoder_pipe->Flush();
-			}
-
-			return;
-		}
-
-		_decoder_pipe->SendData(packet);
-	}
 }
 
 video::ThreadDecoderPipe::ThreadDecoderPipe(AVStreamInfoCollection stream)
