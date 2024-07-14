@@ -4,7 +4,8 @@ video::AudioSampler::AudioSampler(std::shared_ptr<base::ISignalSource<double>> s
 								  video::IAudioFrameInfoCollection const &infos)
 {
 	_signal_source = signal_source;
-	IAudioFrameInfoCollection::operator=(infos);
+	_audio_frame_infos = infos;
+	_audio_frame_infos.SetSampleFormat(AVSampleFormat::AV_SAMPLE_FMT_DBL);
 	_signal_source->SetSampleInterval(base::Fraction{1, SampleRate()});
 	_signal_source->Open();
 }
@@ -27,6 +28,12 @@ int video::AudioSampler::ReadData(AVFrameWrapper &frame)
 	}
 
 	frame = AVFrameWrapper{_audio_frame_infos};
+	frame = _audio_frame_infos;
+	frame.SetPts(_pts);
+	base::Fraction fraction_duration = SampleCount() / base::Fraction{SampleRate()} / base::Fraction{AVRationalToFraction(TimeBase())};
+	int64_t duration = fraction_duration.Div();
+	frame.SetDuration(duration);
+
 	double *channel_buffer = reinterpret_cast<double *>(frame->extended_data[0]);
 
 	// 一个音频帧有 SampleCount 个采样点
@@ -127,17 +134,21 @@ void video::AudioSampler::SetSampleCount(int value)
 
 #include <base/pipe/Pump.h>
 #include <base/signal/SinSignalSource.h>
+#include <base/task/CancellationTokenSource.h>
 #include <ffmpeg-wrapper/AVChannelLayoutExtension.h>
 #include <ffmpeg-wrapper/AVSampleFormatExtension.h>
 #include <ffmpeg-wrapper/factory/EncoderPipeFactoryManager.h>
 #include <ffmpeg-wrapper/output-format/FileOutputFormat.h>
+#include <ffmpeg-wrapper/pipe/SwrEncoderPipe.h>
+#include <iostream>
+#include <jccpp/TaskCompletionSignal.h>
 
 void video::TestAudioSampler()
 {
 	AudioFrameInfoCollection audio_frame_infos;
 	audio_frame_infos.SetChannelLayout(AVChannelLayoutExtension::GetDefaultChannelLayout(2));
 	audio_frame_infos.SetSampleCount(AVSampleFormatExtension::ParseRequiredSampleCount("eac3"));
-	audio_frame_infos.SetSampleFormat(AVSampleFormat::AV_SAMPLE_FMT_DBL);
+	audio_frame_infos.SetSampleFormat(AVSampleFormat::AV_SAMPLE_FMT_FLTP);
 	audio_frame_infos.SetSampleRate(44100);
 	audio_frame_infos.SetTimeBase(AVRational{1, 90000});
 
@@ -147,11 +158,41 @@ void video::TestAudioSampler()
 			audio_frame_infos,
 		},
 	};
+	audio_sampler->Open();
 
 	std::shared_ptr<video::FileOutputFormat> out_format{new video::FileOutputFormat{"sin_audio.ts"}};
+	std::shared_ptr<SwrEncoderPipe> encoder_pipe{new SwrEncoderPipe{
+		"eac3",
+		audio_frame_infos,
+		out_format,
+	}};
 
-	auto encoder_pipe_factory = video::EncoderPipeFactoryManager::Instance().Factory();
-	auto encoder = encoder_pipe_factory->CreateEncoderPipe("eac3",
-														   audio_frame_infos,
-														   out_format);
+	base::CancellationTokenSource cancel_pump;
+	TaskCompletionSignal pump_thread_exit{false};
+	base::Pump<AVFrameWrapper> pump{audio_sampler};
+	pump.ConsumerList().Add(encoder_pipe);
+
+	auto pump_thread_func = [&]()
+	{
+		try
+		{
+			pump.PumpDataToConsumers(cancel_pump.Token());
+		}
+		catch (std::exception &e)
+		{
+			std::cerr << e.what() << std::endl;
+		}
+		catch (...)
+		{
+			std::cerr << "发生未知异常" << std::endl;
+		}
+
+		std::cout << "线程退出" << std::endl;
+		pump_thread_exit.SetResult();
+	};
+	std::thread(pump_thread_func).detach();
+
+	std::cin.get();
+	cancel_pump.Cancel();
+	pump_thread_exit.Wait();
 }
