@@ -1,4 +1,4 @@
-#include "ffmpeg-wrapper/AVSampleFormatExtention.h"
+#include "AVSampleFormatExtension.h"
 #include <base/string/define.h>
 #include <ffmpeg-wrapper/AVToString.h>
 #include <format>
@@ -12,7 +12,7 @@ ostream &operator<<(ostream &ostream, AVSampleFormat sf)
 	return ostream << av_get_sample_fmt_name(sf);
 }
 
-string video::AVSampleFormatExtention::av_sample_format_to_string_with_endian(AVSampleFormat sf, bool little_endian)
+string video::AVSampleFormatExtension::av_sample_format_to_string_with_endian(AVSampleFormat sf, bool little_endian)
 {
 	string base = av_get_sample_fmt_name(sf);
 	if (little_endian)
@@ -21,12 +21,12 @@ string video::AVSampleFormatExtention::av_sample_format_to_string_with_endian(AV
 		return base + "be";
 }
 
-AVSampleFormat video::AVSampleFormatExtention::string_to_av_sample_format(string str)
+AVSampleFormat video::AVSampleFormatExtension::string_to_av_sample_format(string str)
 {
 	return ::av_get_sample_fmt(str.c_str());
 }
 
-int video::AVSampleFormatExtention::ParseRequiredSampleCount(std::string codec_name)
+int video::AVSampleFormatExtension::ParseRequiredSampleCount(std::string codec_name)
 {
 	static std::map<std::string, int> sample_count_map = {
 		{"aac", 1024},

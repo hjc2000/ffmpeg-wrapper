@@ -1,5 +1,6 @@
 #include "IAudioStreamInfoCollection.h"
 #include <ffmpeg-wrapper/AVChannelLayoutExtension.h>
+#include <ffmpeg-wrapper/AVCompare.h>
 
 using namespace video;
 
@@ -18,9 +19,9 @@ std::string video::IAudioStreamInfoCollection::sample_format_string() const
 	return name ? std::string(name) : "";
 }
 
-std::string video::IAudioStreamInfoCollection::channel_layout_description() const
+std::string video::IAudioStreamInfoCollection::ChannelLayoutDescription() const
 {
-	return AVChannelLayoutExtension::channel_layout_description(ChannelLayout());
+	return AVChannelLayoutExtension::ChannelLayoutDescription(ChannelLayout());
 }
 
 bool video::IAudioStreamInfoCollection::IsPlanar() const

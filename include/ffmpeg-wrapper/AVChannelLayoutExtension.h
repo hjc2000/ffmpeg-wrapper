@@ -9,47 +9,45 @@ namespace video
 	 */
 	class AudioChannelBitMark
 	{
+	private:
+		AudioChannelBitMark() = delete;
+
 	public:
-		const static uint64_t Bit1 = 1;
-		const static uint64_t Left = Bit1 << AVChannel::AV_CHAN_FRONT_LEFT;
-		const static uint64_t Right = Bit1 << AVChannel::AV_CHAN_FRONT_RIGHT;
-		const static uint64_t FrontCenter = Bit1 << AVChannel::AV_CHAN_FRONT_CENTER;
+		static consteval uint64_t Bit1()
+		{
+			return 1;
+		}
+
+		static consteval uint64_t Left()
+		{
+			return Bit1() << AVChannel::AV_CHAN_FRONT_LEFT;
+		}
+
+		static consteval uint64_t Right()
+		{
+			return Bit1() << AVChannel::AV_CHAN_FRONT_RIGHT;
+		}
+
+		static consteval uint64_t FrontCenter()
+		{
+			return Bit1() << AVChannel::AV_CHAN_FRONT_CENTER;
+		}
 	};
 
 	class AVChannelLayoutExtension
 	{
 	private:
-		/// <summary>
-		/// 作为静态类，禁止构造
-		/// </summary>
-		AVChannelLayoutExtension() {}
+		AVChannelLayoutExtension() = delete;
 
 	public:
-		/// <summary>
-		/// 获取声道布局的描述字符串
-		/// </summary>
-		/// <param name="layout"></param>
-		/// <returns></returns>
-		static std::string channel_layout_description(AVChannelLayout layout);
+		/// @brief 获取声道布局的描述字符串
+		/// @param layout
+		/// @return
+		static std::string ChannelLayoutDescription(AVChannelLayout const &layout);
 
-		/// <summary>
-		/// 获取单声道的声道布局
-		/// </summary>
-		/// <returns></returns>
-		static AVChannelLayout get_mono_layout_channel();
-
-		/// <summary>
-		/// 获取呈 2.0 声道布局（左右声道，低音不分离）的 AVChannelLayout
-		/// </summary>
-		/// <returns></returns>
-		static AVChannelLayout get_2_0_layout_channel();
-
-		/// <summary>
-		/// 获取 3.0 声道布局的 AVChannelLayout
-		/// </summary>
-		/// <returns></returns>
-		static AVChannelLayout get_3_0_layout_channel();
-
+		/// @brief 获取指定声道数的默认声道布局。
+		/// @param nb_channels 声道的数量。
+		/// @return 声道布局。
 		static AVChannelLayout GetDefaultChannelLayout(int nb_channels)
 		{
 			AVChannelLayout ch_layout;

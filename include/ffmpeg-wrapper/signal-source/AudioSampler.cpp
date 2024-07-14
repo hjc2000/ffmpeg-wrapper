@@ -137,6 +137,7 @@ void video::AudioSampler::SetSampleCount(int value)
 #pragma endregion
 
 #include <ffmpeg-wrapper/AVChannelLayoutExtension.h>
+#include <ffmpeg-wrapper/AVSampleFormatExtension.h>
 #include <ffmpeg-wrapper/factory/EncoderPipeFactoryManager.h>
 #include <ffmpeg-wrapper/output-format/FileOutputFormat.h>
 
@@ -144,7 +145,7 @@ void video::TestAudioSampler()
 {
 	AudioFrameInfoCollection audio_frame_infos;
 	audio_frame_infos.SetChannelLayout(AVChannelLayoutExtension::GetDefaultChannelLayout(2));
-	audio_frame_infos.SetSampleCount(AVSampleFormatExtention::ParseRequiredSampleCount("eac3"));
+	audio_frame_infos.SetSampleCount(AVSampleFormatExtension::ParseRequiredSampleCount("eac3"));
 	audio_frame_infos.SetSampleFormat(AVSampleFormat::AV_SAMPLE_FMT_DBL);
 	audio_frame_infos.SetSampleRate(44100);
 	audio_frame_infos.SetTimeBase(AVRational{1, 90000});

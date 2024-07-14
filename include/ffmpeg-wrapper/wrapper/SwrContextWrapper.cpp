@@ -1,6 +1,6 @@
-#include "ffmpeg-wrapper/wrapper/SwrContextWrapper.h"
 #include "SwrContextWrapper.h"
 #include <ffmpeg-wrapper/AVCalculate.h>
+#include <ffmpeg-wrapper/AVCompare.h>
 
 using namespace video;
 
@@ -11,16 +11,15 @@ SwrContextWrapper::SwrContextWrapper(
 	_in_stream_infos = in_stream_infos;
 	_out_frame_infos = out_frame_infos;
 
-	int ret = swr_alloc_set_opts2(
-		&_wrapped_obj,
-		&_out_frame_infos._ch_layout,
-		_out_frame_infos._sample_format,
-		_out_frame_infos._sample_rate,
-		&_in_stream_infos._ch_layout,
-		_in_stream_infos._sample_format,
-		_in_stream_infos._sample_rate,
-		0,
-		nullptr);
+	int ret = swr_alloc_set_opts2(&_wrapped_obj,
+								  &_out_frame_infos._ch_layout,
+								  _out_frame_infos._sample_format,
+								  _out_frame_infos._sample_rate,
+								  &_in_stream_infos._ch_layout,
+								  _in_stream_infos._sample_format,
+								  _in_stream_infos._sample_rate,
+								  0,
+								  nullptr);
 
 	if (ret < 0)
 	{

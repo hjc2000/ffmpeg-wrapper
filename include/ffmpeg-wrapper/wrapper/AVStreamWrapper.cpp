@@ -28,7 +28,7 @@ AVStreamWrapper &AVStreamWrapper::operator=(AVStreamWrapper const &other)
 
 AVCodec const *video::AVStreamWrapper::Codec() const
 {
-	return video::FindDecoderById(_wrapped_obj->codecpar->codec_id);
+	return video::AVCodecExtension::FindDecoderById(_wrapped_obj->codecpar->codec_id);
 }
 
 AVCodecParameters &AVStreamWrapper::CodecParams() const

@@ -1,6 +1,6 @@
 #pragma once
-#include<ffmpeg-wrapper/base_include.h>
-#include<string>
+#include <ffmpeg-wrapper/base_include.h>
+#include <string>
 
 namespace video
 {
@@ -8,9 +8,10 @@ namespace video
 	///		AVSampleFormat 扩展。提供对 AVSampleFormat 的操作。这里面的方法都是静态方法。
 	///		本类不能被实例化。
 	/// </summary>
-	class AVSampleFormatExtention
+	class AVSampleFormatExtension
 	{
-		AVSampleFormatExtention() = delete;
+	private:
+		AVSampleFormatExtension() = delete;
 
 	public:
 		/// <summary>

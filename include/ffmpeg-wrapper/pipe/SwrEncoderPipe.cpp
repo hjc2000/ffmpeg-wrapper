@@ -1,6 +1,5 @@
-#include "ffmpeg-wrapper/pipe/SwrEncoderPipe.h"
 #include "SwrEncoderPipe.h"
-#include <ffmpeg-wrapper/AVSampleFormatExtention.h>
+#include <ffmpeg-wrapper/AVSampleFormatExtension.h>
 #include <ffmpeg-wrapper/factory/EncoderPipeFactoryManager.h>
 
 video::SwrEncoderPipe::SwrEncoderPipe(std::string codec_name,
@@ -9,7 +8,7 @@ video::SwrEncoderPipe::SwrEncoderPipe(std::string codec_name,
 {
 	AudioFrameInfoCollection swr_out_frame_infos{
 		infos,
-		AVSampleFormatExtention::ParseRequiredSampleCount(codec_name),
+		AVSampleFormatExtension::ParseRequiredSampleCount(codec_name),
 	};
 
 	_swr_pipe = shared_ptr<SwrPipe>{new SwrPipe{swr_out_frame_infos}};

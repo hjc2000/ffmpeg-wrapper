@@ -7,6 +7,7 @@
 #include <ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
 #include <ffmpeg-wrapper/pipe/interface/IDecoderPipe.h>
 #include <ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h>
+#include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
 #include <jccpp/TaskCompletionSignal.h>
 #include <memory>

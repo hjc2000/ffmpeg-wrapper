@@ -1,6 +1,4 @@
 #pragma once
-#include <ffmpeg-wrapper/AVCompare.h>
-#include <ffmpeg-wrapper/AVSampleFormatExtention.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <string>
 
@@ -41,7 +39,7 @@ namespace video
 
 		/// @brief 获取声道布局的描述字符串
 		/// @return
-		std::string channel_layout_description() const;
+		std::string ChannelLayoutDescription() const;
 
 		/// @brief 判断本音频帧是不是平面类型。当然，本帧首先得是音频帧。
 		/// @return
