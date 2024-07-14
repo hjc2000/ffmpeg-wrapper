@@ -21,3 +21,12 @@ target_import_base(${ProjectName} PUBLIC)
 target_import_pinvoke(${ProjectName} PUBLIC)
 
 set(CMAKE_INSTALL_PREFIX ${cpp_lib_build_scripts_path}/${platform}/.libs/${ProjectName}/)
+
+# 添加测试程序
+add_executable(test ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
+target_link_libraries(test ${ProjectName})
+target_compile_definitions(test PRIVATE Predefine_ResourceDir="D:/video/视频开发测试")
+install(TARGETS test
+		RUNTIME DESTINATION bin
+		LIBRARY DESTINATION lib
+		ARCHIVE DESTINATION lib)
