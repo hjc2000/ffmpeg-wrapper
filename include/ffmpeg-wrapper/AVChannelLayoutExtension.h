@@ -1,12 +1,12 @@
 #pragma once
-#include<ffmpeg-wrapper/base_include.h>
-#include<string>
+#include <ffmpeg-wrapper/base_include.h>
+#include <string>
 
 namespace video
 {
 	/**
 	 * @brief 提供声道的位掩码
-	*/
+	 */
 	class AudioChannelBitMark
 	{
 	public:
@@ -22,7 +22,7 @@ namespace video
 		/// <summary>
 		/// 作为静态类，禁止构造
 		/// </summary>
-		AVChannelLayoutExtension() { }
+		AVChannelLayoutExtension() {}
 
 	public:
 		/// <summary>
@@ -64,5 +64,5 @@ namespace video
  * @param ostream
  * @param ch_layout
  * @return
-*/
+ */
 std::ostream &operator<<(std::ostream &ostream, AVChannelLayout ch_layout);

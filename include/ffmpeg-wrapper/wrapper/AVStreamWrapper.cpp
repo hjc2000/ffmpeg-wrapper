@@ -1,8 +1,7 @@
-#include <ffmpeg-wrapper/AVCodecExtention.h>
+#include "AVStreamWrapper.h"
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h>
-#include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
 #include <memory>
 
 using namespace video;
@@ -29,7 +28,7 @@ AVStreamWrapper &AVStreamWrapper::operator=(AVStreamWrapper const &other)
 
 AVCodec const *video::AVStreamWrapper::Codec() const
 {
-	return AVCodecExtention::find_decoder_by_id(_wrapped_obj->codecpar->codec_id);
+	return video::FindDecoderById(_wrapped_obj->codecpar->codec_id);
 }
 
 AVCodecParameters &AVStreamWrapper::CodecParams() const

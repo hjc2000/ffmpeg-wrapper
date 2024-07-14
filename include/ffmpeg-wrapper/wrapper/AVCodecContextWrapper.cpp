@@ -1,6 +1,5 @@
 #include "ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h"
 #include <ffmpeg-wrapper/AVCalculate.h>
-#include <ffmpeg-wrapper/AVCodecExtention.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/wrapper/AVDictionaryWrapper.h>
@@ -60,7 +59,7 @@ std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
 	bool set_global_header,
 	bool auto_open)
 {
-	auto codec = AVCodecExtention::find_encoder_by_name(encoder_name);
+	auto codec = video::FindEncoderByName(encoder_name);
 	if (!codec)
 	{
 		throw std::runtime_error{CODE_POS_STR + std::string{"查找编码器失败"}};
@@ -97,7 +96,7 @@ std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
 	bool set_global_header,
 	bool auto_open)
 {
-	auto codec = AVCodecExtention::find_encoder_by_name(encoder_name);
+	auto codec = video::FindEncoderByName(encoder_name);
 	if (!codec)
 	{
 		throw std::runtime_error{CODE_POS_STR + std::string{"查找编码器失败"}};
@@ -309,3 +308,23 @@ void AVCodecContextWrapper::SetFrameRate(AVRational value)
 	_wrapped_obj->framerate = value;
 }
 #pragma endregion
+
+AVCodec const *video::FindEncoderById(AVCodecID id)
+{
+	return avcodec_find_encoder(id);
+}
+
+AVCodec const *video::FindEncoderByName(char const *name)
+{
+	return ::avcodec_find_encoder_by_name(name);
+}
+
+AVCodec const *video::FindDecoderById(AVCodecID id)
+{
+	return ::avcodec_find_decoder(id);
+}
+
+AVCodec const *video::FindDecoderByName(char const *name)
+{
+	return avcodec_find_decoder_by_name(name);
+}
