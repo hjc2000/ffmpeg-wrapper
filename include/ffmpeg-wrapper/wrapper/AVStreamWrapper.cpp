@@ -1,4 +1,5 @@
 #include "AVStreamWrapper.h"
+#include <ffmpeg-wrapper/AVCodecExtension.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h>

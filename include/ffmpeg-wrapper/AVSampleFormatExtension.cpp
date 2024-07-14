@@ -7,18 +7,22 @@
 using namespace video;
 using namespace std;
 
-ostream &operator<<(ostream &ostream, AVSampleFormat sf)
+ostream &operator<<(ostream &ostream, AVSampleFormat sample_format)
 {
-	return ostream << av_get_sample_fmt_name(sf);
+	return ostream << av_get_sample_fmt_name(sample_format);
 }
 
-string video::AVSampleFormatExtension::av_sample_format_to_string_with_endian(AVSampleFormat sf, bool little_endian)
+string video::AVSampleFormatExtension::av_sample_format_to_string_with_endian(AVSampleFormat sample_format, bool little_endian)
 {
-	string base = av_get_sample_fmt_name(sf);
+	string base = av_get_sample_fmt_name(sample_format);
 	if (little_endian)
+	{
 		return base + "le";
+	}
 	else
+	{
 		return base + "be";
+	}
 }
 
 AVSampleFormat video::AVSampleFormatExtension::string_to_av_sample_format(string str)
@@ -48,5 +52,6 @@ int video::AVSampleFormatExtension::ParseRequiredSampleCount(std::string codec_n
 	cout << CODE_POS_STR
 		 << std::format("map 中没有指示 {} 应该有多少个采样点，返回默认的 1024 个", codec_name)
 		 << endl;
+
 	return 1024;
 }

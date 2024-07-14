@@ -4,9 +4,8 @@
 
 using namespace video;
 
-SwrContextWrapper::SwrContextWrapper(
-	IAudioStreamInfoCollection &in_stream_infos,
-	IAudioFrameInfoCollection &out_frame_infos)
+SwrContextWrapper::SwrContextWrapper(IAudioStreamInfoCollection &in_stream_infos,
+									 IAudioFrameInfoCollection &out_frame_infos)
 {
 	_in_stream_infos = in_stream_infos;
 	_out_frame_infos = out_frame_infos;

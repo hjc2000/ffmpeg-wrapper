@@ -2,14 +2,12 @@
 #include <atomic>
 #include <base/pipe/IConsumer.h>
 #include <base/pipe/ISource.h>
-#include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/info-collection/AudioFrameInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include <mutex>
-#include <thread>
 
 namespace video
 {
@@ -93,9 +91,8 @@ namespace video
 		/// </summary>
 		/// <param name="in_stream_infos">设置重采样器输入流。</param>
 		/// <param name="out_frame_infos">设置重采样器输出流。</param>
-		SwrContextWrapper(
-			IAudioStreamInfoCollection &in_stream_infos,
-			IAudioFrameInfoCollection &out_frame_infos);
+		SwrContextWrapper(IAudioStreamInfoCollection &in_stream_infos,
+						  IAudioFrameInfoCollection &out_frame_infos);
 
 		~SwrContextWrapper();
 

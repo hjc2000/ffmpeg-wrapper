@@ -4,9 +4,7 @@
 
 namespace video
 {
-	/**
-	 * @brief 提供声道的位掩码
-	 */
+	/// @brief 提供声道的位掩码
 	class AudioChannelBitMark
 	{
 	private:
@@ -57,10 +55,8 @@ namespace video
 	};
 }
 
-/**
- * @brief 输出 AVChannelLayout 的描述信息字符串
- * @param ostream
- * @param ch_layout
- * @return
- */
+/// @brief 输出 AVChannelLayout 的描述信息字符串
+/// @param ostream
+/// @param ch_layout
+/// @return
 std::ostream &operator<<(std::ostream &ostream, AVChannelLayout ch_layout);
