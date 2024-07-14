@@ -1,8 +1,7 @@
 #include "AudioSampler.h"
 
-video::AudioSampler::AudioSampler(
-	std::shared_ptr<base::ISignalSource<double>> signal_source,
-	video::AudioFrameInfoCollection const &infos)
+video::AudioSampler::AudioSampler(std::shared_ptr<base::ISignalSource<double>> signal_source,
+								  video::AudioFrameInfoCollection const &infos)
 {
 	_signal_source = signal_source;
 	IAudioFrameInfoCollection::operator=(infos);
@@ -24,12 +23,7 @@ int video::AudioSampler::ReadData(AVFrameWrapper &frame)
 {
 	if (!_opened)
 	{
-		throw std::runtime_error{"先打开采样器"};
-	}
-
-	if (frame.IsPlanar())
-	{
-		throw std::invalid_argument("传进来的帧的声道布局必须是交织类型的");
+		throw std::runtime_error{"先打开本采样器后才能开始读取帧"};
 	}
 
 	frame = AVFrameWrapper{_audio_frame_infos};
@@ -69,7 +63,6 @@ AVRational video::AudioSampler::TimeBase() const
 {
 	return _audio_frame_infos.TimeBase();
 }
-
 void video::AudioSampler::SetTimeBase(AVRational value)
 {
 	if (_opened)
@@ -84,7 +77,6 @@ AVSampleFormat video::AudioSampler::SampleFormat() const
 {
 	return AVSampleFormat::AV_SAMPLE_FMT_DBL;
 }
-
 void video::AudioSampler::SetSampleFormat(AVSampleFormat value)
 {
 	// 采样格式只能是 AVSampleFormat::AV_SAMPLE_FMT_DBL，所以设置不起作用。
@@ -94,7 +86,6 @@ int video::AudioSampler::SampleRate() const
 {
 	return _audio_frame_infos.SampleRate();
 }
-
 void video::AudioSampler::SetSampleRate(int value)
 {
 	if (_opened)
@@ -109,7 +100,6 @@ AVChannelLayout video::AudioSampler::ChannelLayout() const
 {
 	return _audio_frame_infos.ChannelLayout();
 }
-
 void video::AudioSampler::SetChannelLayout(AVChannelLayout value)
 {
 	if (_opened)
@@ -124,7 +114,6 @@ int video::AudioSampler::SampleCount() const
 {
 	return _audio_frame_infos.SampleCount();
 }
-
 void video::AudioSampler::SetSampleCount(int value)
 {
 	if (_opened)

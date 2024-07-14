@@ -22,7 +22,7 @@ void AVFrameWrapper::GetBuffer(int align)
 void AVFrameWrapper::Ref(AVFrameWrapper const &o)
 {
 	Unref();
-	int ret = av_frame_ref(_wrapped_obj, (AVFrameWrapper &)o);
+	int ret = av_frame_ref(_wrapped_obj, o);
 	if (ret < 0)
 	{
 		cerr << CODE_POS_STR << video::ToString((ErrorCode)ret) << endl;

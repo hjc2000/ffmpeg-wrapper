@@ -1,4 +1,5 @@
 #include "JoinedInputFormatDemuxDecoder.h"
+#include <base/pipe/Pump.h>
 
 using namespace video;
 using namespace std;

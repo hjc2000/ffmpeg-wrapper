@@ -1,7 +1,6 @@
 #pragma once
-#include <base/MutexHandleWrapper.h>
 #include <base/delegate/Delegate.h>
-#include <base/pipe/Pump.h>
+#include <base/pipe/IPump.h>
 #include <base/task/CancellationToken.h>
 #include <ffmpeg-wrapper/factory/DecoderPipeFactoryManager.h>
 #include <ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
@@ -26,9 +25,11 @@ namespace video
 		AVStreamInfoCollection _video_stream_infos;
 		std::shared_ptr<IDecoderPipe> _video_decode_pipe;
 		int _original_video_stream_index = -1;
+
 		AVStreamInfoCollection _audio_stream_infos;
 		std::shared_ptr<IDecoderPipe> _audio_decode_pipe;
 		int _original_audio_stream_index = -1;
+
 		std::shared_ptr<InfinitePacketPipe> _infinite_packet_pipe{new InfinitePacketPipe{}};
 		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> _video_frame_consumer_list;
 		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> _audio_frame_consumer_list;
