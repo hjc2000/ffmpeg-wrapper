@@ -12,7 +12,7 @@ int main()
 		test_SptsEncodeMux();
 		return 0;
 	}
-	catch (std::runtime_error &e)
+	catch (std::exception const &e)
 	{
 		std::cout << e.what() << std::endl;
 		throw;
