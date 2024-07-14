@@ -23,5 +23,6 @@ void video::SwsFpsEncoderPipe::SendData(AVFrameWrapper &frame)
 
 void video::SwsFpsEncoderPipe::Flush()
 {
+	std::cout << CODE_POS_STR << "SwsFpsEncoderPipe 被冲洗" << std::endl;
 	_sws_fps_pipe->Flush();
 }

@@ -27,5 +27,6 @@ void video::SwrEncoderPipe::SendData(AVFrameWrapper &frame)
 
 void video::SwrEncoderPipe::Flush()
 {
+	std::cout << CODE_POS_STR << "SwrEncoderPipe 被冲洗" << std::endl;
 	_swr_pipe->Flush();
 }

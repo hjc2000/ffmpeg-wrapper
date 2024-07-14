@@ -95,6 +95,7 @@ void video::JoinedInputFormatDemuxDecoder::PumpDataToConsumers(shared_ptr<base::
 	{
 		if (cancel_pump->IsCancellationRequested())
 		{
+			std::cout << CODE_POS_STR << "PumpDataToConsumers 取消" << std::endl;
 			return;
 		}
 
