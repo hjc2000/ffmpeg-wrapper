@@ -47,6 +47,9 @@ namespace video
 		/// @exception 送进来的包的时间基必须是 1/90000，否则会抛出异常。
 		void SendData(AVPacketWrapper &packet) override;
 
+		/// @brief 冲洗
+		/// @note 本方法不会冲洗管道下级的消费者，冲洗管道下级的消费者需要手动调用继承自 IPipeSource
+		/// 的 FlushEachConsumer 方法。
 		void Flush();
 	};
 }
