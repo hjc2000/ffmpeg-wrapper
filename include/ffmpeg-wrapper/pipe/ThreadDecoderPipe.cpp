@@ -13,8 +13,9 @@ void video::ThreadDecoderPipe::InitDecodeThread()
 		{
 			DecodeThreadFunc();
 		}
-		catch (...)
+		catch (std::exception const &e)
 		{
+			std::cout << CODE_POS_STR << "ThreadDecoderPipe 的线程遇到异常。" << e.what() << std::endl;
 		}
 
 		_decode_thread_exit.SetResult();
