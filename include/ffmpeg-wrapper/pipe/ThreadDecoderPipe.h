@@ -20,6 +20,7 @@ namespace video
 		std::atomic_bool _disposed = false;
 
 		void InitDecodeThread();
+		void DecodeThreadFunc();
 
 	public:
 #pragma region 生命周期
@@ -30,21 +31,19 @@ namespace video
 		void Dispose() override;
 #pragma endregion
 
-		/// <summary>
-		///		将包送入队列后就会立即返回，队列满了才会受到阻塞。
-		///		另一个线程会负责从队列中取出包进行解码。
-		/// </summary>
-		/// <param name="packet"></param>
+		/// @brief 送入包
+		/// @note 将包送入队列后就会立即返回，队列满了才会受到阻塞。
+		/// 另一个线程会负责从队列中取出包进行解码。
+		///
+		/// @param packet
 		void SendData(AVPacketWrapper &packet) override;
 
 		/// @brief 冲洗消费者
 		void Flush() override;
 
-		/// <summary>
-		///		冲洗解码器，但是不冲洗消费者。
-		///		当需要把本解码器撤掉，换另一个解码器时就要调用本方法。这样既可以取出残留在解码器
-		///		中的帧，又不会把下级的消费者也一起冲洗了。
-		/// </summary>
+		/// @brief 冲洗解码器，但是不冲洗消费者。
+		/// @note 当需要把本解码器管道撤掉，换另一个解码器管道时就要调用本方法。
+		/// 这样既可以取出残留在解码器中的帧，又不会把下级的消费者也一起冲洗了。
 		void FlushDecoderButNotFlushConsumers();
 
 #pragma region 通过 IAudioStreamInfoCollection 继承

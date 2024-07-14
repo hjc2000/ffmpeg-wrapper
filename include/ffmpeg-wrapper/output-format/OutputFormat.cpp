@@ -86,8 +86,6 @@ void video::OutputFormat::Flush()
 	std::lock_guard l(_not_private_methods_lock);
 
 	_flush_times++;
-	std::cout << CODE_POS_STR << std::format("OutputFormat 被冲洗 {} 次", _flush_times) << std::endl;
-
 	if (_flush_times == WrappedObj()->nb_streams)
 	{
 		std::cout << CODE_POS_STR << "所有流都被冲洗了。" << std::endl;

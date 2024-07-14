@@ -10,45 +10,48 @@ void video::ThreadDecoderPipe::InitDecodeThread()
 {
 	auto thread_func = [this]()
 	{
-		base::Guard g{
-			[this]()
-			{
-				_decode_thread_exit.SetResult();
-			},
-		};
-
-		try
-		{
-			AVPacketWrapper packet;
-			while (true)
-			{
-				int read_packet_result = _packet_queue.ReadData(packet);
-				if (read_packet_result < 0)
-				{
-					if (_do_not_flush_consumer)
-					{
-						std::cout << CODE_POS_STR << "ThreadDecoderPipe FlushDecoderButNotFlushConsumers" << std::endl;
-						_decoder_pipe->FlushDecoderButNotFlushConsumers();
-					}
-					else
-					{
-						std::cout << CODE_POS_STR << "ThreadDecoderPipe Flush" << std::endl;
-						_decoder_pipe->Flush();
-					}
-
-					return;
-				}
-
-				_decoder_pipe->SendData(packet);
-			}
-		}
-		catch (std::exception const &e)
-		{
-			std::cout << CODE_POS_STR << "ThreadDecoderPipe 的线程遇到异常。" << e.what() << std::endl;
-		}
+		DecodeThreadFunc();
 	};
 	std::thread(thread_func).detach();
 	_decode_thread_exit.Reset();
+}
+
+void video::ThreadDecoderPipe::DecodeThreadFunc()
+{
+	base::Guard g{
+		[this]()
+		{
+			_decode_thread_exit.SetResult();
+		},
+	};
+
+	try
+	{
+		AVPacketWrapper packet;
+		while (true)
+		{
+			int read_packet_result = _packet_queue.ReadData(packet);
+			if (read_packet_result < 0)
+			{
+				if (_do_not_flush_consumer)
+				{
+					_decoder_pipe->FlushDecoderButNotFlushConsumers();
+				}
+				else
+				{
+					_decoder_pipe->Flush();
+				}
+
+				return;
+			}
+
+			_decoder_pipe->SendData(packet);
+		}
+	}
+	catch (std::exception const &e)
+	{
+		std::cout << CODE_POS_STR << "ThreadDecoderPipe 的线程遇到异常。" << e.what() << std::endl;
+	}
 }
 
 video::ThreadDecoderPipe::ThreadDecoderPipe(AVStreamInfoCollection stream)
@@ -93,11 +96,11 @@ void video::ThreadDecoderPipe::FlushDecoderButNotFlushConsumers()
 	_packet_queue.Flush();
 }
 
+#pragma region IAudioStreamInfoCollection
 AVRational video::ThreadDecoderPipe::TimeBase() const
 {
 	return _decoder_pipe->TimeBase();
 }
-
 void video::ThreadDecoderPipe::SetTimeBase(AVRational value)
 {
 	_decoder_pipe->SetTimeBase(value);
@@ -107,7 +110,6 @@ AVSampleFormat video::ThreadDecoderPipe::SampleFormat() const
 {
 	return _decoder_pipe->SampleFormat();
 }
-
 void video::ThreadDecoderPipe::SetSampleFormat(AVSampleFormat value)
 {
 	_decoder_pipe->SetSampleFormat(value);
@@ -117,7 +119,6 @@ int video::ThreadDecoderPipe::SampleRate() const
 {
 	return _decoder_pipe->SampleRate();
 }
-
 void video::ThreadDecoderPipe::SetSampleRate(int value)
 {
 	_decoder_pipe->SetSampleRate(value);
@@ -127,12 +128,13 @@ AVChannelLayout video::ThreadDecoderPipe::ChannelLayout() const
 {
 	return _decoder_pipe->ChannelLayout();
 }
-
 void video::ThreadDecoderPipe::SetChannelLayout(AVChannelLayout value)
 {
 	_decoder_pipe->SetChannelLayout(value);
 }
+#pragma endregion
 
+#pragma region IVideoStreamInfoCollection
 int video::ThreadDecoderPipe::Width() const
 {
 	return _decoder_pipe->Width();
@@ -172,3 +174,4 @@ void video::ThreadDecoderPipe::SetFrameRate(AVRational value)
 {
 	_decoder_pipe->SetFrameRate(value);
 }
+#pragma endregion
