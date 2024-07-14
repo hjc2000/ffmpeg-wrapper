@@ -9,7 +9,7 @@ void FpsAdjustPipe::ReadAndSendFrame()
 	bool have_synced = false;
 	int64_t delta_pts = 0;
 
-	while (1)
+	while (true)
 	{
 		int ret = _graph.ReadData(frame);
 		switch (ret)
@@ -32,7 +32,6 @@ void FpsAdjustPipe::ReadAndSendFrame()
 
 			// 滤镜出来的 pts 与输入端的 pts 有误差，则本轮循环读取的每一个帧的 pts 都要加上 delta_pts。
 			frame.SetPts(frame.Pts() + delta_pts);
-			frame.SetTimeBase(AVRational{_desired_out_fps.den, _desired_out_fps.num});
 			SendDataToEachConsumer(frame);
 
 			// 下轮循环继续读取
@@ -51,11 +50,13 @@ void FpsAdjustPipe::ReadAndSendFrame()
 	}
 }
 
-FpsAdjustPipe::FpsAdjustPipe(IVideoStreamInfoCollection const &input_video_stream_infos, AVRational desired_out_fps) : _input_video_stream_infos(input_video_stream_infos),
-																													   _graph(input_video_stream_infos),
-																													   _desired_out_fps(desired_out_fps)
+FpsAdjustPipe::FpsAdjustPipe(IVideoStreamInfoCollection const &input_video_stream_infos,
+							 AVRational desired_out_fps)
+	: _input_video_stream_infos(input_video_stream_infos),
+	  _graph(input_video_stream_infos),
+	  _desired_out_fps(desired_out_fps)
 {
-	auto fps_filter = _graph.alloc_fps_filter(desired_out_fps);
+	AVFilterContextWrapper fps_filter = _graph.alloc_fps_filter(desired_out_fps);
 
 	// 连接滤镜
 	_graph.buffer_filter() << fps_filter << _graph.buffer_sink_filter();
@@ -75,10 +76,9 @@ void FpsAdjustPipe::SendData(AVFrameWrapper &frame)
 	frame.ChangeTimeBase(_input_video_stream_infos.TimeBase());
 	_graph.SendData(frame);
 
-	int64_t rescaled_current_frame_pts = ConvertTimeStamp(
-		frame.Pts(),
-		frame.TimeBase(),
-		AVRational{_desired_out_fps.den, _desired_out_fps.num});
+	int64_t rescaled_current_frame_pts = ConvertTimeStamp(frame.Pts(),
+														  frame.TimeBase(),
+														  AVRational{_desired_out_fps.den, _desired_out_fps.num});
 
 	_trigger.UpdateInput(rescaled_current_frame_pts);
 	if (_trigger.HaveNotUpdateOutput())
@@ -92,5 +92,12 @@ void FpsAdjustPipe::SendData(AVFrameWrapper &frame)
 
 void video::FpsAdjustPipe::Flush()
 {
+	if (ConsumerList().Count() == 0)
+	{
+		return;
+	}
+
+	ReadAndSendFrame();
 	_graph.Flush();
+	ReadAndSendFrame();
 }

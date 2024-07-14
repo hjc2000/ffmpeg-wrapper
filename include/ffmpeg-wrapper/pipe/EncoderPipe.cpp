@@ -6,7 +6,7 @@ using namespace video;
 void EncoderPipe::ReadAndSendPacketToOutputFormat()
 {
 	AVPacketWrapper packet;
-	while (1)
+	while (true)
 	{
 		int ret = _encoder_ctx->ReadPacket(packet);
 		switch (ret)
@@ -16,7 +16,7 @@ void EncoderPipe::ReadAndSendPacketToOutputFormat()
 			packet.SetStreamIndex(_new_stream.Index());
 			_output_format->SendData(packet);
 
-			// 下一轮循环继续读取包
+			// 退出 switch，下一轮循环继续读取包
 			break;
 		}
 		case (int)ErrorCode::output_is_temporarily_unavailable:
@@ -37,13 +37,13 @@ void EncoderPipe::ReadAndSendPacketToOutputFormat()
 }
 
 EncoderPipe::EncoderPipe(std::string codec_name,
-						 IVideoStreamInfoCollection const &in_stream_infos,
+						 IVideoStreamInfoCollection const &stream_infos,
 						 std::shared_ptr<OutputFormat> output_format,
 						 int64_t out_bit_rate_in_bps)
 {
 	_output_format = output_format;
 	_encoder_ctx = AVCodecContextWrapper::CreateEncoder(codec_name.c_str(),
-														in_stream_infos,
+														stream_infos,
 														_output_format->NeedGlobalHeader(),
 														false);
 

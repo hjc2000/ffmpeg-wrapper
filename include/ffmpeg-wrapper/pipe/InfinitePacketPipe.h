@@ -14,6 +14,7 @@ namespace video
 		: public base::IConsumer<AVPacketWrapper>,
 		  public base::IPipeSource<AVPacketWrapper>
 	{
+	private:
 		int64_t _last_pts = 0;
 		int64_t _last_dts = 0;
 		int64_t _offset = 0;

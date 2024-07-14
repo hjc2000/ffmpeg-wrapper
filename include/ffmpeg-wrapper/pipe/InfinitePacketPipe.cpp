@@ -70,5 +70,5 @@ void InfinitePacketPipe::Flush()
 	_last_packet_duration = 0;
 	_start_pts_dts_not_set = true;
 
-	Flush();
+	FlushEachConsumer();
 }
