@@ -16,7 +16,7 @@ namespace video
 	private:
 		std::shared_ptr<base::ISignalSource<double>> _signal_source;
 		AudioFrameInfoCollection _audio_frame_infos;
-		int64_t _pts = 0;
+		base::Fraction _pts = 0;
 		bool _opened = false;
 
 	public:

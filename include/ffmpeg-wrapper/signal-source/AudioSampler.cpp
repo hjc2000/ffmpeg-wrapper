@@ -29,7 +29,7 @@ int video::AudioSampler::ReadData(AVFrameWrapper &frame)
 
 	frame = AVFrameWrapper{_audio_frame_infos};
 	frame = _audio_frame_infos;
-	frame.SetPts(_pts);
+	frame.SetPts(_pts.Div());
 	base::Fraction fraction_duration = SampleCount() / base::Fraction{SampleRate()} / base::Fraction{AVRationalToFraction(TimeBase())};
 	int64_t duration = fraction_duration.Div();
 	frame.SetDuration(duration);
@@ -41,7 +41,7 @@ int video::AudioSampler::ReadData(AVFrameWrapper &frame)
 	{
 		// 采样一次
 		double sample_value = _signal_source->Sample();
-		_pts++;
+		_pts += base::Fraction{SampleRate()}.Reciprocal() / AVRationalToFraction(TimeBase());
 
 		// 为每个声道填充相同的值
 		for (int j = 0; j < ChannelLayout().nb_channels; j++)
