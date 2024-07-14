@@ -12,14 +12,6 @@ void InfinitePacketPipe::UpdateLastPacketDuration(int64_t value)
 	}
 }
 
-void InfinitePacketPipe::UpdateLastPts(int64_t value)
-{
-	if (value > _last_pts)
-	{
-		_last_pts = value;
-	}
-}
-
 void InfinitePacketPipe::UpdateLastDts(int64_t value)
 {
 	if (value > _last_dts)
@@ -28,20 +20,20 @@ void InfinitePacketPipe::UpdateLastDts(int64_t value)
 	}
 }
 
-void InfinitePacketPipe::CorrectStartTimeStamp(AVPacketWrapper &packet)
+void InfinitePacketPipe::CorrectStartingPointOfDts(AVPacketWrapper &packet)
 {
-	if (_start_pts_dts_not_set)
+	if (_first_dts_not_set)
 	{
-		_start_pts_dts_not_set = false;
-		_start_pts = packet.Pts();
-		_start_dts = packet.Dts();
-
-		// 开头处对齐取最小值，因为不能出现时间戳回溯。
-		_correct_offset = std::min(_start_pts, _start_dts);
+		_first_dts_not_set = false;
+		_first_dts = packet.Dts();
 	}
 
-	packet.SetPts(packet.Pts() - _correct_offset);
-	packet.SetDts(packet.Dts() - _correct_offset);
+	if (packet.Pts() != AV_NOPTS_VALUE)
+	{
+		packet.SetPts(packet.Pts() - _first_dts);
+	}
+
+	packet.SetDts(packet.Dts() - _first_dts);
 }
 
 void InfinitePacketPipe::SendData(AVPacketWrapper &packet)
@@ -52,23 +44,25 @@ void InfinitePacketPipe::SendData(AVPacketWrapper &packet)
 		cout << CODE_POS_STR << "送进来的包的时间基必须是 " << AVRational{1, 90000} << endl;
 	}
 
-	CorrectStartTimeStamp(packet);
-	UpdateLastPts(packet.Pts());
+	CorrectStartingPointOfDts(packet);
 	UpdateLastDts(packet.Dts());
 	UpdateLastPacketDuration(packet.Duration());
-	packet.SetPts(packet.Pts() + _offset);
+
+	if (packet.Pts() != AV_NOPTS_VALUE)
+	{
+		packet.SetPts(packet.Pts() + _offset);
+	}
+
 	packet.SetDts(packet.Dts() + _offset);
 	SendDataToEachConsumer(packet);
 }
 
 void InfinitePacketPipe::Flush()
 {
-	// 结尾处添加边距取最大值，不能让下一个封装的时间戳重叠到上一个。
-	_offset += std::max(_last_pts, _last_dts) + _last_packet_duration;
-	_last_pts = 0;
+	_offset += _last_dts + _last_packet_duration;
 	_last_dts = 0;
 	_last_packet_duration = 0;
-	_start_pts_dts_not_set = true;
+	_first_dts_not_set = true;
 
 	FlushEachConsumer();
 }
