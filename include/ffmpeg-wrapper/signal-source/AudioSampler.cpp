@@ -30,7 +30,6 @@ int video::AudioSampler::ReadData(AVFrameWrapper &frame)
 	frame = AVFrameWrapper{_audio_frame_infos};
 	frame = _audio_frame_infos;
 	frame.SetPts(_pts.Div());
-	frame->pkt_dts = frame.Pts();
 	base::Fraction fraction_duration = SampleCount() / base::Fraction{SampleRate()} / base::Fraction{AVRationalToFraction(TimeBase())};
 	int64_t duration = fraction_duration.Div();
 	frame.SetDuration(duration);
