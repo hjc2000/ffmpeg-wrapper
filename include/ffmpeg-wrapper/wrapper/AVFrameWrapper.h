@@ -139,6 +139,14 @@ namespace video
 			_wrapped_obj->duration = value;
 		}
 
+		/// @brief 根据采样点个数和采样时间间隔更新音频帧的持续时间。
+		void UpdateAudioFrameDuration()
+		{
+			base::Fraction fraction_duration = SampleCount() * SampleInterval() / AVRationalToFraction(TimeBase());
+			int64_t duration = fraction_duration.Div();
+			SetDuration(duration);
+		}
+
 		/// @brief 计算本帧的 pts 所对应的时间。
 		/// @note 需要保证本帧的时间基被正确设置。
 		///

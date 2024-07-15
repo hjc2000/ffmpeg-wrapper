@@ -290,9 +290,8 @@ void video::AVFrameWrapper::SetPixelFormat(AVPixelFormat value)
 
 std::string AVFrameWrapper::ToString()
 {
-	return std::format(
-		"pts={}, time_base={}, sample_format={}",
-		_wrapped_obj->pts,
-		::ToString(_wrapped_obj->time_base),
-		!_wrapped_obj->width ? ::ToString(SampleFormat()) : "");
+	return std::format("pts={}, time_base={}, sample_format={}",
+					   _wrapped_obj->pts,
+					   ::ToString(_wrapped_obj->time_base),
+					   !_wrapped_obj->width ? ::ToString(SampleFormat()) : "");
 }
