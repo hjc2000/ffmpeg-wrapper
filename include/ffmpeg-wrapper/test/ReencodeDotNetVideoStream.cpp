@@ -24,8 +24,9 @@ void ReencodeDotNetVideoStream(DotNetStream *dotnet_video_stream)
 	output_audio_stream_infos._sample_rate = 48000;
 
 	// 编码封装管道
-	shared_ptr<base::Stream> out_fs = jccpp::FileStream::CreateNewAnyway("mux_out.ts");
+	shared_ptr<base::Stream> out_fs = base::FileStream::CreateNewAnyway("mux_out.ts");
 	shared_ptr<StreamOutputFormat> out_fmt_ctx{new StreamOutputFormat{".ts", out_fs}};
+
 	shared_ptr<SptsEncodeMux> spts_encode_mux{
 		new SptsEncodeMux{
 			out_fmt_ctx,
@@ -33,7 +34,8 @@ void ReencodeDotNetVideoStream(DotNetStream *dotnet_video_stream)
 			"hevc_amf",
 			-1,
 			output_audio_stream_infos,
-			"aac"},
+			"aac",
+		},
 	};
 
 	// 输入格式

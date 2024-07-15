@@ -1,12 +1,12 @@
 #pragma once
 #include <base/container/List.h>
 #include <base/container/Queue.h>
+#include <base/stream/FileStream.h>
 #include <ffmpeg-wrapper/demux/JoinedInputFormatDemuxDecoder.h>
 #include <ffmpeg-wrapper/input-format/InputFormat.h>
 #include <ffmpeg-wrapper/mux/SptsEncodeMux.h>
 #include <ffmpeg-wrapper/output-format/StreamOutputFormat.h>
 #include <iostream>
-#include <jccpp/stream/FileStream.h>
 #include <pinvoke/DotNetStream.h>
 
 extern "C"
