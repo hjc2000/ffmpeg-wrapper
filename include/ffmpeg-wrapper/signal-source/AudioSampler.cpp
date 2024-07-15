@@ -162,7 +162,7 @@ void video::TestAudioSampler()
 	};
 	audio_sampler->Open();
 
-	std::shared_ptr<video::FileOutputFormat> out_format{new video::FileOutputFormat{"sin_audio.ts"}};
+	std::shared_ptr<video::FileOutputFormat> out_format{new video::FileOutputFormat{"sin_audio.flac"}};
 	std::shared_ptr<SwrEncoderPipe> encoder_pipe{new SwrEncoderPipe{
 		codec_name,
 		audio_frame_infos,
