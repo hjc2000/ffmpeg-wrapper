@@ -146,11 +146,11 @@ void video::AudioSampler::SetSampleCount(int value)
 
 void video::TestAudioSampler()
 {
-	std::string codec_name = "flac";
+	std::string codec_name = "eac3";
 	AudioFrameInfoCollection audio_frame_infos;
 	audio_frame_infos.SetChannelLayout(AVChannelLayoutExtension::GetDefaultChannelLayout(2));
 	audio_frame_infos.SetSampleCount(AVSampleFormatExtension::ParseRequiredSampleCount(codec_name));
-	audio_frame_infos.SetSampleFormat(AVSampleFormat::AV_SAMPLE_FMT_S16);
+	audio_frame_infos.SetSampleFormat(AVSampleFormat::AV_SAMPLE_FMT_FLTP);
 	audio_frame_infos.SetSampleRate(44100);
 	audio_frame_infos.SetTimeBase(AVRational{1, 90000});
 
@@ -162,7 +162,7 @@ void video::TestAudioSampler()
 	};
 	audio_sampler->Open();
 
-	std::shared_ptr<video::FileOutputFormat> out_format{new video::FileOutputFormat{"sin_audio.flac"}};
+	std::shared_ptr<video::FileOutputFormat> out_format{new video::FileOutputFormat{"sin_audio.eac3"}};
 	std::shared_ptr<SwrEncoderPipe> encoder_pipe{new SwrEncoderPipe{
 		codec_name,
 		audio_frame_infos,
