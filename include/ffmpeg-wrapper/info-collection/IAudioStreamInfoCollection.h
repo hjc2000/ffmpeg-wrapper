@@ -1,4 +1,5 @@
 #pragma once
+#include <base/math/Fraction.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <string>
 
@@ -20,18 +21,15 @@ namespace video
 		virtual int SampleRate() const = 0;
 		virtual void SetSampleRate(int value) = 0;
 
+		/// @brief 采样时间间隔。单位：秒。
+		/// @return
+		base::Fraction SampleInterval()
+		{
+			return base::Fraction{1, SampleRate()};
+		}
+
 		virtual AVChannelLayout ChannelLayout() const = 0;
 		virtual void SetChannelLayout(AVChannelLayout value) = 0;
-
-		/// @brief 获取两个采样点之间的时间间隔。
-		/// @note 其实就是采样率的倒数。
-		///
-		/// @return
-		double DoubleSampleInterval() const;
-
-		/// @brief 两个采样点之间的时间间隔，单位毫秒。
-		/// @return
-		double sample_interval_in_milliseconds() const;
 
 		/// @brief 将 sample_format 属性转化为字符串。
 		/// @return 返回 sample_format 的名称。如果是未知类型，返回空字符串

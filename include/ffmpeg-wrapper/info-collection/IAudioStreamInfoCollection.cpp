@@ -41,13 +41,3 @@ bool IAudioStreamInfoCollection::operator==(IAudioStreamInfoCollection const &an
 		   SampleRate() == another.SampleRate() &&
 		   ChannelLayout() == another.ChannelLayout();
 }
-
-double video::IAudioStreamInfoCollection::DoubleSampleInterval() const
-{
-	return 1.0 / SampleRate();
-}
-
-double video::IAudioStreamInfoCollection::sample_interval_in_milliseconds() const
-{
-	return 1.0 * 1000 / SampleRate();
-}
