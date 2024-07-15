@@ -168,6 +168,8 @@ void video::TestAudioSampler()
 		audio_frame_infos,
 		out_format,
 	}};
+	out_format->WriteHeader();
+	out_format->DumpFormat();
 
 	base::CancellationTokenSource cancel_pump;
 	TaskCompletionSignal pump_thread_exit{false};
