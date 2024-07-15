@@ -22,7 +22,7 @@ void video::OutputFormat::DumpFormat(char const *url)
 	std::lock_guard l(_not_private_methods_lock);
 	std::cout << std::endl;
 	std::cout << "------------------------------------------------------------" << std::endl;
-	std::cout << "▼ 格式信息" << endl;
+	std::cout << "▼ 格式信息" << std::endl;
 	std::cout << "------------------------------------------------------------" << std::endl;
 	av_dump_format(WrappedObj(), 0, url, true);
 	std::cout << "------------------------------------------------------------" << std::endl;

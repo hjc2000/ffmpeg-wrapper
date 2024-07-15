@@ -6,11 +6,6 @@
 #include <sstream>
 #include <string>
 
-using std::endl;
-using std::exception;
-using std::string;
-using std::stringstream;
-
 namespace video
 {
 	/// @brief 错误代码枚举
