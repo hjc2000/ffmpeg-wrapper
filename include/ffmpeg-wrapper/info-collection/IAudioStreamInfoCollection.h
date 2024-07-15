@@ -23,10 +23,7 @@ namespace video
 
 		/// @brief 采样时间间隔。单位：秒。
 		/// @return
-		base::Fraction SampleInterval()
-		{
-			return base::Fraction{1, SampleRate()};
-		}
+		base::Fraction SampleInterval() const;
 
 		virtual AVChannelLayout ChannelLayout() const = 0;
 		virtual void SetChannelLayout(AVChannelLayout value) = 0;

@@ -13,6 +13,11 @@ IAudioStreamInfoCollection &video::IAudioStreamInfoCollection::operator=(IAudioS
 	return *this;
 }
 
+base::Fraction video::IAudioStreamInfoCollection::SampleInterval() const
+{
+	return base::Fraction{1, SampleRate()};
+}
+
 std::string video::IAudioStreamInfoCollection::sample_format_string() const
 {
 	const char *name = av_get_sample_fmt_name(SampleFormat());

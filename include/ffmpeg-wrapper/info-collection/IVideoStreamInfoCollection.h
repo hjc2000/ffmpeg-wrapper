@@ -1,4 +1,5 @@
 #pragma once
+#include <base/math/Fraction.h>
 #include <ffmpeg-wrapper/AVCompare.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/info-collection/IVideoFrameInfoCollection.h>
@@ -20,7 +21,9 @@ namespace video
 		virtual AVRational FrameRate() const = 0;
 		virtual void SetFrameRate(AVRational value) = 0;
 
-		uint32_t FrameIntervalInMilliseconds() const;
+		/// @brief 帧间隔。单位：秒。
+		/// @return
+		base::Fraction FrameInterval() const;
 
 		using IVideoFrameInfoCollection::operator==;
 		bool operator==(IVideoStreamInfoCollection const &another) const;

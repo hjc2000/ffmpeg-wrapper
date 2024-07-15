@@ -1,4 +1,5 @@
 #include "IVideoStreamInfoCollection.h"
+#include <ffmpeg-wrapper/AVCalculate.h>
 
 using namespace video;
 
@@ -10,9 +11,9 @@ IVideoStreamInfoCollection &video::IVideoStreamInfoCollection::operator=(IVideoS
 	return *this;
 }
 
-uint32_t video::IVideoStreamInfoCollection::FrameIntervalInMilliseconds() const
+base::Fraction video::IVideoStreamInfoCollection::FrameInterval() const
 {
-	return 1000 * FrameRate().den / FrameRate().num;
+	return video::AVRationalToFraction(FrameRate()).Reciprocal();
 }
 
 bool IVideoStreamInfoCollection::operator==(IVideoStreamInfoCollection const &o) const
