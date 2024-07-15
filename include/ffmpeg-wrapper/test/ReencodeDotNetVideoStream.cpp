@@ -1,9 +1,9 @@
 #include "ReencodeDotNetVideoStream.h"
 #include <base/task/CancellationTokenSource.h>
+#include <base/task/TaskCompletionSignal.h>
 #include <ffmpeg-wrapper/AVChannelLayoutExtension.h>
 #include <ffmpeg-wrapper/factory/EncoderPipeFactoryManager.h>
 #include <ffmpeg-wrapper/info-collection/VideoStreamInfoCollection.h>
-#include <jccpp/TaskCompletionSignal.h>
 
 using namespace std;
 using namespace video;
@@ -62,7 +62,7 @@ void ReencodeDotNetVideoStream(DotNetStream *dotnet_video_stream)
 
 	// 解码管道
 	base::CancellationTokenSource cancel_pump_source;
-	TaskCompletionSignal pump_thread_exit{false};
+	base::TaskCompletionSignal pump_thread_exit{false};
 
 	auto thread_fun = [&]()
 	{

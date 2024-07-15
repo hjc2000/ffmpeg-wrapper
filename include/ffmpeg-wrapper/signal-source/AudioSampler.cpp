@@ -132,13 +132,13 @@ void video::AudioSampler::SetSampleCount(int value)
 #include <base/pipe/Pump.h>
 #include <base/signal/SinSignalSource.h>
 #include <base/task/CancellationTokenSource.h>
+#include <base/task/TaskCompletionSignal.h>
 #include <ffmpeg-wrapper/AVChannelLayoutExtension.h>
 #include <ffmpeg-wrapper/AVSampleFormatExtension.h>
 #include <ffmpeg-wrapper/factory/EncoderPipeFactoryManager.h>
 #include <ffmpeg-wrapper/output-format/FileOutputFormat.h>
 #include <ffmpeg-wrapper/pipe/SwrEncoderPipe.h>
 #include <iostream>
-#include <jccpp/TaskCompletionSignal.h>
 
 void video::TestAudioSampler()
 {
@@ -168,7 +168,7 @@ void video::TestAudioSampler()
 	out_format->DumpFormat();
 
 	base::CancellationTokenSource cancel_pump;
-	TaskCompletionSignal pump_thread_exit{false};
+	base::TaskCompletionSignal pump_thread_exit{false};
 	base::Pump<AVFrameWrapper> pump{audio_sampler};
 	pump.ConsumerList().Add(encoder_pipe);
 

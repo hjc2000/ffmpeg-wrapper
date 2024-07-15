@@ -1,10 +1,10 @@
 #pragma once
 #include <base/pipe/PipeBlockingQueue.h>
 #include <base/string/define.h>
+#include <base/task/TaskCompletionSignal.h>
 #include <ffmpeg-wrapper/factory/DecoderPipeFactoryManager.h>
 #include <ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
 #include <ffmpeg-wrapper/pipe/interface/IDecoderPipe.h>
-#include <jccpp/TaskCompletionSignal.h>
 #include <memory>
 
 namespace video
@@ -15,7 +15,7 @@ namespace video
 	private:
 		std::shared_ptr<IDecoderPipe> _decoder_pipe;
 		base::PipeBlockingQueue<AVPacketWrapper> _packet_queue{};
-		TaskCompletionSignal _decode_thread_exit{true};
+		base::TaskCompletionSignal _decode_thread_exit{true};
 		std::atomic_bool _do_not_flush_consumer = false;
 		std::atomic_bool _disposed = false;
 

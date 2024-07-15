@@ -1,5 +1,6 @@
 #pragma once
 #include <base/container/Queue.h>
+#include <base/task/TaskCompletionSignal.h>
 #include <ffmpeg-wrapper/factory/EncoderPipeFactoryManager.h>
 #include <ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/VideoStreamInfoCollection.h>
@@ -7,7 +8,6 @@
 #include <ffmpeg-wrapper/pipe/SwrEncoderPipe.h>
 #include <ffmpeg-wrapper/pipe/SwsFpsEncoderPipe.h>
 #include <iostream>
-#include <jccpp/TaskCompletionSignal.h>
 #include <memory>
 #include <stdint.h>
 #include <string>
