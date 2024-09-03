@@ -8,7 +8,8 @@ namespace video
     class AVFrameWrapper;
     class AVCodecContextWrapper;
 
-    class AVPacketWrapper : public base::Wrapper<AVPacket>
+    class AVPacketWrapper :
+        public base::Wrapper<AVPacket>
     {
     private:
         AVPacket *_wrapped_obj = nullptr;
