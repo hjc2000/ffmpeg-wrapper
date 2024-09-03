@@ -1,6 +1,7 @@
 #include "ffmpeg-wrapper/wrapper/AVFrameWrapper.h"
 #include "AVFrameWrapper.h"
 #include <base/math/Fraction.h>
+#include <base/unit/Seconds.h>
 #include <ffmpeg-wrapper/AVToString.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
@@ -154,10 +155,9 @@ bool video::AVFrameWrapper::IsWritable()
 
 std::chrono::milliseconds AVFrameWrapper::PtsToMilliseconds()
 {
-    int64_t num = Pts() * 1000 * TimeBase().num;
-    int64_t den = TimeBase().den;
-    std::chrono::milliseconds m{num / den};
-    return m;
+    base::Fraction time_base{TimeBase().num, TimeBase().den};
+    base::Seconds seconds{Pts() * time_base};
+    return static_cast<std::chrono::milliseconds>(seconds);
 }
 
 void AVFrameWrapper::copy_image_to_buffer(std::shared_ptr<ImageBuffer> buffer)
