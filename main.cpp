@@ -10,8 +10,8 @@ int main()
     try
     {
         std::filesystem::current_path(Predefine_ResourceDir);
-        // test_SptsEncodeMux();
-        video::TestAudioSampler();
+        test_SptsEncodeMux();
+        // video::TestAudioSampler();
         return 0;
     }
     catch (std::exception const &e)
