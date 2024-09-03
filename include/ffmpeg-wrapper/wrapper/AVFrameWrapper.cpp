@@ -1,5 +1,6 @@
 #include "ffmpeg-wrapper/wrapper/AVFrameWrapper.h"
 #include "AVFrameWrapper.h"
+#include <base/math/Fraction.h>
 #include <ffmpeg-wrapper/AVToString.h>
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
@@ -86,18 +87,19 @@ AVFrameWrapper &AVFrameWrapper::operator=(AVFrameWrapper const &another)
 
 void AVFrameWrapper::ChangeTimeBase(AVRational new_time_base)
 {
-    AVRational old_time_base = _wrapped_obj->time_base;
+    base::Fraction fraction_old_time_base{
+        _wrapped_obj->time_base.num,
+        _wrapped_obj->time_base.den,
+    };
+
+    base::Fraction fraction_new_time_base{
+        new_time_base.num,
+        new_time_base.den,
+    };
+
     _wrapped_obj->time_base = new_time_base;
-
-    _wrapped_obj->pts = ConvertTimeStamp(
-        _wrapped_obj->pts,
-        old_time_base,
-        new_time_base);
-
-    _wrapped_obj->duration = ConvertTimeStamp(
-        _wrapped_obj->duration,
-        old_time_base,
-        new_time_base);
+    _wrapped_obj->pts = static_cast<int64_t>(_wrapped_obj->pts * fraction_old_time_base / fraction_new_time_base);
+    _wrapped_obj->duration = static_cast<int64_t>(_wrapped_obj->duration * fraction_old_time_base / fraction_new_time_base);
 }
 
 int video::AVFrameWrapper::audio_data_size()
@@ -118,24 +120,22 @@ int video::AVFrameWrapper::audio_data_size()
      * 综上，下面应该向 av_samples_get_buffer_size 函数的 align 参数传入 1，表示不对齐，也就是
      * 获取的 buf_size 不包括后面的间隙。
      */
-    int buf_size = av_samples_get_buffer_size(
-        nullptr,
-        ChannelLayout().nb_channels,
-        SampleCount(),
-        SampleFormat(),
-        1);
+    int buf_size = av_samples_get_buffer_size(nullptr,
+                                              ChannelLayout().nb_channels,
+                                              SampleCount(),
+                                              SampleFormat(),
+                                              1);
 
     return buf_size;
 }
 
 void video::AVFrameWrapper::Mute(int offset)
 {
-    av_samples_set_silence(
-        _wrapped_obj->extended_data,
-        offset,
-        SampleCount() - offset,
-        ChannelLayout().nb_channels,
-        SampleFormat());
+    av_samples_set_silence(_wrapped_obj->extended_data,
+                           offset,
+                           SampleCount() - offset,
+                           ChannelLayout().nb_channels,
+                           SampleFormat());
 }
 
 void AVFrameWrapper::MakeWritable()

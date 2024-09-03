@@ -1,14 +1,15 @@
 #include "AVPacketWrapper.h"
+#include <base/math/Fraction.h>
 #include <base/string/define.h>
 
 using namespace video;
 
 #pragma region 私有生命周期
 
-void AVPacketWrapper::Ref(AVPacketWrapper const &other)
+void AVPacketWrapper::Ref(AVPacketWrapper const &o)
 {
     Unref();
-    int ret = av_packet_ref(_wrapped_obj, other._wrapped_obj);
+    int ret = av_packet_ref(_wrapped_obj, o._wrapped_obj);
     if (ret < 0)
     {
         throw std::runtime_error{CODE_POS_STR + std::string{"引用 AVPacket 失败"}};
@@ -31,10 +32,10 @@ AVPacketWrapper::AVPacketWrapper()
     }
 }
 
-AVPacketWrapper::AVPacketWrapper(AVPacketWrapper const &another)
+AVPacketWrapper::AVPacketWrapper(AVPacketWrapper const &o)
     : AVPacketWrapper()
 {
-    Ref(another);
+    Ref(o);
 }
 
 AVPacketWrapper::~AVPacketWrapper()
@@ -42,31 +43,28 @@ AVPacketWrapper::~AVPacketWrapper()
     av_packet_free(&_wrapped_obj);
 }
 
-AVPacketWrapper &AVPacketWrapper::operator=(AVPacketWrapper const &another)
+AVPacketWrapper &AVPacketWrapper::operator=(AVPacketWrapper const &o)
 {
-    Ref(another);
+    Ref(o);
     return *this;
 }
 
 void AVPacketWrapper::ChangeTimeBase(AVRational new_time_base)
 {
-    AVRational old_time_base = _wrapped_obj->time_base;
+    base::Fraction fraction_old_time_base{
+        _wrapped_obj->time_base.num,
+        _wrapped_obj->time_base.den,
+    };
+
+    base::Fraction fraction_new_time_base{
+        new_time_base.num,
+        new_time_base.den,
+    };
+
     _wrapped_obj->time_base = new_time_base;
-
-    _wrapped_obj->pts = ConvertTimeStamp(
-        _wrapped_obj->pts,
-        old_time_base,
-        new_time_base);
-
-    _wrapped_obj->dts = ConvertTimeStamp(
-        _wrapped_obj->dts,
-        old_time_base,
-        new_time_base);
-
-    _wrapped_obj->duration = ConvertTimeStamp(
-        _wrapped_obj->duration,
-        old_time_base,
-        new_time_base);
+    _wrapped_obj->pts = static_cast<int64_t>(_wrapped_obj->pts * fraction_old_time_base / fraction_new_time_base);
+    _wrapped_obj->dts = static_cast<int64_t>(_wrapped_obj->dts * fraction_old_time_base / fraction_new_time_base);
+    _wrapped_obj->duration = static_cast<int64_t>(_wrapped_obj->duration * fraction_old_time_base / fraction_new_time_base);
 }
 
 int AVPacketWrapper::StreamIndex() const
