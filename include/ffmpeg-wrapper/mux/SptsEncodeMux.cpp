@@ -2,9 +2,8 @@
 #include <ffmpeg-wrapper/AVChannelLayoutExtension.h>
 
 using namespace video;
-using namespace std;
 
-video::SptsEncodeMux::SptsEncodeMux(shared_ptr<OutputFormat> out_format,
+video::SptsEncodeMux::SptsEncodeMux(std::shared_ptr<OutputFormat> out_format,
                                     // 视频相关参数
                                     IVideoStreamInfoCollection const &video_stream_infos,
                                     std::string video_codec_name,
@@ -35,7 +34,7 @@ video::SptsEncodeMux::SptsEncodeMux(shared_ptr<OutputFormat> out_format,
 
 void video::SptsEncodeMux::InitVideoEncodePipe()
 {
-    _video_encoder_pipe = shared_ptr<SwsFpsEncoderPipe>{
+    _video_encoder_pipe = std::shared_ptr<SwsFpsEncoderPipe>{
         new SwsFpsEncoderPipe{
             _out_format,
             _video_stream_infos,
@@ -67,12 +66,12 @@ void video::SptsEncodeMux::WriteHeader()
     _out_format->DumpFormat();
 }
 
-shared_ptr<base::IConsumer<AVFrameWrapper>> video::SptsEncodeMux::VideoEncodePipe()
+std::shared_ptr<base::IConsumer<AVFrameWrapper>> video::SptsEncodeMux::VideoEncodePipe()
 {
     return _video_encoder_pipe;
 }
 
-shared_ptr<base::IConsumer<AVFrameWrapper>> video::SptsEncodeMux::AudioEncodePipe()
+std::shared_ptr<base::IConsumer<AVFrameWrapper>> video::SptsEncodeMux::AudioEncodePipe()
 {
     return _audio_encode_pipe;
 }
@@ -91,24 +90,24 @@ void test_SptsEncodeMux()
     file_queue.Enqueue("越权访问.mkv");
     file_queue.Enqueue("moon.mp4");
     file_queue.Enqueue("fallen-down.ts");
-    shared_ptr<JoinedInputFormatDemuxDecoder> joined_input_format_demux_decoder{new JoinedInputFormatDemuxDecoder{}};
+    std::shared_ptr<JoinedInputFormatDemuxDecoder> joined_input_format_demux_decoder{new JoinedInputFormatDemuxDecoder{}};
 
-    auto get_input_format_func = [&](shared_ptr<InputFormat> &current_input_format)
+    auto get_input_format_func = [&](std::shared_ptr<InputFormat> &current_input_format)
     {
         try
         {
             std::string file = file_queue.Dequeue();
-            shared_ptr<InputFormat> in_fmt_ctx{new InputFormat{file}};
+            std::shared_ptr<InputFormat> in_fmt_ctx{new InputFormat{file}};
             in_fmt_ctx->DumpFormat();
             current_input_format = in_fmt_ctx;
         }
         catch (std::exception &e)
         {
-            cerr << CODE_POS_STR << e.what() << endl;
+            std::cerr << CODE_POS_STR << e.what() << std::endl;
         }
         catch (...)
         {
-            cerr << CODE_POS_STR << "发生未知异常" << endl;
+            std::cerr << CODE_POS_STR << "发生未知异常" << std::endl;
         }
     };
     joined_input_format_demux_decoder->NeedInputFormatEvent().Subscribe(get_input_format_func);
@@ -126,10 +125,10 @@ void test_SptsEncodeMux()
     output_audio_stream_infos._sample_format = AVSampleFormat::AV_SAMPLE_FMT_FLTP;
     output_audio_stream_infos._sample_rate = 48000;
 
-    shared_ptr<base::Stream> out_fs = base::FileStream::CreateNewAnyway("mux_out.ts");
-    shared_ptr<StreamOutputFormat> out_fmt_ctx{new StreamOutputFormat{".ts", out_fs}};
+    std::shared_ptr<base::Stream> out_fs = base::FileStream::CreateNewAnyway("mux_out.ts");
+    std::shared_ptr<StreamOutputFormat> out_fmt_ctx{new StreamOutputFormat{".ts", out_fs}};
 
-    shared_ptr<SptsEncodeMux> spts_encode_mux{
+    std::shared_ptr<SptsEncodeMux> spts_encode_mux{
         new SptsEncodeMux{
             out_fmt_ctx,
             output_video_stream_infos,
@@ -154,19 +153,19 @@ void test_SptsEncodeMux()
         }
         catch (std::exception &e)
         {
-            cerr << e.what() << endl;
+            std::cerr << e.what() << std::endl;
         }
         catch (...)
         {
-            cerr << "发生未知异常" << endl;
+            std::cerr << "发生未知异常" << std::endl;
         }
 
-        cout << "线程退出" << endl;
+        std::cout << "线程退出" << std::endl;
         pump_thread_exit.SetResult();
     };
     std::thread(pump_thread_func).detach();
 
-    cin.get();
+    std::cin.get();
     cancel_pump.Cancel();
     pump_thread_exit.Wait();
 }
