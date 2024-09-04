@@ -27,6 +27,12 @@ video::SwsContextWrapper::SwsContextWrapper(SwsContextWrapper_InVideoFrameInfos 
     }
 }
 
+video::SwsContextWrapper::~SwsContextWrapper()
+{
+    sws_freeContext(_wrapped_obj);
+    _wrapped_obj = nullptr;
+}
+
 void video::SwsContextWrapper::SendData(AVFrameWrapper &frame)
 {
     std::lock_guard l(_lock);

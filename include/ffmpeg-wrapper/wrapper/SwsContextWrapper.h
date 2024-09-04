@@ -11,6 +11,8 @@
 
 namespace video
 {
+#pragma region 参数类
+
     /// @brief 输入视频帧的信息
     class SwsContextWrapper_InVideoFrameInfos
     {
@@ -18,7 +20,7 @@ namespace video
         VideoFrameInfoCollection _value;
 
     public:
-        SwsContextWrapper_InVideoFrameInfos(IVideoFrameInfoCollection const &value)
+        explicit SwsContextWrapper_InVideoFrameInfos(IVideoFrameInfoCollection const &value)
         {
             _value = value;
         }
@@ -36,7 +38,7 @@ namespace video
         VideoFrameInfoCollection _value;
 
     public:
-        SwsContextWrapper_OutVideoFrameInfos(IVideoFrameInfoCollection const &value)
+        explicit SwsContextWrapper_OutVideoFrameInfos(IVideoFrameInfoCollection const &value)
         {
             _value = value;
         }
@@ -46,6 +48,8 @@ namespace video
             return _value;
         }
     };
+
+#pragma endregion
 
     /// @brief 视频重采样器。
     class SwsContextWrapper :
@@ -68,11 +72,7 @@ namespace video
         SwsContextWrapper(SwsContextWrapper_InVideoFrameInfos const &in_video_frame_infos,
                           SwsContextWrapper_OutVideoFrameInfos const &out_video_frame_infos);
 
-        ~SwsContextWrapper()
-        {
-            sws_freeContext(_wrapped_obj);
-            _wrapped_obj = nullptr;
-        }
+        ~SwsContextWrapper();
 
         SwsContext *&WrappedObj() override
         {
