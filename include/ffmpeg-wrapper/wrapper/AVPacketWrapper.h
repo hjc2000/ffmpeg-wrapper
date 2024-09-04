@@ -14,7 +14,6 @@ namespace video
     private:
         AVPacket *_wrapped_obj = nullptr;
 
-#pragma region 私有生命周期
         /// @brief 让本包引用另一个包的缓冲区，并且复制其它参数。
         /// 在引用另一个包之前会先调用 Unref 方法。
         ///
@@ -23,7 +22,6 @@ namespace video
 
         /// @brief 解除此包对缓冲区的引用
         void Unref();
-#pragma endregion
 
     public:
         AVPacketWrapper();

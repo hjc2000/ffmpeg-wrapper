@@ -9,12 +9,14 @@
 
 using namespace video;
 
-#pragma region 私有生命周期
-
 void AVFrameWrapper::GetBuffer(int align)
 {
-    // GetBuffer里面不能调用Unref方法，否则会导致程序卡死
-    int ret = ::av_frame_get_buffer(_wrapped_obj, align);
+    // GetBuffer里面不能调用 Unref 方法，否则会导致程序卡死
+
+    /* ffmpeg 的注释里明确说了如果一个 AVFrame 已经有缓冲区了，再次调用 av_frame_get_buffer
+     * 分配缓冲区会导致内存泄漏。
+     */
+    int ret = av_frame_get_buffer(_wrapped_obj, align);
     if (ret < 0)
     {
         throw std::runtime_error{CODE_POS_STR + std::string{"av_frame_get_buffer 失败。"}};
@@ -27,18 +29,18 @@ void AVFrameWrapper::Ref(AVFrameWrapper const &o)
     int ret = av_frame_ref(_wrapped_obj, o);
     if (ret < 0)
     {
-        std::cerr << CODE_POS_STR << video::ToString((ErrorCode)ret) << std::endl;
+        std::cerr << CODE_POS_STR
+                  << video::ToString(static_cast<ErrorCode>(ret))
+                  << std::endl;
     }
 }
 
 void AVFrameWrapper::Unref()
 {
-    ::av_frame_unref(_wrapped_obj);
+    av_frame_unref(_wrapped_obj);
 }
 
-#pragma endregion
-
-#pragma region 生命周期
+#pragma region 构造函数
 
 AVFrameWrapper::AVFrameWrapper()
 {
@@ -73,6 +75,8 @@ AVFrameWrapper::AVFrameWrapper(AVFrameWrapper const &o)
     Ref(o);
 }
 
+#pragma endregion
+
 AVFrameWrapper::~AVFrameWrapper()
 {
     av_frame_free(&_wrapped_obj);
@@ -83,8 +87,6 @@ AVFrameWrapper &AVFrameWrapper::operator=(AVFrameWrapper const &another)
     Ref(another);
     return *this;
 }
-
-#pragma endregion
 
 void AVFrameWrapper::ChangeTimeBase(AVRational new_time_base)
 {
@@ -141,7 +143,7 @@ void video::AVFrameWrapper::Mute(int offset)
 
 void AVFrameWrapper::MakeWritable()
 {
-    int ret = ::av_frame_make_writable(_wrapped_obj);
+    int ret = av_frame_make_writable(_wrapped_obj);
     if (ret)
     {
         throw std::runtime_error{CODE_POS_STR + std::string{"av_frame_make_writable 失败。"}};
@@ -151,6 +153,13 @@ void AVFrameWrapper::MakeWritable()
 bool video::AVFrameWrapper::IsWritable()
 {
     return av_frame_is_writable(_wrapped_obj);
+}
+
+void video::AVFrameWrapper::UpdateAudioFrameDuration()
+{
+    base::Fraction fraction_duration = SampleCount() * SampleInterval() / AVRationalToFraction(TimeBase());
+    int64_t duration = fraction_duration.Div();
+    SetDuration(duration);
 }
 
 std::chrono::milliseconds AVFrameWrapper::PtsToMilliseconds()
@@ -178,7 +187,9 @@ void AVFrameWrapper::CopyAudioDataToBuffer(uint8_t *buffer, int len)
         throw std::runtime_error("本帧是平面类型，写入缓冲区的音频数据不允许是平面类型");
     }
 
-    memcpy(buffer, _wrapped_obj->extended_data[0], len);
+    std::copy(_wrapped_obj->extended_data[0],
+              _wrapped_obj->extended_data[0] + len,
+              buffer);
 }
 
 void video::AVFrameWrapper::CopyVideoFrameToStream(base::Stream &stream)
@@ -193,7 +204,7 @@ void video::AVFrameWrapper::CopyVideoFrameToStream(base::Stream &stream)
             new ImageBuffer{
                 _wrapped_obj->width,
                 _wrapped_obj->height,
-                (AVPixelFormat)_wrapped_obj->format,
+                static_cast<AVPixelFormat>(_wrapped_obj->format),
                 1,
             },
         };
@@ -218,7 +229,7 @@ void video::AVFrameWrapper::CopyAudioFrameToStream(base::Stream &stream)
 
 AVSampleFormat video::AVFrameWrapper::SampleFormat() const
 {
-    return (AVSampleFormat)_wrapped_obj->format;
+    return static_cast<AVSampleFormat>(_wrapped_obj->format);
 }
 
 void video::AVFrameWrapper::SetSampleFormat(AVSampleFormat value)
@@ -292,7 +303,7 @@ void video::AVFrameWrapper::SetHeight(int value)
 
 AVPixelFormat video::AVFrameWrapper::PixelFormat() const
 {
-    return AVPixelFormat(_wrapped_obj->format);
+    return static_cast<AVPixelFormat>(_wrapped_obj->format);
 }
 
 void video::AVFrameWrapper::SetPixelFormat(AVPixelFormat value)

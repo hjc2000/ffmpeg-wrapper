@@ -4,8 +4,6 @@
 
 using namespace video;
 
-#pragma region 私有生命周期
-
 void AVPacketWrapper::Ref(AVPacketWrapper const &o)
 {
     Unref();
@@ -21,14 +19,12 @@ void AVPacketWrapper::Unref()
     av_packet_unref(_wrapped_obj);
 }
 
-#pragma endregion
-
 AVPacketWrapper::AVPacketWrapper()
 {
     _wrapped_obj = av_packet_alloc();
     if (_wrapped_obj == nullptr)
     {
-        throw std::runtime_error{CODE_POS_STR + std::string{"构造 AVPacket 失败"}};
+        throw std::runtime_error{CODE_POS_STR + std::string{"av_packet_alloc 失败"}};
     }
 }
 
