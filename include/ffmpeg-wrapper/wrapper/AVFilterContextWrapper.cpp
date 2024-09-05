@@ -13,14 +13,14 @@ AVFilterContextWrapper::AVFilterContextWrapper(AVFilterContext *filter_ctx)
     _wrapped_obj = filter_ctx;
 }
 
-AVFilterContextWrapper::AVFilterContextWrapper(AVFilterContextWrapper const &other)
+AVFilterContextWrapper::AVFilterContextWrapper(AVFilterContextWrapper const &o)
 {
-    _wrapped_obj = other._wrapped_obj;
+    _wrapped_obj = o._wrapped_obj;
 }
 
-AVFilterContextWrapper &AVFilterContextWrapper::operator=(AVFilterContextWrapper const &other)
+AVFilterContextWrapper &AVFilterContextWrapper::operator=(AVFilterContextWrapper const &o)
 {
-    _wrapped_obj = other._wrapped_obj;
+    _wrapped_obj = o._wrapped_obj;
     return *this;
 }
 

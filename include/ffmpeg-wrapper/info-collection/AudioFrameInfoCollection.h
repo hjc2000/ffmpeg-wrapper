@@ -10,15 +10,6 @@ namespace video
     public:
         AudioFrameInfoCollection() = default;
 
-        /// @brief 构造音频帧信息集合。
-        /// @param infos 音频流信息集合。
-        /// @param nb_samples 音频帧比音频流多了一个信息就是采样点个数。
-        AudioFrameInfoCollection(IAudioStreamInfoCollection const &infos, int nb_samples)
-        {
-            IAudioStreamInfoCollection::operator=(infos);
-            _nb_samples = nb_samples;
-        }
-
         /// @brief 拷贝构造函数
         /// @param infos
         AudioFrameInfoCollection(AudioFrameInfoCollection const &infos)
@@ -31,6 +22,15 @@ namespace video
         AudioFrameInfoCollection(IAudioFrameInfoCollection const &infos)
         {
             IAudioFrameInfoCollection::operator=(infos);
+        }
+
+        /// @brief 构造音频帧信息集合。
+        /// @param infos 音频流信息集合。
+        /// @param nb_samples 音频帧比音频流多了一个信息就是采样点个数。
+        AudioFrameInfoCollection(IAudioStreamInfoCollection const &infos, int nb_samples)
+        {
+            IAudioStreamInfoCollection::operator=(infos);
+            _nb_samples = nb_samples;
         }
 
         /// @brief 赋值运算符。
