@@ -14,7 +14,7 @@ video::InputFormat::InputFormat(std::string url)
 {
     _url = url;
     _wrapped_obj = avformat_alloc_context();
-    int ret = ::avformat_open_input(&_wrapped_obj, url.c_str(), nullptr, nullptr);
+    int ret = avformat_open_input(&_wrapped_obj, url.c_str(), nullptr, nullptr);
     if (ret < 0)
     {
         throw std::runtime_error{CODE_POS_STR + std::string{"打开输入格式失败"}};
@@ -60,8 +60,8 @@ video::InputFormat::InputFormat(std::shared_ptr<base::Stream> input_stream)
 
 InputFormat::~InputFormat()
 {
-    ::avformat_close_input(&_wrapped_obj);
-    ::avformat_free_context(_wrapped_obj);
+    avformat_close_input(&_wrapped_obj);
+    avformat_free_context(_wrapped_obj);
     _wrapped_obj = nullptr;
 }
 
@@ -87,12 +87,12 @@ void InputFormat::FindStreamInfo(::AVDictionary **options)
 
 AVStreamWrapper InputFormat::FindBestStream(AVMediaType type)
 {
-    int ret = ::av_find_best_stream(_wrapped_obj,
-                                    type,
-                                    -1,
-                                    -1,
-                                    nullptr,
-                                    0);
+    int ret = av_find_best_stream(_wrapped_obj,
+                                  type,
+                                  -1,
+                                  -1,
+                                  nullptr,
+                                  0);
 
     if (ret < 0)
     {
@@ -105,7 +105,7 @@ AVStreamWrapper InputFormat::FindBestStream(AVMediaType type)
 
 int InputFormat::ReadData(AVPacketWrapper &data)
 {
-    int ret = ::av_read_frame(_wrapped_obj, data);
+    int ret = av_read_frame(_wrapped_obj, data);
     if (ret == 0)
     {
         // 读取成功
