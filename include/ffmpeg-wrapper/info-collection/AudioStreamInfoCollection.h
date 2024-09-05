@@ -4,71 +4,66 @@
 
 namespace video
 {
-	/// @brief 音频流信息集合。
-	class AudioStreamInfoCollection
-		: public IAudioStreamInfoCollection
-	{
-	public:
-		AudioStreamInfoCollection() = default;
+    /// @brief 音频流信息集合。
+    class AudioStreamInfoCollection :
+        public IAudioStreamInfoCollection
+    {
+    public:
+        AudioStreamInfoCollection() = default;
+        AudioStreamInfoCollection(AudioStreamInfoCollection const &o);
+        AudioStreamInfoCollection(std::shared_ptr<IAudioStreamInfoCollection> o);
+        AudioStreamInfoCollection(IAudioStreamInfoCollection const &o);
 
-		AudioStreamInfoCollection(std::shared_ptr<IAudioStreamInfoCollection> value)
-		{
-			*this = *value;
-		}
+        AudioStreamInfoCollection &operator=(AudioStreamInfoCollection const &o);
 
-		AudioStreamInfoCollection(IAudioStreamInfoCollection const &value)
-		{
-			*this = value;
-		}
-
-		AudioStreamInfoCollection &operator=(IAudioStreamInfoCollection const &value)
-		{
-			IAudioStreamInfoCollection::operator=(value);
-			return *this;
-		}
-
-		AVRational _time_base{};
-		AVSampleFormat _sample_format{};
-		int _sample_rate = 0;
-		AVChannelLayout _ch_layout{};
+        AVRational _time_base{};
+        AVSampleFormat _sample_format{};
+        int _sample_rate = 0;
+        AVChannelLayout _ch_layout{};
 
 #pragma region IAudioStreamInfoCollection
-		AVRational TimeBase() const override
-		{
-			return _time_base;
-		}
-		void SetTimeBase(AVRational value) override
-		{
-			_time_base = value;
-		}
 
-		AVSampleFormat SampleFormat() const override
-		{
-			return _sample_format;
-		}
-		void SetSampleFormat(AVSampleFormat value) override
-		{
-			_sample_format = value;
-		}
+        AVRational TimeBase() const override
+        {
+            return _time_base;
+        }
 
-		int SampleRate() const override
-		{
-			return _sample_rate;
-		}
-		void SetSampleRate(int value) override
-		{
-			_sample_rate = value;
-		}
+        void SetTimeBase(AVRational value) override
+        {
+            _time_base = value;
+        }
 
-		AVChannelLayout ChannelLayout() const override
-		{
-			return _ch_layout;
-		}
-		void SetChannelLayout(AVChannelLayout value) override
-		{
-			_ch_layout = value;
-		}
+        AVSampleFormat SampleFormat() const override
+        {
+            return _sample_format;
+        }
+
+        void SetSampleFormat(AVSampleFormat value) override
+        {
+            _sample_format = value;
+        }
+
+        int SampleRate() const override
+        {
+            return _sample_rate;
+        }
+
+        void SetSampleRate(int value) override
+        {
+            _sample_rate = value;
+        }
+
+        AVChannelLayout ChannelLayout() const override
+        {
+            return _ch_layout;
+        }
+
+        void SetChannelLayout(AVChannelLayout value) override
+        {
+            _ch_layout = value;
+        }
+
 #pragma endregion
-	};
+    };
 
-}
+} // namespace video
