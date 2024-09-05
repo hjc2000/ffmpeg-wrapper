@@ -5,26 +5,28 @@
 
 namespace video
 {
-	class IOContextOutputFormat : public OutputFormat
-	{
-	private:
-		std::shared_ptr<AVIOContextWrapper> _io_context;
-		AVFormatContext *_wrapped_obj = nullptr;
+    class IOContextOutputFormat :
+        public OutputFormat
+    {
+    private:
+        std::shared_ptr<AVIOContextWrapper> _io_context;
+        AVFormatContext *_wrapped_obj = nullptr;
 
-	public:
-		/// @brief
-		/// @param url 这里的 url 不是用来创建文件的，而是让 ffmpeg 根据后缀名分析封装格式的
-		/// @param io_context
-		IOContextOutputFormat(std::string url, std::shared_ptr<AVIOContextWrapper> io_context);
-		~IOContextOutputFormat();
+    public:
+        /// @brief
+        /// @param url 这里的 url 不是用来创建文件的，而是让 ffmpeg 根据后缀名分析封装格式的
+        /// @param io_context
+        IOContextOutputFormat(std::string url, std::shared_ptr<AVIOContextWrapper> io_context);
+        ~IOContextOutputFormat();
 
-		AVFormatContext *&WrappedObj() override
-		{
-			return _wrapped_obj;
-		}
-		AVFormatContext *WrappedObj() const override
-		{
-			return _wrapped_obj;
-		}
-	};
-}
+        AVFormatContext *&WrappedObj() override
+        {
+            return _wrapped_obj;
+        }
+
+        AVFormatContext *WrappedObj() const override
+        {
+            return _wrapped_obj;
+        }
+    };
+} // namespace video
