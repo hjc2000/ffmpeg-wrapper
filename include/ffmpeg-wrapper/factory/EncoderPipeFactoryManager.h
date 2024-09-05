@@ -4,16 +4,16 @@
 
 namespace video
 {
-	class EncoderPipeFactoryManager
-		: public base::FactoryManager<video::IEncoderPipeFactory>
-	{
-	public:
-		static EncoderPipeFactoryManager &Instance()
-		{
-			static EncoderPipeFactoryManager o;
-			return o;
-		}
+    class EncoderPipeFactoryManager :
+        public base::FactoryManager<video::IEncoderPipeFactory>
+    {
+    public:
+        static EncoderPipeFactoryManager &Instance()
+        {
+            static EncoderPipeFactoryManager o;
+            return o;
+        }
 
-		std::shared_ptr<video::IEncoderPipeFactory> DefaultFactory() override;
-	};
+        std::shared_ptr<video::IEncoderPipeFactory> DefaultFactory() override;
+    };
 } // namespace video

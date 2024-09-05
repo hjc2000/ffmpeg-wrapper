@@ -7,11 +7,13 @@ using namespace video;
 
 void video::ThreadDecoderPipe::InitDecodeThread()
 {
-    auto thread_func = [this]()
-    {
-        DecodeThreadFunc();
-    };
-    std::thread(thread_func).detach();
+    std::thread{
+        [this]()
+        {
+            DecodeThreadFunc();
+        }}
+        .detach();
+
     _decode_thread_exit.Reset();
 }
 

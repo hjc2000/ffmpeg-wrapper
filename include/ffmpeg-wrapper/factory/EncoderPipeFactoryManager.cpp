@@ -7,54 +7,52 @@ using namespace video;
 /// @note 这里创建出来的编码管道的编码器是 ffmpeg 的编码器的包装。
 /// @note 如果移植到特殊平台，需要硬件编码加速，可以自己实现一个编码器工厂，
 /// 继承 video::IEncoderPipeFactory 接口，在这里提供硬件加速的编码器。
-class EncoderPipeFactory
-	: public video::IEncoderPipeFactory
+class EncoderPipeFactory :
+    public video::IEncoderPipeFactory
 {
 public:
-	/// @brief 构造视频编码管道
-	/// @param codec_name
-	/// @param in_stream_infos
-	/// @param output_format
-	/// @param out_bit_rate_in_bps
-	/// @return
-	std::shared_ptr<base::IConsumer<AVFrameWrapper>> CreateEncoderPipe(
-		std::string codec_name,
-		IVideoStreamInfoCollection const &in_stream_infos,
-		std::shared_ptr<OutputFormat> output_format,
-		int64_t out_bit_rate_in_bps = -1)
-	{
-		return std::shared_ptr<base::IConsumer<AVFrameWrapper>>{
-			new EncoderPipe{
-				codec_name,
-				in_stream_infos,
-				output_format,
-				out_bit_rate_in_bps,
-			},
-		};
-	}
+    /// @brief 构造视频编码管道
+    /// @param codec_name
+    /// @param in_stream_infos
+    /// @param output_format
+    /// @param out_bit_rate_in_bps
+    /// @return
+    std::shared_ptr<base::IConsumer<AVFrameWrapper>> CreateEncoderPipe(std::string codec_name,
+                                                                       IVideoStreamInfoCollection const &in_stream_infos,
+                                                                       std::shared_ptr<OutputFormat> output_format,
+                                                                       int64_t out_bit_rate_in_bps = -1)
+    {
+        return std::shared_ptr<base::IConsumer<AVFrameWrapper>>{
+            new EncoderPipe{
+                codec_name,
+                in_stream_infos,
+                output_format,
+                out_bit_rate_in_bps,
+            },
+        };
+    }
 
-	/// @brief 构造音频编码管道
-	/// @param codec_name
-	/// @param in_stream_infos
-	/// @param output_format
-	/// @return
-	std::shared_ptr<base::IConsumer<AVFrameWrapper>> CreateEncoderPipe(
-		std::string codec_name,
-		IAudioStreamInfoCollection const &in_stream_infos,
-		std::shared_ptr<OutputFormat> output_format)
-	{
-		return std::shared_ptr<base::IConsumer<AVFrameWrapper>>{
-			new EncoderPipe{
-				codec_name,
-				in_stream_infos,
-				output_format,
-			},
-		};
-	}
+    /// @brief 构造音频编码管道
+    /// @param codec_name
+    /// @param in_stream_infos
+    /// @param output_format
+    /// @return
+    std::shared_ptr<base::IConsumer<AVFrameWrapper>> CreateEncoderPipe(std::string codec_name,
+                                                                       IAudioStreamInfoCollection const &in_stream_infos,
+                                                                       std::shared_ptr<OutputFormat> output_format)
+    {
+        return std::shared_ptr<base::IConsumer<AVFrameWrapper>>{
+            new EncoderPipe{
+                codec_name,
+                in_stream_infos,
+                output_format,
+            },
+        };
+    }
 };
 
 std::shared_ptr<video::IEncoderPipeFactory> video::EncoderPipeFactoryManager::DefaultFactory()
 {
-	static std::shared_ptr<EncoderPipeFactory> o{new EncoderPipeFactory{}};
-	return o;
+    static std::shared_ptr<EncoderPipeFactory> o{new EncoderPipeFactory{}};
+    return o;
 }
