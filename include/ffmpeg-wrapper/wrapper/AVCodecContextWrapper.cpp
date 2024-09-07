@@ -1,4 +1,5 @@
 #include "ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h"
+#include "AVCodecContextWrapper.h"
 #include <ffmpeg-wrapper/AVCalculate.h>
 #include <ffmpeg-wrapper/AVCodecExtension.h>
 #include <ffmpeg-wrapper/base_include.h>
@@ -12,8 +13,6 @@
 #include <memory>
 
 using namespace video;
-
-#pragma region 构造,析构
 
 AVCodecContextWrapper::AVCodecContextWrapper(AVCodec const *codec)
 {
@@ -35,8 +34,6 @@ AVCodecContextWrapper::~AVCodecContextWrapper()
 {
     avcodec_free_context(&_wrapped_obj);
 }
-
-#pragma endregion
 
 #pragma region 工厂函数
 
@@ -135,6 +132,15 @@ std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
 
 #pragma endregion
 
+void AVCodecContextWrapper::Open(AVDictionary **dic)
+{
+    int ret = ::avcodec_open2(_wrapped_obj, _codec, dic);
+    if (ret)
+    {
+        throw std::runtime_error{CODE_POS_STR + std::string{"打开编解码器失败"}};
+    }
+}
+
 void AVCodecContextWrapper::SetCodecParams(AVCodecParameters *param)
 {
     int ret = ::avcodec_parameters_to_context(_wrapped_obj, param);
@@ -144,13 +150,9 @@ void AVCodecContextWrapper::SetCodecParams(AVCodecParameters *param)
     }
 }
 
-void AVCodecContextWrapper::Open(AVDictionary **dic)
+void video::AVCodecContextWrapper::SetGlobalHeader()
 {
-    int ret = ::avcodec_open2(_wrapped_obj, _codec, dic);
-    if (ret)
-    {
-        throw std::runtime_error{CODE_POS_STR + std::string{"打开编解码器失败"}};
-    }
+    _wrapped_obj->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
 }
 
 #pragma region 编码

@@ -100,10 +100,7 @@ namespace video
         /// @brief 设置全局头部
         /// @note 某些封装格式要求编码器在编码的时候设置全局头部。要知道封装格式是不是需要设置全局头部，
         /// 可以查看 AVFormatContextWrapper 的 NeedGlobalHeader 属性。
-        void SetGlobalHeader()
-        {
-            _wrapped_obj->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
-        }
+        void SetGlobalHeader();
 
 #pragma region 编码
         void SendFrame(AVFrameWrapper *frame);
