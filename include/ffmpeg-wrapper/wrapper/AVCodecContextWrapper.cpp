@@ -12,32 +12,30 @@
 #include <iostream>
 #include <memory>
 
-using namespace video;
-
-AVCodecContextWrapper::AVCodecContextWrapper(AVCodec const *codec)
+video::AVCodecContextWrapper::AVCodecContextWrapper(AVCodec const *codec)
 {
     _codec = codec;
-    _wrapped_obj = ::avcodec_alloc_context3(codec);
+    _wrapped_obj = avcodec_alloc_context3(codec);
     if (!_wrapped_obj)
     {
         throw std::runtime_error("AVCodecContextWrapper create(AVCodecWrapper codec) 失败");
     }
 }
 
-AVCodecContextWrapper::AVCodecContextWrapper(AVCodec const *codec, AVCodecParameters *param)
+video::AVCodecContextWrapper::AVCodecContextWrapper(AVCodec const *codec, AVCodecParameters *param)
     : AVCodecContextWrapper(codec)
 {
     SetCodecParams(param);
 }
 
-AVCodecContextWrapper::~AVCodecContextWrapper()
+video::AVCodecContextWrapper::~AVCodecContextWrapper()
 {
     avcodec_free_context(&_wrapped_obj);
 }
 
 #pragma region 工厂函数
 
-std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateDecoder(AVStreamInfoCollection stream)
+std::shared_ptr<video::AVCodecContextWrapper> video::AVCodecContextWrapper::CreateDecoder(AVStreamInfoCollection stream)
 {
     std::shared_ptr<AVCodecContextWrapper> ctx{
         new AVCodecContextWrapper{
@@ -53,7 +51,7 @@ std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateDecoder(AVSt
     return ctx;
 }
 
-std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
+std::shared_ptr<video::AVCodecContextWrapper> video::AVCodecContextWrapper::CreateEncoder(
     char const *encoder_name,
     IAudioStreamInfoCollection const &infos,
     bool set_global_header,
@@ -91,7 +89,7 @@ std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
     return ctx;
 }
 
-std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
+std::shared_ptr<video::AVCodecContextWrapper> video::AVCodecContextWrapper::CreateEncoder(
     char const *encoder_name,
     IVideoStreamInfoCollection const &infos,
     bool set_global_header,
@@ -132,7 +130,7 @@ std::shared_ptr<AVCodecContextWrapper> AVCodecContextWrapper::CreateEncoder(
 
 #pragma endregion
 
-void AVCodecContextWrapper::Open(AVDictionary **dic)
+void video::AVCodecContextWrapper::Open(AVDictionary **dic)
 {
     int ret = ::avcodec_open2(_wrapped_obj, _codec, dic);
     if (ret)
@@ -141,7 +139,7 @@ void AVCodecContextWrapper::Open(AVDictionary **dic)
     }
 }
 
-void AVCodecContextWrapper::SetCodecParams(AVCodecParameters *param)
+void video::AVCodecContextWrapper::SetCodecParams(AVCodecParameters *param)
 {
     int ret = ::avcodec_parameters_to_context(_wrapped_obj, param);
     if (ret < 0)
@@ -157,7 +155,7 @@ void video::AVCodecContextWrapper::SetGlobalHeader()
 
 #pragma region 编码
 
-void AVCodecContextWrapper::SendFrame(AVFrameWrapper *frame)
+void video::AVCodecContextWrapper::SendFrame(AVFrameWrapper *frame)
 {
     int ret;
     if (frame)
@@ -187,7 +185,7 @@ void AVCodecContextWrapper::SendFrame(AVFrameWrapper *frame)
     }
 }
 
-int AVCodecContextWrapper::ReadPacket(AVPacketWrapper &packet)
+int video::AVCodecContextWrapper::ReadPacket(AVPacketWrapper &packet)
 {
     int ret = ::avcodec_receive_packet(_wrapped_obj, packet);
     if (!ret)
@@ -202,7 +200,7 @@ int AVCodecContextWrapper::ReadPacket(AVPacketWrapper &packet)
 
 #pragma region 解码
 
-void AVCodecContextWrapper::SendPacket(AVPacketWrapper *packet)
+void video::AVCodecContextWrapper::SendPacket(AVPacketWrapper *packet)
 {
     int ret;
     if (packet)
@@ -225,7 +223,7 @@ void AVCodecContextWrapper::SendPacket(AVPacketWrapper *packet)
     }
 }
 
-int AVCodecContextWrapper::ReadFrame(AVFrameWrapper &frame)
+int video::AVCodecContextWrapper::ReadFrame(AVFrameWrapper &frame)
 {
     // avcodec_receive_frame 内部在执行工作之前会先调用 av_frame_unref
     int ret = avcodec_receive_frame(_wrapped_obj, frame);
@@ -242,82 +240,82 @@ int AVCodecContextWrapper::ReadFrame(AVFrameWrapper &frame)
 
 #pragma region IAudioStreamInfoCollection, IVideoStreamInfoCollection
 
-AVChannelLayout AVCodecContextWrapper::ChannelLayout() const
+AVChannelLayout video::AVCodecContextWrapper::ChannelLayout() const
 {
     return _wrapped_obj->ch_layout;
 }
 
-void AVCodecContextWrapper::SetChannelLayout(AVChannelLayout value)
+void video::AVCodecContextWrapper::SetChannelLayout(AVChannelLayout value)
 {
     _wrapped_obj->ch_layout = value;
 }
 
-AVSampleFormat AVCodecContextWrapper::SampleFormat() const
+AVSampleFormat video::AVCodecContextWrapper::SampleFormat() const
 {
     return _wrapped_obj->sample_fmt;
 }
 
-void AVCodecContextWrapper::SetSampleFormat(AVSampleFormat value)
+void video::AVCodecContextWrapper::SetSampleFormat(AVSampleFormat value)
 {
     _wrapped_obj->sample_fmt = value;
 }
 
-int AVCodecContextWrapper::SampleRate() const
+int video::AVCodecContextWrapper::SampleRate() const
 {
     return _wrapped_obj->sample_rate;
 }
 
-void AVCodecContextWrapper::SetSampleRate(int value)
+void video::AVCodecContextWrapper::SetSampleRate(int value)
 {
     _wrapped_obj->sample_rate = value;
 }
 
-int AVCodecContextWrapper::Width() const
+int video::AVCodecContextWrapper::Width() const
 {
     return _wrapped_obj->width;
 }
 
-void AVCodecContextWrapper::SetWidth(int value)
+void video::AVCodecContextWrapper::SetWidth(int value)
 {
     _wrapped_obj->width = value;
 }
 
-int AVCodecContextWrapper::Height() const
+int video::AVCodecContextWrapper::Height() const
 {
     return _wrapped_obj->height;
 }
 
-void AVCodecContextWrapper::SetHeight(int value)
+void video::AVCodecContextWrapper::SetHeight(int value)
 {
     _wrapped_obj->height = value;
 }
 
-AVPixelFormat AVCodecContextWrapper::PixelFormat() const
+AVPixelFormat video::AVCodecContextWrapper::PixelFormat() const
 {
     return _wrapped_obj->pix_fmt;
 }
 
-void AVCodecContextWrapper::SetPixelFormat(AVPixelFormat value)
+void video::AVCodecContextWrapper::SetPixelFormat(AVPixelFormat value)
 {
     _wrapped_obj->pix_fmt = value;
 }
 
-AVRational AVCodecContextWrapper::TimeBase() const
+AVRational video::AVCodecContextWrapper::TimeBase() const
 {
     return _wrapped_obj->time_base;
 }
 
-void AVCodecContextWrapper::SetTimeBase(AVRational value)
+void video::AVCodecContextWrapper::SetTimeBase(AVRational value)
 {
     _wrapped_obj->time_base = value;
 }
 
-AVRational AVCodecContextWrapper::FrameRate() const
+AVRational video::AVCodecContextWrapper::FrameRate() const
 {
     return _wrapped_obj->framerate;
 }
 
-void AVCodecContextWrapper::SetFrameRate(AVRational value)
+void video::AVCodecContextWrapper::SetFrameRate(AVRational value)
 {
     _wrapped_obj->framerate = value;
 }
