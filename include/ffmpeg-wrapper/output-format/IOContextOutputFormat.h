@@ -10,7 +10,6 @@ namespace video
     {
     private:
         std::shared_ptr<AVIOContextWrapper> _io_context;
-        AVFormatContext *_wrapped_obj = nullptr;
 
     public:
         /// @brief
@@ -18,15 +17,5 @@ namespace video
         /// @param io_context
         IOContextOutputFormat(std::string url, std::shared_ptr<AVIOContextWrapper> io_context);
         ~IOContextOutputFormat();
-
-        AVFormatContext *&WrappedObj() override
-        {
-            return _wrapped_obj;
-        }
-
-        AVFormatContext *WrappedObj() const override
-        {
-            return _wrapped_obj;
-        }
     };
 } // namespace video

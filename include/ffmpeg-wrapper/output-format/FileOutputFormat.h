@@ -10,21 +10,8 @@ namespace video
     class FileOutputFormat :
         public OutputFormat
     {
-    private:
-        AVFormatContext *_wrapped_obj;
-
     public:
         FileOutputFormat(std::string url);
         ~FileOutputFormat();
-
-        AVFormatContext *&WrappedObj() override
-        {
-            return _wrapped_obj;
-        }
-
-        AVFormatContext *WrappedObj() const override
-        {
-            return _wrapped_obj;
-        }
     };
 } // namespace video

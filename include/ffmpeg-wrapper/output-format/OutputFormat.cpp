@@ -10,7 +10,7 @@ using namespace video;
 
 void video::OutputFormat::WriteTrailer()
 {
-    int ret = av_write_trailer(WrappedObj());
+    int ret = av_write_trailer(_wrapped_obj);
     if (ret < 0)
     {
         throw std::runtime_error{base::ToString((ErrorCode)ret)};
@@ -24,7 +24,7 @@ void video::OutputFormat::DumpFormat(char const *url)
     std::cout << "------------------------------------------------------------" << std::endl;
     std::cout << "▼ 格式信息" << std::endl;
     std::cout << "------------------------------------------------------------" << std::endl;
-    av_dump_format(WrappedObj(), 0, url, true);
+    av_dump_format(_wrapped_obj, 0, url, true);
     std::cout << "------------------------------------------------------------" << std::endl;
     std::cout << std::endl;
 }
@@ -32,13 +32,13 @@ void video::OutputFormat::DumpFormat(char const *url)
 bool video::OutputFormat::NeedGlobalHeader()
 {
     std::lock_guard l(_not_private_methods_lock);
-    return WrappedObj()->oformat->flags & AVFMT_GLOBALHEADER;
+    return _wrapped_obj->oformat->flags & AVFMT_GLOBALHEADER;
 }
 
 AVStreamWrapper video::OutputFormat::CreateNewStream()
 {
     std::lock_guard l(_not_private_methods_lock);
-    ::AVStream *ps = avformat_new_stream(WrappedObj(), nullptr);
+    ::AVStream *ps = avformat_new_stream(_wrapped_obj, nullptr);
     if (ps == nullptr)
     {
         throw std::runtime_error{"创建流失败"};
@@ -50,7 +50,7 @@ AVStreamWrapper video::OutputFormat::CreateNewStream()
 AVStreamWrapper video::OutputFormat::CreateNewStream(std::shared_ptr<AVCodecContextWrapper> codec_ctx)
 {
     std::lock_guard l{_not_private_methods_lock};
-    AVStream *ps = avformat_new_stream(WrappedObj(), nullptr);
+    AVStream *ps = avformat_new_stream(_wrapped_obj, nullptr);
     if (ps == nullptr)
     {
         throw std::runtime_error{"创建流失败"};
@@ -71,7 +71,7 @@ AVStreamWrapper video::OutputFormat::CreateNewStream(std::shared_ptr<AVCodecCont
 void video::OutputFormat::SendData(AVPacketWrapper &packet)
 {
     std::lock_guard l(_not_private_methods_lock);
-    int ret = av_interleaved_write_frame(WrappedObj(), packet);
+    int ret = av_interleaved_write_frame(_wrapped_obj, packet);
     if (ret < 0)
     {
         std::cout << CODE_POS_STR
@@ -86,7 +86,7 @@ void video::OutputFormat::Flush()
     std::lock_guard l(_not_private_methods_lock);
 
     _flush_times++;
-    if (_flush_times == WrappedObj()->nb_streams)
+    if (_flush_times == _wrapped_obj->nb_streams)
     {
         std::cout << CODE_POS_STR << "所有流都被冲洗了。" << std::endl;
         WriteTrailer();
@@ -102,7 +102,7 @@ void video::OutputFormat::Flush()
 void video::OutputFormat::WriteHeader(AVDictionary **dic)
 {
     std::lock_guard l(_not_private_methods_lock);
-    int ret = ::avformat_write_header(WrappedObj(), dic);
+    int ret = ::avformat_write_header(_wrapped_obj, dic);
     if (ret < 0)
     {
         throw std::runtime_error{base::ToString((ErrorCode)ret)};

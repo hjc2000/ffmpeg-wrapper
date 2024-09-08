@@ -28,8 +28,21 @@ namespace video
     protected:
         std::recursive_mutex _not_private_methods_lock;
 
+        /// @brief 子类在自己的构造函数中初始化本字段
+        AVFormatContext *_wrapped_obj = nullptr;
+
     public:
         virtual ~OutputFormat() = default;
+
+        AVFormatContext *&WrappedObj() override
+        {
+            return _wrapped_obj;
+        }
+
+        AVFormatContext *WrappedObj() const override
+        {
+            return _wrapped_obj;
+        }
 
         /// @brief 所有流都被冲洗后会触发此事件。此事件会被在后台线程中执行，避免死锁。
         /// @return
