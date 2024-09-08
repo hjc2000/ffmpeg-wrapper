@@ -2,9 +2,15 @@
 
 using namespace video;
 
-std::shared_ptr<AVIOContextWrapper> CreateIOContext(std::shared_ptr<base::Stream> output_stream)
+static std::shared_ptr<AVIOContextWrapper> CreateIOContext(std::shared_ptr<base::Stream> output_stream)
 {
-    std::shared_ptr<AVIOContextWrapper> output_context{new AVIOContextWrapper{true, output_stream}};
+    std::shared_ptr<AVIOContextWrapper> output_context{
+        new AVIOContextWrapper{
+            true,
+            output_stream,
+        },
+    };
+
     return output_context;
 }
 
