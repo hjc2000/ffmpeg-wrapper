@@ -182,7 +182,7 @@ void video::AVCodecContextWrapper::SendFrame(AVFrameWrapper *frame)
     {
         std::string msg = std::format("送入帧失败，错误代码：{} —— {}",
                                       ret,
-                                      ToString((ErrorCode)ret));
+                                      base::ToString((ErrorCode)ret));
 
         throw std::runtime_error{CODE_POS_STR + msg};
     }
@@ -212,16 +212,16 @@ void video::AVCodecContextWrapper::SendPacket(AVPacketWrapper *packet)
          * 包的时间基都当作这个时间基。从封装中读出来的包不含有时间基信息（时间基字段为：0 / 1 ，是个无效值），
          * 只含有 pst 和 dts。
          */
-        ret = ::avcodec_send_packet(_wrapped_obj, *packet);
+        ret = avcodec_send_packet(_wrapped_obj, *packet);
     }
     else
     {
-        ret = ::avcodec_send_packet(_wrapped_obj, nullptr);
+        ret = avcodec_send_packet(_wrapped_obj, nullptr);
     }
 
     if (ret < 0)
     {
-        std::cout << CODE_POS_STR << "错误代码：" << ret << " -- " << ToString((ErrorCode)ret);
+        std::cout << CODE_POS_STR << "错误代码：" << ret << " -- " << base::ToString((ErrorCode)ret);
         // throw SendPacketException{};
     }
 }

@@ -13,7 +13,7 @@ void video::OutputFormat::WriteTrailer()
     int ret = av_write_trailer(WrappedObj());
     if (ret < 0)
     {
-        throw std::runtime_error{ToString((ErrorCode)ret)};
+        throw std::runtime_error{base::ToString((ErrorCode)ret)};
     }
 }
 
@@ -77,7 +77,7 @@ void video::OutputFormat::SendData(AVPacketWrapper &packet)
         std::cout << CODE_POS_STR
                   << "错误代码："
                   << ret << " -- "
-                  << ToString((ErrorCode)ret);
+                  << base::ToString((ErrorCode)ret);
     }
 }
 
@@ -105,6 +105,6 @@ void video::OutputFormat::WriteHeader(AVDictionary **dic)
     int ret = ::avformat_write_header(WrappedObj(), dic);
     if (ret < 0)
     {
-        throw std::runtime_error{ToString((ErrorCode)ret)};
+        throw std::runtime_error{base::ToString((ErrorCode)ret)};
     }
 }

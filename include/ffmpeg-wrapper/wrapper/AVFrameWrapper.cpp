@@ -30,7 +30,7 @@ void AVFrameWrapper::Ref(AVFrameWrapper const &o)
     if (ret < 0)
     {
         std::cerr << CODE_POS_STR
-                  << video::ToString(static_cast<ErrorCode>(ret))
+                  << base::ToString(static_cast<ErrorCode>(ret))
                   << std::endl;
     }
 }
@@ -219,7 +219,7 @@ void video::AVFrameWrapper::CopyAudioFrameToStream(base::Stream &stream)
     int buf_size = audio_data_size();
     if (buf_size < 0)
     {
-        throw std::runtime_error{video::ToString((ErrorCode)buf_size)};
+        throw std::runtime_error{base::ToString((ErrorCode)buf_size)};
     }
 
     stream.Write(_wrapped_obj->extended_data[0], 0, buf_size);

@@ -15,7 +15,7 @@ IOContextOutputFormat::IOContextOutputFormat(std::string url,
 
     if (ret < 0)
     {
-        throw std::runtime_error{ToString((ErrorCode)ret)};
+        throw std::runtime_error{base::ToString((ErrorCode)ret)};
     }
 
     _wrapped_obj->flags |= AVFMT_FLAG_CUSTOM_IO;

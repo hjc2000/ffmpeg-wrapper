@@ -40,7 +40,7 @@ void video::SwrPipe::ReadAndSendFrame()
             }
         default:
             {
-                throw std::runtime_error{ToString((ErrorCode)ret)};
+                throw std::runtime_error{base::ToString((ErrorCode)ret)};
             }
         }
     }
@@ -70,7 +70,7 @@ void video::SwrPipe::ReadAndSendFrameWithoutFlushingConsumer()
             }
         default:
             {
-                throw std::runtime_error{ToString((ErrorCode)ret)};
+                throw std::runtime_error{base::ToString((ErrorCode)ret)};
             }
         }
     }

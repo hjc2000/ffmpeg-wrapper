@@ -57,7 +57,7 @@ void video::SwrContextWrapper::SendData(AVFrameWrapper &input_frame)
 
     if (ret < 0)
     {
-        throw std::runtime_error{ToString((ErrorCode)ret)};
+        throw std::runtime_error{base::ToString((ErrorCode)ret)};
     }
 }
 
@@ -76,7 +76,7 @@ void video::SwrContextWrapper::Flush()
     int ret = convert(nullptr, 0, nullptr, 0);
     if (ret < 0)
     {
-        throw std::runtime_error{ToString((ErrorCode)ret)};
+        throw std::runtime_error{base::ToString((ErrorCode)ret)};
     }
 }
 

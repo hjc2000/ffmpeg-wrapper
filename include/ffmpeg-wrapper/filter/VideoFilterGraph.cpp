@@ -57,7 +57,7 @@ void VideoFilterGraph::init_buffer_filter()
     int ret = avfilter_init_str(buffersrc_ctx, nullptr);
     if (ret < 0)
     {
-        throw std::runtime_error{ToString((ErrorCode)ret)};
+        throw std::runtime_error{base::ToString((ErrorCode)ret)};
     }
 
     _buffer_filter = AVFilterContextWrapper{buffersrc_ctx};
@@ -118,7 +118,7 @@ void VideoFilterGraph::config_graph()
     int ret = avfilter_graph_config(_wrapped_obj, nullptr);
     if (ret < 0)
     {
-        throw std::runtime_error{ToString((ErrorCode)ret)};
+        throw std::runtime_error{base::ToString((ErrorCode)ret)};
     }
 }
 
@@ -136,7 +136,7 @@ void VideoFilterGraph::SendData(AVFrameWrapper &frame)
 
     if (ret < 0)
     {
-        throw std::runtime_error{ToString((ErrorCode)ret)};
+        throw std::runtime_error{base::ToString((ErrorCode)ret)};
     }
 }
 
@@ -149,6 +149,6 @@ void video::VideoFilterGraph::Flush()
 
     if (ret < 0)
     {
-        throw std::runtime_error{ToString((ErrorCode)ret)};
+        throw std::runtime_error{base::ToString((ErrorCode)ret)};
     }
 }

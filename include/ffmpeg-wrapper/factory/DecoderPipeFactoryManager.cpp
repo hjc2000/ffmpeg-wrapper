@@ -50,7 +50,7 @@ private:
                 }
             default:
                 {
-                    throw std::runtime_error{ToString((ErrorCode)ret)};
+                    throw std::runtime_error{base::ToString((ErrorCode)ret)};
                 }
             }
         }
@@ -144,7 +144,7 @@ public:
                 }
             default:
                 {
-                    throw std::runtime_error{ToString((ErrorCode)ret)};
+                    throw std::runtime_error{base::ToString((ErrorCode)ret)};
                 }
             }
         }

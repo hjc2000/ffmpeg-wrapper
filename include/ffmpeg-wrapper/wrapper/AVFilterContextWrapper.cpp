@@ -29,7 +29,7 @@ void AVFilterContextWrapper::link(AVFilterContextWrapper &next_filter)
     int ret = avfilter_link(_wrapped_obj, 0, next_filter, 0);
     if (ret)
     {
-        throw std::runtime_error{ToString((ErrorCode)ret)};
+        throw std::runtime_error{base::ToString((ErrorCode)ret)};
     }
 }
 
