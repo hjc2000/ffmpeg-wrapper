@@ -58,13 +58,8 @@ AVStreamWrapper video::OutputFormat::CreateNewStream(std::shared_ptr<AVCodecCont
 
     AVStreamWrapper stream{ps};
 
-    /* SetCodecParam 函数设置参数的时候，会将码器的时间基，帧率的信息复制到流中。*/
-    int ret = stream.SetCodecParams(*codec_ctx);
-    if (ret < 0)
-    {
-        throw std::runtime_error{"设置流参数失败"};
-    }
-
+    /* SetCodecParam 函数设置参数的时候，会将编解码器的时间基，帧率的信息复制到流中。*/
+    stream.SetCodecParams(*codec_ctx);
     return stream;
 }
 
@@ -84,18 +79,19 @@ void video::OutputFormat::SendData(AVPacketWrapper &packet)
 void video::OutputFormat::Flush()
 {
     std::lock_guard l(_not_private_methods_lock);
-
     _flush_times++;
     if (_flush_times == _wrapped_obj->nb_streams)
     {
         std::cout << CODE_POS_STR << "所有流都被冲洗了。" << std::endl;
         WriteTrailer();
 
-        auto thread_func = [&]()
-        {
-            _all_streams_flushed_event.Invoke();
-        };
-        std::thread(thread_func).detach();
+        // 在后台线程中触发事件
+        std::thread{
+            [&]()
+            {
+                _all_streams_flushed_event.Invoke();
+            }}
+            .detach();
     }
 }
 

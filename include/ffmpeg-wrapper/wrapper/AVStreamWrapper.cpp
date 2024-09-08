@@ -2,6 +2,7 @@
 #include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h>
+#include <format>
 #include <memory>
 
 using namespace video;
@@ -38,17 +39,35 @@ AVCodecParameters &AVStreamWrapper::CodecParams() const
 
 void video::AVStreamWrapper::SetCodecParams(AVCodecParameters const &params)
 {
-    avcodec_parameters_copy(_wrapped_obj->codecpar, &params);
+    int result = avcodec_parameters_copy(_wrapped_obj->codecpar, &params);
+    if (result < 0)
+    {
+        throw std::runtime_error{
+            std::format("{} -- avcodec_parameters_copy 失败。错误代码：{}，错误消息：{}",
+                        CODE_POS_STR,
+                        result,
+                        base::ToString(static_cast<ErrorCode>(result))),
+        };
+    }
 }
 
-int video::AVStreamWrapper::SetCodecParams(AVCodecContextWrapper const &codec_ctx)
+void video::AVStreamWrapper::SetCodecParams(AVCodecContextWrapper const &codec_ctx)
 {
     // 设置时间基
     _wrapped_obj->time_base = codec_ctx.TimeBase();
     _wrapped_obj->avg_frame_rate = codec_ctx.FrameRate();
 
     // 将码器的参数设置到本流
-    return avcodec_parameters_from_context(_wrapped_obj->codecpar, codec_ctx);
+    int result = avcodec_parameters_from_context(_wrapped_obj->codecpar, codec_ctx);
+    if (result < 0)
+    {
+        throw std::runtime_error{
+            std::format("{} -- avcodec_parameters_copy 失败。错误代码：{}，错误消息：{}",
+                        CODE_POS_STR,
+                        result,
+                        base::ToString(static_cast<ErrorCode>(result))),
+        };
+    }
 }
 
 int64_t AVStreamWrapper::Bitrate() const

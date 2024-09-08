@@ -45,14 +45,14 @@ namespace video
         /// @param params
         void SetCodecParams(AVCodecParameters const &params);
 
-        /// @brief 通过码器上下文设置此流信息。除了会用码器上下文来设置本流的 AVCodecParameters 外，还会
-        /// 额外设置时间基和帧率。如果本流是音频流，帧率是没用的，但是设置了也无伤大雅。
+        /// @brief 通过 AVCodecContextWrapper 设置此流信息。
+        /// @note 除了会设置本流的 AVCodecParameters 外，还会额外设置时间基和帧率。
+        /// 如果本流是音频流，帧率是没用的，但是设置了也无伤大雅。
         /// @param codec_ctx 此码器上下文的信息将被复制到此流中。
-        /// @return 设置成功则返回值大于等于0，失败则返回小于 0 的错误代码。
-        int SetCodecParams(AVCodecContextWrapper const &codec_ctx);
+        void SetCodecParams(AVCodecContextWrapper const &codec_ctx);
 
         /// @brief 获取此流对应的编解码器
-        /// @return
+        /// @return 找不到会返回空指针。
         AVCodec const *Codec() const;
 
         int64_t Bitrate() const;
