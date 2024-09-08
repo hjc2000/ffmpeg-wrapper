@@ -74,10 +74,13 @@ namespace video
 #pragma region 通过 IAudioStreamInfoCollection 继承
         AVRational TimeBase() const override;
         void SetTimeBase(AVRational value) override;
+
         AVSampleFormat SampleFormat() const override;
         void SetSampleFormat(AVSampleFormat value) override;
+
         int SampleRate() const override;
         void SetSampleRate(int value) override;
+
         AVChannelLayout ChannelLayout() const override;
         void SetChannelLayout(AVChannelLayout value) override;
 #pragma endregion
@@ -85,10 +88,13 @@ namespace video
 #pragma region 通过 IVideoStreamInfoCollection 继承
         int Width() const override;
         void SetWidth(int value) override;
+
         int Height() const override;
         void SetHeight(int value) override;
+
         AVPixelFormat PixelFormat() const override;
         void SetPixelFormat(AVPixelFormat value) override;
+
         AVRational FrameRate() const override;
         void SetFrameRate(AVRational value) override;
 #pragma endregion
