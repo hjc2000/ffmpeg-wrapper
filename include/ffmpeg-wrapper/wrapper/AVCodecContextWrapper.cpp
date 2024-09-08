@@ -12,6 +12,8 @@
 #include <iostream>
 #include <memory>
 
+#pragma region 构造函数
+
 video::AVCodecContextWrapper::AVCodecContextWrapper(AVCodec const *codec)
 {
     _codec = codec;
@@ -28,6 +30,8 @@ video::AVCodecContextWrapper::AVCodecContextWrapper(AVCodec const *codec, AVCode
     SetCodecParams(param);
 }
 
+#pragma endregion
+
 video::AVCodecContextWrapper::~AVCodecContextWrapper()
 {
     avcodec_free_context(&_wrapped_obj);
@@ -37,18 +41,18 @@ video::AVCodecContextWrapper::~AVCodecContextWrapper()
 
 std::shared_ptr<video::AVCodecContextWrapper> video::AVCodecContextWrapper::CreateDecoder(AVStreamInfoCollection stream)
 {
-    std::shared_ptr<AVCodecContextWrapper> ctx{
+    std::shared_ptr<AVCodecContextWrapper> context_wrapper{
         new AVCodecContextWrapper{
             stream._codec,
             stream._codec_params,
         },
     };
 
-    ctx->SetTimeBase(stream.TimeBase());
-    ctx->SetFrameRate(stream.FrameRate());
+    context_wrapper->SetTimeBase(stream.TimeBase());
+    context_wrapper->SetFrameRate(stream.FrameRate());
 
-    ctx->Open();
-    return ctx;
+    context_wrapper->Open();
+    return context_wrapper;
 }
 
 std::shared_ptr<video::AVCodecContextWrapper> video::AVCodecContextWrapper::CreateEncoder(
@@ -57,36 +61,36 @@ std::shared_ptr<video::AVCodecContextWrapper> video::AVCodecContextWrapper::Crea
     bool set_global_header,
     bool auto_open)
 {
-    auto codec = video::AVCodecExtension::FindEncoderByName(encoder_name);
-    if (!codec)
+    AVCodec const *codec = video::AVCodecExtension::FindEncoderByName(encoder_name);
+    if (codec == nullptr)
     {
         throw std::runtime_error{CODE_POS_STR + std::string{"查找编码器失败"}};
     }
 
-    std::shared_ptr<AVCodecContextWrapper> ctx{
+    std::shared_ptr<AVCodecContextWrapper> context_wrapper{
         new AVCodecContextWrapper{
             codec,
         },
     };
 
     // 设置编码器参数
-    (*ctx)->codec_type = AVMediaType::AVMEDIA_TYPE_AUDIO;
-    (*ctx)->ch_layout = infos.ChannelLayout();
-    (*ctx)->sample_fmt = infos.SampleFormat();
-    (*ctx)->sample_rate = infos.SampleRate();
-    (*ctx)->time_base = infos.TimeBase();
+    (*context_wrapper)->codec_type = AVMediaType::AVMEDIA_TYPE_AUDIO;
+    (*context_wrapper)->ch_layout = infos.ChannelLayout();
+    (*context_wrapper)->sample_fmt = infos.SampleFormat();
+    (*context_wrapper)->sample_rate = infos.SampleRate();
+    (*context_wrapper)->time_base = infos.TimeBase();
 
     if (set_global_header)
     {
-        ctx->SetGlobalHeader();
+        context_wrapper->SetGlobalHeader();
     }
 
     if (auto_open)
     {
-        ctx->Open();
+        context_wrapper->Open();
     }
 
-    return ctx;
+    return context_wrapper;
 }
 
 std::shared_ptr<video::AVCodecContextWrapper> video::AVCodecContextWrapper::CreateEncoder(
@@ -95,37 +99,37 @@ std::shared_ptr<video::AVCodecContextWrapper> video::AVCodecContextWrapper::Crea
     bool set_global_header,
     bool auto_open)
 {
-    auto codec = video::AVCodecExtension::FindEncoderByName(encoder_name);
-    if (!codec)
+    AVCodec const *codec = video::AVCodecExtension::FindEncoderByName(encoder_name);
+    if (codec == nullptr)
     {
         throw std::runtime_error{CODE_POS_STR + std::string{"查找编码器失败"}};
     }
 
-    std::shared_ptr<AVCodecContextWrapper> ctx{new AVCodecContextWrapper{codec}};
+    std::shared_ptr<AVCodecContextWrapper> context_wrapper{new AVCodecContextWrapper{codec}};
 
     // 设置编码器参数
-    (*ctx)->codec_type = AVMediaType::AVMEDIA_TYPE_VIDEO;
+    (*context_wrapper)->codec_type = AVMediaType::AVMEDIA_TYPE_VIDEO;
 
-    (*ctx)->width = infos.Width();
-    (*ctx)->height = infos.Height();
-    (*ctx)->pix_fmt = infos.PixelFormat();
+    (*context_wrapper)->width = infos.Width();
+    (*context_wrapper)->height = infos.Height();
+    (*context_wrapper)->pix_fmt = infos.PixelFormat();
 
-    (*ctx)->time_base = infos.TimeBase();
-    (*ctx)->framerate = infos.FrameRate();
+    (*context_wrapper)->time_base = infos.TimeBase();
+    (*context_wrapper)->framerate = infos.FrameRate();
 
-    (*ctx)->gop_size = infos.FrameRate().num / infos.FrameRate().den;
+    (*context_wrapper)->gop_size = infos.FrameRate().num / infos.FrameRate().den;
     //(*ctx)->max_b_frames = 10;
     if (set_global_header)
     {
-        ctx->SetGlobalHeader();
+        context_wrapper->SetGlobalHeader();
     }
 
     if (auto_open)
     {
-        ctx->Open();
+        context_wrapper->Open();
     }
 
-    return ctx;
+    return context_wrapper;
 }
 
 #pragma endregion
@@ -176,10 +180,9 @@ void video::AVCodecContextWrapper::SendFrame(AVFrameWrapper *frame)
 
     if (ret)
     {
-        std::string msg = std::format(
-            "送入帧失败，错误代码：{} —— {}",
-            ret,
-            ToString((ErrorCode)ret));
+        std::string msg = std::format("送入帧失败，错误代码：{} —— {}",
+                                      ret,
+                                      ToString((ErrorCode)ret));
 
         throw std::runtime_error{CODE_POS_STR + msg};
     }
@@ -238,7 +241,7 @@ int video::AVCodecContextWrapper::ReadFrame(AVFrameWrapper &frame)
 
 #pragma endregion
 
-#pragma region IAudioStreamInfoCollection, IVideoStreamInfoCollection
+#pragma region IAudioStreamInfoCollection
 
 AVChannelLayout video::AVCodecContextWrapper::ChannelLayout() const
 {
@@ -270,6 +273,32 @@ void video::AVCodecContextWrapper::SetSampleRate(int value)
     _wrapped_obj->sample_rate = value;
 }
 
+AVRational video::AVCodecContextWrapper::TimeBase() const
+{
+    /**
+     * 这是表示时间的基本单位（以秒为单位），帧的时间戳就是基于这个单位来表示的。对于固定帧率的内容，
+     * time_base 应该是 1/帧率，并且时间戳增量应该是相同的 1。
+     * 对于视频来说，这通常是帧率或场率的倒数，但如果帧率不是常数的话，1/time_base 并不是平均帧率。
+     *
+     * 像容器一样，基本流也可以存储时间戳，1/time_base 是这些时间戳所指定的单位。
+     * 例如，可以参考 ISO/IEC 14496-2:2001(E) 中的 vop_time_increment_resolution 和 fixed_vop_rate
+     * （fixed_vop_rate == 0 表示它与帧率不同）。
+     *
+     * - 编码时：必须由用户设置。
+     * - 解码时：不使用。
+     */
+    return _wrapped_obj->time_base;
+}
+
+void video::AVCodecContextWrapper::SetTimeBase(AVRational value)
+{
+    _wrapped_obj->time_base = value;
+}
+
+#pragma endregion
+
+#pragma region IVideoStreamInfoCollection
+
 int video::AVCodecContextWrapper::Width() const
 {
     return _wrapped_obj->width;
@@ -298,16 +327,6 @@ AVPixelFormat video::AVCodecContextWrapper::PixelFormat() const
 void video::AVCodecContextWrapper::SetPixelFormat(AVPixelFormat value)
 {
     _wrapped_obj->pix_fmt = value;
-}
-
-AVRational video::AVCodecContextWrapper::TimeBase() const
-{
-    return _wrapped_obj->time_base;
-}
-
-void video::AVCodecContextWrapper::SetTimeBase(AVRational value)
-{
-    _wrapped_obj->time_base = value;
 }
 
 AVRational video::AVCodecContextWrapper::FrameRate() const

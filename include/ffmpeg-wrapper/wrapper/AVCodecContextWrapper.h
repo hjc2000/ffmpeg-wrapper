@@ -112,7 +112,7 @@ namespace video
         int ReadFrame(AVFrameWrapper &frame);
 #pragma endregion
 
-#pragma region IAudioStreamInfoCollection, IVideoStreamInfoCollection
+#pragma region IAudioStreamInfoCollection
         AVChannelLayout ChannelLayout() const override;
         void SetChannelLayout(AVChannelLayout value) override;
 
@@ -122,6 +122,13 @@ namespace video
         int SampleRate() const override;
         void SetSampleRate(int value) override;
 
+        /// @brief 获取此码器的时间基。
+        /// @return
+        AVRational TimeBase() const override;
+        void SetTimeBase(AVRational value) override;
+#pragma endregion
+
+#pragma region IVideoStreamInfoCollection
         int Width() const override;
         void SetWidth(int value) override;
 
@@ -130,11 +137,6 @@ namespace video
 
         AVPixelFormat PixelFormat() const override;
         void SetPixelFormat(AVPixelFormat value) override;
-
-        /// @brief 获取此码器的时间基。
-        /// @return
-        AVRational TimeBase() const override;
-        void SetTimeBase(AVRational value) override;
 
         AVRational FrameRate() const override;
         void SetFrameRate(AVRational value) override;
