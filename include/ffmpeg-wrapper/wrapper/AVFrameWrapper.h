@@ -1,5 +1,6 @@
 #pragma once
 #include <base/stream/Stream.h>
+#include <base/string/Json.h>
 #include <base/Wrapper.h>
 #include <chrono>
 #include <ffmpeg-wrapper/AVCalculate.h>
@@ -17,7 +18,8 @@ namespace video
     class AVFrameWrapper :
         public base::Wrapper<AVFrame>,
         public IAudioFrameInfoCollection,
-        public IVideoFrameInfoCollection
+        public IVideoFrameInfoCollection,
+        public base::IJsonSerializable
     {
     private:
         std::shared_ptr<ImageBuffer> _image_buf;
@@ -194,6 +196,6 @@ namespace video
         void SetPixelFormat(AVPixelFormat value) override;
 #pragma endregion
 
-        std::string ToString();
+        base::Json ToJson() override;
     };
 } // namespace video

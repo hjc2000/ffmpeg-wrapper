@@ -313,10 +313,21 @@ void video::AVFrameWrapper::SetPixelFormat(AVPixelFormat value)
 
 #pragma endregion
 
-std::string AVFrameWrapper::ToString()
+base::Json video::AVFrameWrapper::ToJson()
 {
-    return std::format("pts={}, time_base={}, sample_format={}",
-                       _wrapped_obj->pts,
-                       ::ToString(_wrapped_obj->time_base),
-                       !_wrapped_obj->width ? ::ToString(SampleFormat()) : "");
+    base::Json root{
+        {"pts", _wrapped_obj->pts},
+        {
+            "time_base",
+            base::ToString(_wrapped_obj->time_base),
+        },
+    };
+
+    if (_wrapped_obj->width == 0)
+    {
+        // 通过 width==0 来推测是音频帧
+        root["sample_format"] = base::ToString(SampleFormat());
+    }
+
+    return root;
 }

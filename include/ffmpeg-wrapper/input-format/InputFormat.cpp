@@ -14,8 +14,8 @@ video::InputFormat::InputFormat(std::string url)
 {
     _url = url;
     _wrapped_obj = avformat_alloc_context();
-    int ret = avformat_open_input(&_wrapped_obj, url.c_str(), nullptr, nullptr);
-    if (ret < 0)
+    int result = avformat_open_input(&_wrapped_obj, url.c_str(), nullptr, nullptr);
+    if (result < 0)
     {
         throw std::runtime_error{CODE_POS_STR + std::string{"打开输入格式失败"}};
     }
@@ -53,7 +53,12 @@ video::InputFormat::InputFormat(std::shared_ptr<AVIOContextWrapper> io_context)
 }
 
 video::InputFormat::InputFormat(std::shared_ptr<base::Stream> input_stream)
-    : InputFormat(std::shared_ptr<AVIOContextWrapper>{new AVIOContextWrapper{false, input_stream}})
+    : InputFormat(std::shared_ptr<AVIOContextWrapper>{
+          new AVIOContextWrapper{
+              false,
+              input_stream,
+          },
+      })
 {
     _url = "costom stream";
 }
@@ -87,20 +92,25 @@ void InputFormat::FindStreamInfo(::AVDictionary **options)
 
 AVStreamWrapper InputFormat::FindBestStream(AVMediaType type)
 {
-    int ret = av_find_best_stream(_wrapped_obj,
-                                  type,
-                                  -1,
-                                  -1,
-                                  nullptr,
-                                  0);
+    int result = av_find_best_stream(_wrapped_obj,
+                                     type,
+                                     -1,
+                                     -1,
+                                     nullptr,
+                                     0);
 
-    if (ret < 0)
+    if (result < 0)
     {
-        std::cerr << CODE_POS_STR << "找不到最好的 " << ToString(type) << " 流" << std::endl;
+        std::cerr << CODE_POS_STR
+                  << "找不到最好的 "
+                  << base::ToString(type)
+                  << " 流"
+                  << std::endl;
+
         return AVStreamWrapper{nullptr};
     }
 
-    return AVStreamWrapper{_wrapped_obj->streams[ret]};
+    return AVStreamWrapper{_wrapped_obj->streams[result]};
 }
 
 int InputFormat::ReadData(AVPacketWrapper &data)
