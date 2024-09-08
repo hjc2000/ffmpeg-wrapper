@@ -63,7 +63,7 @@ EncoderPipe::EncoderPipe(std::string codec_name,
     //(*_encoder_ctx)->color_trc = AVCOL_TRC_SMPTE2084;
 
     _encoder_ctx->Open();
-    _new_stream = _output_format->CreateNewStream(_encoder_ctx);
+    _new_stream = _output_format->CreateNewStream(*_encoder_ctx);
 }
 
 EncoderPipe::EncoderPipe(std::string codec_name,
@@ -75,7 +75,7 @@ EncoderPipe::EncoderPipe(std::string codec_name,
                                                         in_stream_infos,
                                                         _output_format->NeedGlobalHeader());
 
-    _new_stream = _output_format->CreateNewStream(_encoder_ctx);
+    _new_stream = _output_format->CreateNewStream(*_encoder_ctx);
 }
 
 void EncoderPipe::SendData(AVFrameWrapper &frame)

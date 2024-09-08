@@ -56,7 +56,7 @@ namespace video
 
         /// @brief 以官方格式打印信息。
         /// @param url 仅仅用来显示而已，没有其他任何用途。
-        void DumpFormat(char const *url = "");
+        void DumpFormat(char const *url = "OutputFormat 输出");
 
         /// @brief 检查此输出格式是否需要设置全局头部。
         /// @return
@@ -73,7 +73,7 @@ namespace video
         ///
         /// @param codec_ctx 编码器
         /// @return 创建流成功则返回流
-        AVStreamWrapper CreateNewStream(std::shared_ptr<AVCodecContextWrapper> codec_ctx);
+        AVStreamWrapper CreateNewStream(AVCodecContextWrapper const &codec_ctx);
 
         /// @brief 写入头部信息。
         /// @param dic

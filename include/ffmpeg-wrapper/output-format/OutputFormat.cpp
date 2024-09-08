@@ -10,10 +10,12 @@ using namespace video;
 
 void video::OutputFormat::WriteTrailer()
 {
-    int ret = av_write_trailer(_wrapped_obj);
-    if (ret < 0)
+    int result = av_write_trailer(_wrapped_obj);
+    if (result < 0)
     {
-        throw std::runtime_error{base::ToString((ErrorCode)ret)};
+        throw std::runtime_error{
+            base::ToString(static_cast<ErrorCode>(result)),
+        };
     }
 }
 
@@ -38,16 +40,16 @@ bool video::OutputFormat::NeedGlobalHeader()
 AVStreamWrapper video::OutputFormat::CreateNewStream()
 {
     std::lock_guard l(_not_private_methods_lock);
-    AVStream *ps = avformat_new_stream(_wrapped_obj, nullptr);
-    if (ps == nullptr)
+    AVStream *stream = avformat_new_stream(_wrapped_obj, nullptr);
+    if (stream == nullptr)
     {
         throw std::runtime_error{"创建流失败"};
     }
 
-    return AVStreamWrapper{ps};
+    return AVStreamWrapper{stream};
 }
 
-AVStreamWrapper video::OutputFormat::CreateNewStream(std::shared_ptr<AVCodecContextWrapper> codec_ctx)
+AVStreamWrapper video::OutputFormat::CreateNewStream(AVCodecContextWrapper const &codec_ctx)
 {
     std::lock_guard l{_not_private_methods_lock};
     AVStream *stream = avformat_new_stream(_wrapped_obj, nullptr);
@@ -59,7 +61,7 @@ AVStreamWrapper video::OutputFormat::CreateNewStream(std::shared_ptr<AVCodecCont
     AVStreamWrapper stream_wrapper{stream};
 
     /* SetCodecParam 函数设置参数的时候，会将编解码器的时间基，帧率的信息复制到流中。*/
-    stream_wrapper.SetCodecParams(*codec_ctx);
+    stream_wrapper.SetCodecParams(codec_ctx);
     return stream_wrapper;
 }
 
