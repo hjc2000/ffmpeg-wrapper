@@ -38,13 +38,13 @@ bool video::OutputFormat::NeedGlobalHeader()
 AVStreamWrapper video::OutputFormat::CreateNewStream()
 {
     std::lock_guard l(_not_private_methods_lock);
-    ::AVStream *ps = avformat_new_stream(_wrapped_obj, nullptr);
+    AVStream *ps = avformat_new_stream(_wrapped_obj, nullptr);
     if (ps == nullptr)
     {
         throw std::runtime_error{"创建流失败"};
     }
 
-    return AVStreamWrapper(ps);
+    return AVStreamWrapper{ps};
 }
 
 AVStreamWrapper video::OutputFormat::CreateNewStream(std::shared_ptr<AVCodecContextWrapper> codec_ctx)
@@ -66,19 +66,32 @@ AVStreamWrapper video::OutputFormat::CreateNewStream(std::shared_ptr<AVCodecCont
 void video::OutputFormat::SendData(AVPacketWrapper &packet)
 {
     std::lock_guard l(_not_private_methods_lock);
-    int ret = av_interleaved_write_frame(_wrapped_obj, packet);
-    if (ret < 0)
+    if (!_have_written_header)
     {
-        std::cout << CODE_POS_STR
-                  << "错误代码："
-                  << ret << " -- "
-                  << base::ToString((ErrorCode)ret);
+        throw std::runtime_error{"必须先写入头部才能 SendData"};
+    }
+
+    int result = av_interleaved_write_frame(_wrapped_obj, packet);
+    if (result < 0)
+    {
+        std::string error_message = std::format(
+            "{} 错误代码：{}，错误消息：{}",
+            CODE_POS_STR,
+            result,
+            base::ToString(static_cast<ErrorCode>(result)));
+
+        throw std::runtime_error{error_message};
     }
 }
 
 void video::OutputFormat::Flush()
 {
     std::lock_guard l(_not_private_methods_lock);
+    if (!_have_written_header)
+    {
+        throw std::runtime_error{"必须先写入头部才能冲洗"};
+    }
+
     _flush_times++;
     if (_flush_times == _wrapped_obj->nb_streams)
     {
@@ -98,9 +111,13 @@ void video::OutputFormat::Flush()
 void video::OutputFormat::WriteHeader(AVDictionary **dic)
 {
     std::lock_guard l(_not_private_methods_lock);
-    int ret = ::avformat_write_header(_wrapped_obj, dic);
-    if (ret < 0)
+    int writing_header_result = avformat_write_header(_wrapped_obj, dic);
+    if (writing_header_result < 0)
     {
-        throw std::runtime_error{base::ToString((ErrorCode)ret)};
+        throw std::runtime_error{
+            base::ToString(static_cast<ErrorCode>(writing_header_result)),
+        };
     }
+
+    _have_written_header = true;
 }

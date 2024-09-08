@@ -23,6 +23,9 @@ namespace video
         uint32_t _flush_times = 0;
         base::Delegate<> _all_streams_flushed_event;
 
+        /// @brief 已经写过头部了
+        bool _have_written_header = false;
+
         void WriteTrailer();
 
     protected:
