@@ -50,17 +50,17 @@ AVStreamWrapper video::OutputFormat::CreateNewStream()
 AVStreamWrapper video::OutputFormat::CreateNewStream(std::shared_ptr<AVCodecContextWrapper> codec_ctx)
 {
     std::lock_guard l{_not_private_methods_lock};
-    AVStream *ps = avformat_new_stream(_wrapped_obj, nullptr);
-    if (ps == nullptr)
+    AVStream *stream = avformat_new_stream(_wrapped_obj, nullptr);
+    if (stream == nullptr)
     {
         throw std::runtime_error{"创建流失败"};
     }
 
-    AVStreamWrapper stream{ps};
+    AVStreamWrapper stream_wrapper{stream};
 
     /* SetCodecParam 函数设置参数的时候，会将编解码器的时间基，帧率的信息复制到流中。*/
-    stream.SetCodecParams(*codec_ctx);
-    return stream;
+    stream_wrapper.SetCodecParams(*codec_ctx);
+    return stream_wrapper;
 }
 
 void video::OutputFormat::SendData(AVPacketWrapper &packet)
