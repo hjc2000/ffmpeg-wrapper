@@ -7,6 +7,11 @@ using namespace video;
 IOContextOutputFormat::IOContextOutputFormat(std::string url,
                                              std::shared_ptr<AVIOContextWrapper> io_context)
 {
+    if (io_context == nullptr)
+    {
+        throw std::invalid_argument{"io_context 不能是空指针。"};
+    }
+
     _io_context = io_context;
     int ret = avformat_alloc_output_context2(&_wrapped_obj,
                                              nullptr,

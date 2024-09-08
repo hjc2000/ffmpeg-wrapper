@@ -49,7 +49,7 @@ AVStreamWrapper video::OutputFormat::CreateNewStream()
 
 AVStreamWrapper video::OutputFormat::CreateNewStream(std::shared_ptr<AVCodecContextWrapper> codec_ctx)
 {
-    std::lock_guard l(_not_private_methods_lock);
+    std::lock_guard l{_not_private_methods_lock};
     AVStream *ps = avformat_new_stream(WrappedObj(), nullptr);
     if (ps == nullptr)
     {

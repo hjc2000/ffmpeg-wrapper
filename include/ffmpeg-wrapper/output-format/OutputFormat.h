@@ -20,11 +20,13 @@ namespace video
         public base::IConsumer<AVPacketWrapper>
     {
     private:
-        std::mutex _not_private_methods_lock;
         uint32_t _flush_times = 0;
         base::Delegate<> _all_streams_flushed_event;
 
         void WriteTrailer();
+
+    protected:
+        std::recursive_mutex _not_private_methods_lock;
 
     public:
         virtual ~OutputFormat() = default;
