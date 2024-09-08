@@ -59,7 +59,7 @@ AVStreamWrapper video::OutputFormat::CreateNewStream(std::shared_ptr<AVCodecCont
     AVStreamWrapper stream{ps};
 
     /* SetCodecParam 函数设置参数的时候，会将码器的时间基，帧率的信息复制到流中。*/
-    int ret = stream.SetCodecParams(codec_ctx);
+    int ret = stream.SetCodecParams(*codec_ctx);
     if (ret < 0)
     {
         throw std::runtime_error{"设置流参数失败"};
