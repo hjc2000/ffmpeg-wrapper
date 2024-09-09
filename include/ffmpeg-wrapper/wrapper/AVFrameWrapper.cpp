@@ -16,22 +16,32 @@ void AVFrameWrapper::GetBuffer(int align)
     /* ffmpeg 的注释里明确说了如果一个 AVFrame 已经有缓冲区了，再次调用 av_frame_get_buffer
      * 分配缓冲区会导致内存泄漏。
      */
-    int ret = av_frame_get_buffer(_wrapped_obj, align);
-    if (ret < 0)
+    int result = av_frame_get_buffer(_wrapped_obj, align);
+    if (result < 0)
     {
-        throw std::runtime_error{CODE_POS_STR + std::string{"av_frame_get_buffer 失败。"}};
+        std::string error_message = std::format(
+            "{} av_frame_get_buffer 失败。错误代码：{}，错误消息：{}",
+            CODE_POS_STR,
+            result,
+            base::ToString(static_cast<ErrorCode>(result)));
+
+        throw std::runtime_error{error_message};
     }
 }
 
 void AVFrameWrapper::Ref(AVFrameWrapper const &o)
 {
     Unref();
-    int ret = av_frame_ref(_wrapped_obj, o);
-    if (ret < 0)
+    int result = av_frame_ref(_wrapped_obj, o);
+    if (result < 0)
     {
-        std::cerr << CODE_POS_STR
-                  << base::ToString(static_cast<ErrorCode>(ret))
-                  << std::endl;
+        std::string error_message = std::format(
+            "{} av_frame_ref 失败。错误代码：{}，错误消息：{}",
+            CODE_POS_STR,
+            result,
+            base::ToString(static_cast<ErrorCode>(result)));
+
+        throw std::runtime_error{error_message};
     }
 }
 
@@ -128,6 +138,16 @@ int video::AVFrameWrapper::audio_data_size()
                                               SampleCount(),
                                               SampleFormat(),
                                               1);
+    if (buf_size < 0)
+    {
+        std::string error_message = std::format(
+            "{} av_samples_get_buffer_size 发生错误。错误代码：{}，错误消息：{}",
+            CODE_POS_STR,
+            buf_size,
+            base::ToString(static_cast<ErrorCode>(buf_size)));
+
+        throw std::runtime_error{error_message};
+    }
 
     return buf_size;
 }
@@ -143,10 +163,16 @@ void video::AVFrameWrapper::Mute(int offset)
 
 void AVFrameWrapper::MakeWritable()
 {
-    int ret = av_frame_make_writable(_wrapped_obj);
-    if (ret)
+    int result = av_frame_make_writable(_wrapped_obj);
+    if (result)
     {
-        throw std::runtime_error{CODE_POS_STR + std::string{"av_frame_make_writable 失败。"}};
+        std::string error_message = std::format(
+            "{} av_frame_make_writable 失败。错误代码：{}，错误消息：{}",
+            CODE_POS_STR,
+            result,
+            base::ToString(static_cast<ErrorCode>(result)));
+
+        throw std::runtime_error{error_message};
     }
 }
 
@@ -184,7 +210,11 @@ void AVFrameWrapper::CopyAudioDataToBuffer(uint8_t *buffer, int len)
 {
     if (IsPlanar())
     {
-        throw std::runtime_error("本帧是平面类型，写入缓冲区的音频数据不允许是平面类型");
+        std::string error_message = std::format(
+            "{} 本帧是平面类型，写入缓冲区的音频数据不允许是平面类型",
+            CODE_POS_STR);
+
+        throw std::runtime_error{error_message};
     }
 
     std::copy(_wrapped_obj->extended_data[0],
@@ -217,11 +247,6 @@ void video::AVFrameWrapper::CopyVideoFrameToStream(base::Stream &stream)
 void video::AVFrameWrapper::CopyAudioFrameToStream(base::Stream &stream)
 {
     int buf_size = audio_data_size();
-    if (buf_size < 0)
-    {
-        throw std::runtime_error{base::ToString((ErrorCode)buf_size)};
-    }
-
     stream.Write(_wrapped_obj->extended_data[0], 0, buf_size);
 }
 
