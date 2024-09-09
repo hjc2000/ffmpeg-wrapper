@@ -106,13 +106,13 @@ int64_t AVIOContextWrapper::Seek(int64_t offset, int whence)
         }
     case SEEK_CUR:
         {
-            size_t current_pos = _stream->Position();
+            int64_t current_pos = _stream->Position();
             _stream->SetPosition(current_pos + offset);
             return _stream->Position();
         }
     case SEEK_END:
         {
-            size_t end_pos = _stream->Length();
+            int64_t end_pos = _stream->Length();
             _stream->SetPosition(end_pos + offset);
             return _stream->Position();
         }

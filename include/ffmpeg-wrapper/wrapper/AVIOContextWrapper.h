@@ -6,6 +6,8 @@
 
 namespace video
 {
+#pragma region 参数类
+
     /// @brief 包装的 AVIOContext 是用来读的还是用来写的。true 表示是用来写的，
     /// false 表示是用来读的。
     class AVIOContextWrapper_IsWrite
@@ -25,6 +27,8 @@ namespace video
         }
     };
 
+#pragma endregion
+
     class AVIOContextWrapper :
         public base::Wrapper<AVIOContext>
     {
@@ -43,6 +47,9 @@ namespace video
         int64_t Seek(int64_t offset, int whence);
 
     public:
+        /// @brief AVIOContext 包装器。将 Stream 对象包装成 AVIOContext 供 ffmepg 读写。
+        /// @param is_write 表示是写还是读。为 true 表示写，为 false 表示读。
+        /// @param stream 流。
         AVIOContextWrapper(AVIOContextWrapper_IsWrite const &is_write,
                            std::shared_ptr<base::Stream> stream);
 
