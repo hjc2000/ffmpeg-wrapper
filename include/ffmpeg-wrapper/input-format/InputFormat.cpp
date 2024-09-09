@@ -27,7 +27,7 @@ video::InputFormat::InputFormat(std::string url, AVInputFormat const *fmt, AVDic
 {
     _url = url;
     _wrapped_obj = avformat_alloc_context();
-    int ret = ::avformat_open_input(&_wrapped_obj, url.c_str(), fmt, options);
+    int ret = avformat_open_input(&_wrapped_obj, url.c_str(), fmt, options);
     if (ret < 0)
     {
         throw std::runtime_error{CODE_POS_STR + std::string{"打开输入格式失败"}};
@@ -43,7 +43,7 @@ video::InputFormat::InputFormat(std::shared_ptr<AVIOContextWrapper> io_context)
     _wrapped_obj = avformat_alloc_context();
     _wrapped_obj->pb = *_io_context;
     _wrapped_obj->flags |= AVFMT_FLAG_CUSTOM_IO;
-    int ret = ::avformat_open_input(&_wrapped_obj, nullptr, nullptr, nullptr);
+    int ret = avformat_open_input(&_wrapped_obj, nullptr, nullptr, nullptr);
     if (ret < 0)
     {
         throw std::runtime_error{CODE_POS_STR + std::string{"打开输入格式失败"}};
@@ -55,7 +55,7 @@ video::InputFormat::InputFormat(std::shared_ptr<AVIOContextWrapper> io_context)
 video::InputFormat::InputFormat(std::shared_ptr<base::Stream> input_stream)
     : InputFormat(std::shared_ptr<AVIOContextWrapper>{
           new AVIOContextWrapper{
-              false,
+              video::AVIOContextWrapper_IsWrite{false},
               input_stream,
           },
       })

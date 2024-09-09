@@ -6,7 +6,7 @@ static std::shared_ptr<AVIOContextWrapper> CreateIOContext(std::shared_ptr<base:
 {
     std::shared_ptr<AVIOContextWrapper> output_context{
         new AVIOContextWrapper{
-            true,
+            video::AVIOContextWrapper_IsWrite{true},
             output_stream,
         },
     };

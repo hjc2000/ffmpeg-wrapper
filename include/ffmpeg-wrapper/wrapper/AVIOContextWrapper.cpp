@@ -3,15 +3,16 @@
 
 using namespace video;
 
-AVIOContextWrapper::AVIOContextWrapper(bool is_write, std::shared_ptr<base::Stream> stream)
+AVIOContextWrapper::AVIOContextWrapper(AVIOContextWrapper_IsWrite const &is_write,
+                                       std::shared_ptr<base::Stream> stream)
 {
     _stream = stream;
     _buffer_size = 1024 * 64;
-    _buffer = (uint8_t *)av_malloc(_buffer_size);
+    _buffer = static_cast<uint8_t *>(av_malloc(_buffer_size));
 
     _wrapped_obj = avio_alloc_context(_buffer,
                                       _buffer_size,
-                                      is_write,
+                                      is_write.Value(),
                                       this,
                                       StaticReadPacket,
                                       StaticWritePacket,
