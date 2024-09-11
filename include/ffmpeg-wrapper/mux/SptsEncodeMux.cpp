@@ -90,7 +90,9 @@ void test_SptsEncodeMux()
     file_queue.Enqueue("越权访问.mkv");
     file_queue.Enqueue("moon.mp4");
     file_queue.Enqueue("fallen-down.ts");
-    std::shared_ptr<JoinedInputFormatDemuxDecoder> joined_input_format_demux_decoder{new JoinedInputFormatDemuxDecoder{}};
+    std::shared_ptr<JoinedInputFormatDemuxDecoder> joined_input_format_demux_decoder{
+        new JoinedInputFormatDemuxDecoder{},
+    };
 
     auto get_input_format_func = [&](std::shared_ptr<InputFormat> &current_input_format)
     {
@@ -145,25 +147,26 @@ void test_SptsEncodeMux()
     base::CancellationTokenSource cancel_pump;
     base::TaskCompletionSignal pump_thread_exit{false};
 
-    auto pump_thread_func = [&]()
-    {
-        try
+    std::thread{
+        [&]()
         {
-            joined_input_format_demux_decoder->PumpDataToConsumers(cancel_pump.Token());
-        }
-        catch (std::exception &e)
-        {
-            std::cerr << e.what() << std::endl;
-        }
-        catch (...)
-        {
-            std::cerr << "发生未知异常" << std::endl;
-        }
+            try
+            {
+                joined_input_format_demux_decoder->PumpDataToConsumers(cancel_pump.Token());
+            }
+            catch (std::exception &e)
+            {
+                std::cerr << e.what() << std::endl;
+            }
+            catch (...)
+            {
+                std::cerr << "发生未知异常" << std::endl;
+            }
 
-        std::cout << "线程退出" << std::endl;
-        pump_thread_exit.SetResult();
-    };
-    std::thread(pump_thread_func).detach();
+            std::cout << "线程退出" << std::endl;
+            pump_thread_exit.SetResult();
+        }}
+        .detach();
 
     std::cin.get();
     cancel_pump.Cancel();
