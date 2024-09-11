@@ -1,6 +1,7 @@
 #include "ffmpeg-wrapper/pipe/InfinitePacketPipe.h"
 #include "InfinitePacketPipe.h"
 #include <base/string/define.h>
+#include <ffmpeg-wrapper/AVToString.h>
 
 using namespace video;
 

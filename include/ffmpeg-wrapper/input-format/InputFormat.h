@@ -16,6 +16,7 @@ namespace video
     class AVStreamWrapper;
     class AVCodecContextWrapper;
 
+    /// @brief 输入格式
     class InputFormat :
         public base::Wrapper<AVFormatContext>,
         public base::ISource<AVPacketWrapper>

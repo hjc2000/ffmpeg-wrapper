@@ -5,12 +5,12 @@
 
 namespace base
 {
-    std::string ToString(AVRational value);
-    std::string ToString(AVSampleFormat sample_format);
-    std::string ToString(AVPixelFormat pixel_format);
-    std::string ToString(AVMediaType media_type);
+    std::string ToString(AVRational const &value);
+    std::string ToString(AVSampleFormat const &value);
+    std::string ToString(AVPixelFormat const &value);
+    std::string ToString(AVMediaType const &value);
 } // namespace base
 
-std::ostream &operator<<(std::ostream &ostream, AVMediaType const media_type);
-std::ostream &operator<<(std::ostream &ostream, AVRational const rational);
-std::ostream &operator<<(std::ostream &ostream, AVPixelFormat pf);
+std::ostream &operator<<(std::ostream &ostream, AVMediaType const &right);
+std::ostream &operator<<(std::ostream &ostream, AVRational const &right);
+std::ostream &operator<<(std::ostream &ostream, AVPixelFormat const &right);

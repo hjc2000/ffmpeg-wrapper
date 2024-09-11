@@ -3,19 +3,19 @@
 #include <ffmpeg-wrapper/base_include.h>
 #include <format>
 
-std::string base::ToString(AVRational value)
+std::string base::ToString(AVRational const &value)
 {
     return std::format("{}/{}", value.num, value.den);
 }
 
-std::string base::ToString(AVSampleFormat sample_format)
+std::string base::ToString(AVSampleFormat const &value)
 {
-    return av_get_sample_fmt_name(sample_format);
+    return av_get_sample_fmt_name(value);
 }
 
-std::string base::ToString(AVPixelFormat pixel_format)
+std::string base::ToString(AVPixelFormat const &value)
 {
-    char const *name = ::av_get_pix_fmt_name(pixel_format);
+    char const *name = av_get_pix_fmt_name(value);
     if (name == nullptr)
     {
         throw std::invalid_argument{CODE_POS_STR + std::string{"未知的像素格式"}};
@@ -24,22 +24,22 @@ std::string base::ToString(AVPixelFormat pixel_format)
     return name;
 }
 
-std::string base::ToString(AVMediaType media_type)
+std::string base::ToString(AVMediaType const &value)
 {
-    return std::string{::av_get_media_type_string(media_type)};
+    return std::string{av_get_media_type_string(value)};
 }
 
-std::ostream &operator<<(std::ostream &ostream, AVMediaType const media_type)
+std::ostream &operator<<(std::ostream &ostream, AVMediaType const &right)
 {
-    return ostream << base::ToString(media_type);
+    return ostream << base::ToString(right);
 }
 
-std::ostream &operator<<(std::ostream &ostream, AVRational const rational)
+std::ostream &operator<<(std::ostream &ostream, AVRational const &right)
 {
-    return ostream << base::ToString(rational);
+    return ostream << base::ToString(right);
 }
 
-std::ostream &operator<<(std::ostream &ostream, AVPixelFormat pixel_format)
+std::ostream &operator<<(std::ostream &ostream, AVPixelFormat const &right)
 {
-    return ostream << base::ToString(pixel_format);
+    return ostream << base::ToString(right);
 }
