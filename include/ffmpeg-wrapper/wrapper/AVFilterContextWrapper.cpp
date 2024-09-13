@@ -2,29 +2,23 @@
 #include <ffmpeg-wrapper/AVToString.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 
-using namespace video;
-
-AVFilterContextWrapper::AVFilterContextWrapper()
+video::AVFilterContextWrapper::AVFilterContextWrapper(AVFilterContext *o)
 {
+    _wrapped_obj = o;
 }
 
-AVFilterContextWrapper::AVFilterContextWrapper(AVFilterContext *filter_ctx)
+video::AVFilterContextWrapper::AVFilterContextWrapper(AVFilterContextWrapper const &o)
 {
-    _wrapped_obj = filter_ctx;
+    *this = o;
 }
 
-AVFilterContextWrapper::AVFilterContextWrapper(AVFilterContextWrapper const &o)
-{
-    _wrapped_obj = o._wrapped_obj;
-}
-
-AVFilterContextWrapper &AVFilterContextWrapper::operator=(AVFilterContextWrapper const &o)
+video::AVFilterContextWrapper &video::AVFilterContextWrapper::operator=(AVFilterContextWrapper const &o)
 {
     _wrapped_obj = o._wrapped_obj;
     return *this;
 }
 
-void AVFilterContextWrapper::link(AVFilterContextWrapper &next_filter)
+void video::AVFilterContextWrapper::Link(AVFilterContextWrapper &next_filter)
 {
     int ret = avfilter_link(_wrapped_obj, 0, next_filter, 0);
     if (ret)
@@ -33,8 +27,8 @@ void AVFilterContextWrapper::link(AVFilterContextWrapper &next_filter)
     }
 }
 
-AVFilterContextWrapper &AVFilterContextWrapper::operator<<(AVFilterContextWrapper &next_filter)
+video::AVFilterContextWrapper &video::AVFilterContextWrapper::operator<<(AVFilterContextWrapper &next_filter)
 {
-    link(next_filter);
+    Link(next_filter);
     return next_filter;
 }
