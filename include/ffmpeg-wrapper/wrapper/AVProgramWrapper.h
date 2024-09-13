@@ -10,11 +10,10 @@ namespace video
 {
     class InputFormat;
 
-    /**
-     * @brief AVProgramWrapper 不拥有 AVProgram 对象，只是接收一个 AVProgram * 然后包装起来方便操作而已。
-     * AVProgramWrapper 析构的时候不会释放有关 AVProgram 的资源。这是由 AVFormatContext 的 avformat_free_context
-     * 函数负责释放的。
-     */
+    /// @brief AVProgramWrapper 不拥有 AVProgram 对象，只是接收一个 AVProgram *
+    /// 然后包装起来方便操作而已。
+    /// @note AVProgramWrapper 析构的时候不会释放有关 AVProgram 的资源。
+    /// 这是由 AVFormatContext 的 avformat_free_context 函数负责释放的。
     class AVProgramWrapper :
         public base::Wrapper<AVProgram>,
         public base::ICanToString
