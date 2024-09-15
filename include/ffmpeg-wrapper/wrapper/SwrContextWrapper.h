@@ -20,12 +20,6 @@ namespace video
     private:
         SwrContext *_wrapped_obj = nullptr;
 
-        /// @brief 非私有的方法，即公共的和保护的，都要加锁。
-        /// @note 为什么保护的要加锁？因为保护的有可能是继承了基类的，而基类可能用公共方法
-        /// 去调用保护的方法，导致本类的保护方法和公共方法一样，都有可能被外部在不同
-        /// 线程中调用。
-        std::recursive_mutex _not_private_methods_lock;
-
         /// @brief send_frame 方法被送入空指针，开启了冲洗模式。
         std::atomic_bool _flushed = false;
 

@@ -39,7 +39,6 @@ SwrContextWrapper::~SwrContextWrapper()
 
 void video::SwrContextWrapper::SendData(AVFrameWrapper &input_frame)
 {
-    std::lock_guard l{_not_private_methods_lock};
     _in_pts_when_send_frame = ConvertTimeStamp(input_frame.Pts(),
                                                input_frame.TimeBase(),
                                                AVRational{1, 90000});
@@ -88,7 +87,6 @@ void video::SwrContextWrapper::Flush()
 
 int video::SwrContextWrapper::ReadData(AVFrameWrapper &output_frame)
 {
-    std::lock_guard l{_not_private_methods_lock};
     output_frame = AVFrameWrapper{_out_frame_infos};
 
     int ret = 0;
@@ -180,7 +178,6 @@ int SwrContextWrapper::read_frame_in_non_flushing_mode(AVFrameWrapper &output_fr
 
 int SwrContextWrapper::send_silence_samples(uint32_t nb_samples)
 {
-    std::lock_guard l{_not_private_methods_lock};
     if (nb_samples == 0)
     {
         return 0;
@@ -220,7 +217,6 @@ int SwrContextWrapper::send_silence_samples(uint32_t nb_samples)
 
 int SwrContextWrapper::get_out_nb_samples(int in_nb_samples)
 {
-    std::lock_guard l{_not_private_methods_lock};
     int samples = swr_get_out_samples(_wrapped_obj, in_nb_samples);
     if (samples < 0)
     {
@@ -232,12 +228,11 @@ int SwrContextWrapper::get_out_nb_samples(int in_nb_samples)
 
 int64_t SwrContextWrapper::get_delay(int64_t base)
 {
-    std::lock_guard l{_not_private_methods_lock};
     return swr_get_delay(_wrapped_obj, base);
 }
 
 int SwrContextWrapper::get_delay_as_out_nb_samples()
 {
     // get_delay 已经加锁了，这里不用加锁。
-    return (int)get_delay(_out_frame_infos._sample_rate);
+    return static_cast<int>(get_delay(_out_frame_infos._sample_rate));
 }
