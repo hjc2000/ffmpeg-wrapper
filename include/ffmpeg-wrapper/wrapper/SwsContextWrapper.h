@@ -7,7 +7,6 @@
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/info-collection/VideoFrameInfoCollection.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
-#include <mutex>
 
 namespace video
 {
@@ -66,7 +65,6 @@ namespace video
         /// @brief _out_frame 的数据可用，还没被取走。
         bool _out_frame_avaliable = false;
         bool _flushed = false;
-        std::mutex _lock;
 
     public:
         SwsContextWrapper(SwsContextWrapper_InVideoFrameInfos const &in_video_frame_infos,

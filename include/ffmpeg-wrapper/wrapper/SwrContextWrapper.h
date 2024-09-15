@@ -7,7 +7,6 @@
 #include <ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
-#include <mutex>
 
 namespace video
 {

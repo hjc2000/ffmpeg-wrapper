@@ -35,7 +35,6 @@ video::SwsContextWrapper::~SwsContextWrapper()
 
 void video::SwsContextWrapper::SendData(AVFrameWrapper &frame)
 {
-    std::lock_guard l(_lock);
     if (_flushed)
     {
         throw std::runtime_error{CODE_POS_STR + std::string{"冲洗后不允许再送入"}};
@@ -57,7 +56,6 @@ void video::SwsContextWrapper::Flush()
 
 int video::SwsContextWrapper::ReadData(AVFrameWrapper &frame)
 {
-    std::lock_guard l(_lock);
     if (_flushed && !_out_frame_avaliable)
     {
         return (int)ErrorCode::eof;
