@@ -4,8 +4,8 @@
 
 using namespace video;
 
-SwrContextWrapper::SwrContextWrapper(IAudioStreamInfoCollection &in_stream_infos,
-                                     IAudioFrameInfoCollection &out_frame_infos)
+SwrContextWrapper::SwrContextWrapper(IAudioStreamInfoCollection const &in_stream_infos,
+                                     IAudioFrameInfoCollection const &out_frame_infos)
 {
     _in_stream_infos = in_stream_infos;
     _out_frame_infos = out_frame_infos;
@@ -39,7 +39,7 @@ SwrContextWrapper::~SwrContextWrapper()
 
 void video::SwrContextWrapper::SendData(AVFrameWrapper &input_frame)
 {
-    std::lock_guard l(_not_private_methods_lock);
+    std::lock_guard l{_not_private_methods_lock};
     _in_pts_when_send_frame = ConvertTimeStamp(input_frame.Pts(),
                                                input_frame.TimeBase(),
                                                AVRational{1, 90000});
@@ -50,10 +50,11 @@ void video::SwrContextWrapper::SendData(AVFrameWrapper &input_frame)
         input_frame.ChangeTimeBase(_in_stream_infos.TimeBase());
     }
 
-    int ret = convert(nullptr,
-                      0,
-                      input_frame->extended_data,
-                      input_frame.SampleCount());
+    int ret = swr_convert(_wrapped_obj,
+                          nullptr,
+                          0,
+                          input_frame->extended_data,
+                          input_frame.SampleCount());
 
     if (ret < 0)
     {
@@ -73,7 +74,12 @@ void video::SwrContextWrapper::Flush()
      * _in_pts_when_send_frame 每次在 send_frame 中都要被设置为未来的值，但是冲洗模式时不用设置，
      * 因为 _in_pts_when_send_frame 已经是重采样器缓冲区播放完时的值了。
      */
-    int ret = convert(nullptr, 0, nullptr, 0);
+    int ret = swr_convert(_wrapped_obj,
+                          nullptr,
+                          0,
+                          nullptr,
+                          0);
+
     if (ret < 0)
     {
         throw std::runtime_error{base::ToString((ErrorCode)ret)};
@@ -82,7 +88,7 @@ void video::SwrContextWrapper::Flush()
 
 int video::SwrContextWrapper::ReadData(AVFrameWrapper &output_frame)
 {
-    std::lock_guard l(_not_private_methods_lock);
+    std::lock_guard l{_not_private_methods_lock};
     output_frame = AVFrameWrapper{_out_frame_infos};
 
     int ret = 0;
@@ -121,34 +127,13 @@ int video::SwrContextWrapper::ReadData(AVFrameWrapper &output_frame)
     return ret;
 }
 
-int SwrContextWrapper::convert(uint8_t **out, int out_count, uint8_t **in, int in_count)
-{
-    int ret = swr_convert(_wrapped_obj,
-                          out,
-                          out_count,
-                          (uint8_t const **)in,
-                          in_count);
-
-    return ret;
-}
-
-int SwrContextWrapper::convert(AVFrameWrapper *input_frame, AVFrameWrapper *output_frame)
-{
-    uint8_t **in = input_frame ? (*input_frame)->extended_data : nullptr;
-    int in_count = input_frame ? input_frame->SampleCount() : 0;
-
-    uint8_t **out = output_frame ? (*output_frame)->extended_data : nullptr;
-    int out_count = output_frame ? output_frame->SampleCount() : 0;
-
-    // 重采样
-    int ret = convert(out, out_count, in, in_count);
-
-    return ret;
-}
-
 int SwrContextWrapper::read_frame_in_flushing_mode(AVFrameWrapper &output_frame)
 {
-    int count = convert(nullptr, &output_frame);
+    int count = swr_convert(_wrapped_obj,
+                            output_frame->extended_data,
+                            output_frame.SampleCount(),
+                            nullptr,
+                            0);
 
     // 如果有填充（即 count > 0）且填充了不完整的帧
     if (count > 0 && count < output_frame.SampleCount())
@@ -174,7 +159,12 @@ int SwrContextWrapper::read_frame_in_non_flushing_mode(AVFrameWrapper &output_fr
     if (can_fill_output_frame(output_frame))
     {
         // 可以填充一个完整的帧
-        int count = convert(nullptr, &output_frame);
+        int count = swr_convert(_wrapped_obj,
+                                output_frame->extended_data,
+                                output_frame.SampleCount(),
+                                nullptr,
+                                0);
+
         if (count != output_frame.SampleCount())
         {
             throw std::runtime_error{"read_frame 没有填充完整的 output_frame，本来认为这里一定会填充完整的帧的。"};
@@ -190,7 +180,7 @@ int SwrContextWrapper::read_frame_in_non_flushing_mode(AVFrameWrapper &output_fr
 
 int SwrContextWrapper::send_silence_samples(uint32_t nb_samples)
 {
-    std::lock_guard l(_not_private_methods_lock);
+    std::lock_guard l{_not_private_methods_lock};
     if (nb_samples == 0)
     {
         return 0;
@@ -211,10 +201,13 @@ int SwrContextWrapper::send_silence_samples(uint32_t nb_samples)
 
     // 求模，取余数，看用 _silence_frame 填充 loop_times 次后还会剩下几个采样点才能达到 nb_samples
     uint32_t remain_nb_samples = nb_samples % _silence_frame->SampleCount();
-    int ret = convert(nullptr,
-                      0,
-                      (*_silence_frame)->extended_data,
-                      remain_nb_samples);
+
+    int ret = swr_convert(_wrapped_obj,
+                          nullptr,
+                          0,
+                          (*_silence_frame)->extended_data,
+                          remain_nb_samples);
+
     if (ret < 0)
     {
         // 失败返回负数的错误代码
@@ -227,7 +220,7 @@ int SwrContextWrapper::send_silence_samples(uint32_t nb_samples)
 
 int SwrContextWrapper::get_out_nb_samples(int in_nb_samples)
 {
-    std::lock_guard l(_not_private_methods_lock);
+    std::lock_guard l{_not_private_methods_lock};
     int samples = swr_get_out_samples(_wrapped_obj, in_nb_samples);
     if (samples < 0)
     {
@@ -239,7 +232,7 @@ int SwrContextWrapper::get_out_nb_samples(int in_nb_samples)
 
 int64_t SwrContextWrapper::get_delay(int64_t base)
 {
-    std::lock_guard l(_not_private_methods_lock);
+    std::lock_guard l{_not_private_methods_lock};
     return swr_get_delay(_wrapped_obj, base);
 }
 

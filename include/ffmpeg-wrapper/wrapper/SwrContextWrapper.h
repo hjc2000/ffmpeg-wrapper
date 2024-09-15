@@ -33,36 +33,14 @@ namespace video
         AudioFrameInfoCollection _out_frame_infos;
         std::shared_ptr<AVFrameWrapper> _silence_frame;
 
-        /// @brief 对 swr_convert 的简单封装。
-        /// @param out 接收输出数据的缓冲区
-        /// @param out_count 想要接收多少个采样点
-        /// @param in 要被重采样的采样点的缓冲区
-        /// @param in_count 要被重采样的采样点个数（单个声道的采样点个数。所有声道的采样点个数必须相同）
-        /// @return 成功则返回实际被写入 out 中的采样点个数。失败返回负数的错误代码。
-        int convert(uint8_t **out, int out_count, uint8_t **in, int in_count);
-
         /// @brief send_frame 方法被调用，向重采样器送入帧时就会记录那个帧的 pts。
         /// @note _in_pts_when_send_frame 相当于未来的时间戳。只要将重采样缓冲区中的采样点播放完，
         /// 重采样器输出端的时间戳就会真正变成 _in_pts_when_send_frame。也就是输入端的时间戳
         /// 和输出端的时间戳不仅时间基不一样，还存在时间差。
         int64_t _in_pts_when_send_frame = 0;
 
-#pragma region ReadFrame 方法专用
-        /// @brief 对 input_frame 缓冲区的音频帧进行重采样，输出到 output_frame 的缓冲区中。
-        /// @param input_frame 要被重采样的帧。可以传入空指针，此时表示不输入数据。
-        /// @param output_frame 重采样输出帧。
-        /// @note 注意，此帧可能不完整，因为有可能发生实际写入 output_frame 缓冲区的采样点个数小于 output_frame
-        /// 的 nb_samples 属性的情况。实际写入的采样点个数见本函数的返回值。
-        /// @note 可以传入空指针，此时表示不输出数据。如果 output_frame 为空指针，input_frame 不为空指针，
-        /// 则表示只输入数据不输出数据。此时重采样的结果会储存在重采样器内部的缓冲区中。可以之后在
-        /// input_frame 传入空指针，output_frame 传入非空指针来冲洗缓冲区。
-        /// @return 实际写入 output_frame 缓冲区的可用的采样点个数。失败返回负数的错误代码。
-        int convert(AVFrameWrapper *input_frame, AVFrameWrapper *output_frame);
-
         int read_frame_in_flushing_mode(AVFrameWrapper &output_frame);
-
         int read_frame_in_non_flushing_mode(AVFrameWrapper &output_frame);
-#pragma endregion
 
     public:
         /// @brief 使用 IAudioStreamInfoCollection 接口初始化重采样器。
@@ -70,8 +48,8 @@ namespace video
         /// 的时间基有效。
         /// @param in_stream_infos 设置重采样器输入流。
         /// @param out_frame_infos 设置重采样器输出流。
-        SwrContextWrapper(IAudioStreamInfoCollection &in_stream_infos,
-                          IAudioFrameInfoCollection &out_frame_infos);
+        SwrContextWrapper(IAudioStreamInfoCollection const &in_stream_infos,
+                          IAudioFrameInfoCollection const &out_frame_infos);
 
         ~SwrContextWrapper();
 
