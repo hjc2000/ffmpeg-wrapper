@@ -68,11 +68,11 @@ namespace video
         /// 1 / 90000 时精度不能满足要求。这种时候用整型可以没有误差。time_base = 1 / 90000，则 base = 90000。
         ///
         /// @return 返回值 = 延迟时间 * base
-        int64_t get_delay(int64_t base);
+        int64_t GetDelay(int64_t base);
 
         /// @brief 根据构造时传入的输出采样率来计算延迟为多少个输出采样点
         /// @return 延迟为多少个输出采样点
-        int get_delay_as_out_nb_samples();
+        int GetDelayAsSampleCount();
 
         /// @brief 估算当向此重采样器输入 in_nb_samples 数量的采样点时，输出将会是多少采样点。
         /// 此估计值会比实际值偏大，因此可以用来分配一个足够大的缓冲区
@@ -82,15 +82,15 @@ namespace video
         ///
         /// @param in_nb_samples 将要向重采样器输入多少采样点
         /// @return 将会输出多少采样点
-        int get_out_nb_samples(int in_nb_samples);
+        int AvaliableSampleCount(int in_nb_samples);
 
         /// @brief 检查重采样器输出缓冲区中的数据是否足够填满 output_frame
         /// @param output_frame
         /// @return 足够填满则返回 true，不够则返回 false。
-        bool can_fill_output_frame(AVFrameWrapper const &output_frame)
+        bool CanFillOutputFrame(AVFrameWrapper const &output_frame)
         {
-            // get_delay_as_out_nb_samples 是公共方法，已经加锁了，所以这里不用加锁。
-            return get_delay_as_out_nb_samples() > output_frame.SampleCount() + 50;
+            // GetDelayAsSampleCount 是公共方法，已经加锁了，所以这里不用加锁。
+            return GetDelayAsSampleCount() > output_frame.SampleCount() + 50;
         }
 
         /// @brief 是否已启动冲洗模式。

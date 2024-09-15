@@ -107,7 +107,7 @@ int video::SwrContextWrapper::ReadData(AVFrameWrapper &output_frame)
      *
      * 但是，in_pts 是输入侧的时间戳，我们需要转换为在输出侧的时间戳，然后赋值给 output_frame。
      */
-    int64_t delay = get_delay(90000);
+    int64_t delay = GetDelay(90000);
     if (ret == (int)ErrorCode::eof)
     {
         /* 不清楚冲洗完后重采样器内会不会仍然延迟不为 0，所以冲洗后，并且返回 eof，此时表示重采样器空了。
@@ -154,7 +154,7 @@ int SwrContextWrapper::read_frame_in_flushing_mode(AVFrameWrapper &output_frame)
 
 int SwrContextWrapper::read_frame_in_non_flushing_mode(AVFrameWrapper &output_frame)
 {
-    if (can_fill_output_frame(output_frame))
+    if (CanFillOutputFrame(output_frame))
     {
         // 可以填充一个完整的帧
         int count = swr_convert(_wrapped_obj,
@@ -215,7 +215,7 @@ int SwrContextWrapper::send_silence_samples(uint32_t nb_samples)
     return 0;
 }
 
-int SwrContextWrapper::get_out_nb_samples(int in_nb_samples)
+int SwrContextWrapper::AvaliableSampleCount(int in_nb_samples)
 {
     int samples = swr_get_out_samples(_wrapped_obj, in_nb_samples);
     if (samples < 0)
@@ -226,13 +226,13 @@ int SwrContextWrapper::get_out_nb_samples(int in_nb_samples)
     return samples;
 }
 
-int64_t SwrContextWrapper::get_delay(int64_t base)
+int64_t SwrContextWrapper::GetDelay(int64_t base)
 {
     return swr_get_delay(_wrapped_obj, base);
 }
 
-int SwrContextWrapper::get_delay_as_out_nb_samples()
+int SwrContextWrapper::GetDelayAsSampleCount()
 {
-    // get_delay 已经加锁了，这里不用加锁。
-    return static_cast<int>(get_delay(_out_frame_infos._sample_rate));
+    // GetDelay 已经加锁了，这里不用加锁。
+    return static_cast<int>(GetDelay(_out_frame_infos._sample_rate));
 }
