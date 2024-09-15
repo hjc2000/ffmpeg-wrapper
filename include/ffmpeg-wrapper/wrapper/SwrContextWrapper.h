@@ -62,7 +62,8 @@ namespace video
         /// 此外，如果转换完的采样点没有被取走，则会被储存在内部的输出缓冲区中，这
         /// 也会产生延迟。此函数用来获取所有的这些延迟。
         ///
-        /// @param base 延迟的基。（不是时间基，base 是时间基的倒数。详见 https://www.yuque.com/qiaodangyi/yrin4p/ica2heo5g3kyre9t）
+        /// @param base 延迟的基。
+        /// @note 不是时间基，base 是时间基的倒数。详见 https://www.yuque.com/qiaodangyi/yrin4p/ica2heo5g3kyre9t
         /// @note 使用时间基的倒数是因为 ffmpeg 默认你会取一个 (0, 1] 内的，并且很接近 0 的数作为时间基，因为
         /// 这样精度才高。整型无法表示这种数，所以取了倒数。不用 double 是因为 double 在表示很小的数，例如
         /// 1 / 90000 时精度不能满足要求。这种时候用整型可以没有误差。time_base = 1 / 90000，则 base = 90000。
