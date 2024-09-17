@@ -11,6 +11,8 @@ void FpsAdjustPipe::ReadAndSendFrame()
     while (true)
     {
         int ret = _graph.ReadData(frame);
+        frame.SetTimeBase(AVRational{_desired_out_fps.den, _desired_out_fps.num});
+        frame.ChangeTimeBase(AVRational{1, 90000});
         switch (ret)
         {
         case 0:
@@ -31,9 +33,7 @@ void FpsAdjustPipe::ReadAndSendFrame()
 
                 // 滤镜出来的 pts 与输入端的 pts 有误差，则本轮循环读取的每一个帧的 pts 都要加上 delta_pts。
                 frame.SetPts(frame.Pts() + delta_pts);
-
-                // 从滤镜出来的帧的时间基信息丢失了，需要补上。
-                frame.SetTimeBase(AVRational{_desired_out_fps.den, _desired_out_fps.num});
+                frame.ChangeTimeBase(_input_video_stream_infos.TimeBase());
                 SendDataToEachConsumer(frame);
 
                 // 下轮循环继续读取
@@ -75,20 +75,15 @@ void FpsAdjustPipe::SendData(AVFrameWrapper &frame)
     }
 
     ReadAndSendFrame();
-    frame.ChangeTimeBase(_input_video_stream_infos.TimeBase());
-    _graph.SendData(frame);
-
-    base::Fraction rescaled_current_frame_pts = ConvertTimeStamp(frame.Pts(),
-                                                                 frame.TimeBase(),
-                                                                 AVRational{_desired_out_fps.den, _desired_out_fps.num});
-
-    _trigger.UpdateInput(static_cast<int64_t>(rescaled_current_frame_pts));
+    frame.ChangeTimeBase(AVRational{1, 90000});
+    _trigger.UpdateInput(frame.Pts());
     if (_trigger.HaveNotUpdateOutput())
     {
         // 第一次输入数据，让输入的数据直通到输出端
         _trigger.UpdateOutput();
     }
 
+    _graph.SendData(frame);
     ReadAndSendFrame();
 }
 
