@@ -78,11 +78,11 @@ void FpsAdjustPipe::SendData(AVFrameWrapper &frame)
     frame.ChangeTimeBase(_input_video_stream_infos.TimeBase());
     _graph.SendData(frame);
 
-    int64_t rescaled_current_frame_pts = ConvertTimeStamp(frame.Pts(),
-                                                          frame.TimeBase(),
-                                                          AVRational{_desired_out_fps.den, _desired_out_fps.num});
+    base::Fraction rescaled_current_frame_pts = ConvertTimeStamp(frame.Pts(),
+                                                                 frame.TimeBase(),
+                                                                 AVRational{_desired_out_fps.den, _desired_out_fps.num});
 
-    _trigger.UpdateInput(rescaled_current_frame_pts);
+    _trigger.UpdateInput(static_cast<int64_t>(rescaled_current_frame_pts));
     if (_trigger.HaveNotUpdateOutput())
     {
         // 第一次输入数据，让输入的数据直通到输出端
