@@ -53,7 +53,7 @@ void FpsAdjustPipe::ReadAndSendFrame()
 }
 
 FpsAdjustPipe::FpsAdjustPipe(IVideoStreamInfoCollection const &input_video_stream_infos,
-                             AVRational desired_out_fps)
+                             AVRational const &desired_out_fps)
     : _input_video_stream_infos(input_video_stream_infos),
       _graph(input_video_stream_infos),
       _desired_out_fps(desired_out_fps)

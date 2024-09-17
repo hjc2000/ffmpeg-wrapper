@@ -32,7 +32,7 @@ namespace video
         /// @param input_video_stream_infos 输入的视频流信息
         /// @param desired_out_fps 期望的输出帧率
         FpsAdjustPipe(IVideoStreamInfoCollection const &input_video_stream_infos,
-                      AVRational desired_out_fps);
+                      AVRational const &desired_out_fps);
 
         base::IList<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> &ConsumerList() override
         {
