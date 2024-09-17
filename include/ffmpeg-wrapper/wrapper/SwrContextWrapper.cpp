@@ -57,7 +57,7 @@ void video::SwrContextWrapper::SendData(AVFrameWrapper &input_frame)
 
     if (ret < 0)
     {
-        throw std::runtime_error{base::ToString((ErrorCode)ret)};
+        throw std::runtime_error{base::ToString(static_cast<ErrorCode>(ret))};
     }
 }
 
@@ -81,7 +81,7 @@ void video::SwrContextWrapper::Flush()
 
     if (ret < 0)
     {
-        throw std::runtime_error{base::ToString((ErrorCode)ret)};
+        throw std::runtime_error{base::ToString(static_cast<ErrorCode>(ret))};
     }
 }
 
@@ -108,7 +108,7 @@ int video::SwrContextWrapper::ReadData(AVFrameWrapper &output_frame)
      * 但是，in_pts 是输入侧的时间戳，我们需要转换为在输出侧的时间戳，然后赋值给 output_frame。
      */
     int64_t delay = GetDelay(90000);
-    if (ret == (int)ErrorCode::eof)
+    if (ret == static_cast<int>(ErrorCode::eof))
     {
         /* 不清楚冲洗完后重采样器内会不会仍然延迟不为 0，所以冲洗后，并且返回 eof，此时表示重采样器空了。
          * 手动将 delay 设为 0.
@@ -149,7 +149,7 @@ int SwrContextWrapper::read_frame_in_flushing_mode(AVFrameWrapper &output_frame)
     }
 
     // 一个采样点都没填充，本次读取帧失败，返回 eof。
-    return (int)ErrorCode::eof;
+    return static_cast<int>(ErrorCode::eof);
 }
 
 int SwrContextWrapper::read_frame_in_non_flushing_mode(AVFrameWrapper &output_frame)
@@ -173,7 +173,7 @@ int SwrContextWrapper::read_frame_in_non_flushing_mode(AVFrameWrapper &output_fr
 
     // 无法填充一个完整的帧，所以一个采样点都不填充
     // 返回 -11 表示输出暂时不可用，需要更多的输入数据。这是官方的错误代码。
-    return (int)ErrorCode::output_is_temporarily_unavailable;
+    return static_cast<int>(ErrorCode::output_is_temporarily_unavailable);
 }
 
 int SwrContextWrapper::AvaliableSampleCount(int in_nb_samples)
@@ -181,7 +181,7 @@ int SwrContextWrapper::AvaliableSampleCount(int in_nb_samples)
     int samples = swr_get_out_samples(_wrapped_obj, in_nb_samples);
     if (samples < 0)
     {
-        throw std::runtime_error("swr_get_out_samples 函数出错");
+        throw std::runtime_error{"swr_get_out_samples 函数出错"};
     }
 
     return samples;
