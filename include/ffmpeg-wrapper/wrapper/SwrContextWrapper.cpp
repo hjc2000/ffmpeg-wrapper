@@ -22,13 +22,17 @@ SwrContextWrapper::SwrContextWrapper(IAudioStreamInfoCollection const &in_stream
 
     if (ret < 0)
     {
-        throw std::runtime_error{CODE_POS_STR + std::string{"构造重采样器并设置参数失败"}};
+        throw std::runtime_error{
+            CODE_POS_STR + std::string{"构造重采样器并设置参数失败"},
+        };
     }
 
     ret = swr_init(_wrapped_obj);
     if (ret < 0)
     {
-        throw std::runtime_error{CODE_POS_STR + std::string{"初始化重采样器失败"}};
+        throw std::runtime_error{
+            CODE_POS_STR + std::string{"初始化重采样器失败"},
+        };
     }
 }
 
@@ -39,9 +43,9 @@ SwrContextWrapper::~SwrContextWrapper()
 
 void video::SwrContextWrapper::SendData(AVFrameWrapper &input_frame)
 {
-    _in_pts_when_send_frame = ConvertTimeStamp(input_frame.Pts(),
-                                               input_frame.TimeBase(),
-                                               AVRational{1, 90000});
+    _in_pts_when_send_frame = base::Fraction{input_frame.Pts()} *
+                              video::AVRationalToFraction(input_frame.TimeBase()) /
+                              base::Fraction{1, 90000};
 
     // 非冲洗模式
     if (input_frame.TimeBase() != _in_stream_infos.TimeBase())
@@ -57,7 +61,9 @@ void video::SwrContextWrapper::SendData(AVFrameWrapper &input_frame)
 
     if (ret < 0)
     {
-        throw std::runtime_error{base::ToString(static_cast<ErrorCode>(ret))};
+        throw std::runtime_error{
+            base::ToString(static_cast<ErrorCode>(ret)),
+        };
     }
 }
 
@@ -66,13 +72,6 @@ void video::SwrContextWrapper::Flush()
     // 冲洗模式
     _flushed = true;
 
-    /* _in_pts_when_send_frame 是输出端未来的时间戳，只要将重采样器缓冲区播放完了，
-     * 输出端的时间戳就会等于 _in_pts_when_send_frame。当然，这是在输入端的时间基上讨论的，
-     * 转换为输出端的时间基，则时间戳不等于 _in_pts_when_send_frame。
-     *
-     * _in_pts_when_send_frame 每次在 send_frame 中都要被设置为未来的值，但是冲洗模式时不用设置，
-     * 因为 _in_pts_when_send_frame 已经是重采样器缓冲区播放完时的值了。
-     */
     int ret = swr_convert(_wrapped_obj,
                           nullptr,
                           0,
@@ -81,7 +80,9 @@ void video::SwrContextWrapper::Flush()
 
     if (ret < 0)
     {
-        throw std::runtime_error{base::ToString(static_cast<ErrorCode>(ret))};
+        throw std::runtime_error{
+            base::ToString(static_cast<ErrorCode>(ret)),
+        };
     }
 }
 
@@ -107,7 +108,7 @@ int video::SwrContextWrapper::ReadData(AVFrameWrapper &output_frame)
      *
      * 但是，in_pts 是输入侧的时间戳，我们需要转换为在输出侧的时间戳，然后赋值给 output_frame。
      */
-    int64_t delay = GetDelay(90000);
+    base::Fraction delay = GetDelay(90000);
     if (ret == static_cast<int>(ErrorCode::eof))
     {
         /* 不清楚冲洗完后重采样器内会不会仍然延迟不为 0，所以冲洗后，并且返回 eof，此时表示重采样器空了。
@@ -116,11 +117,11 @@ int video::SwrContextWrapper::ReadData(AVFrameWrapper &output_frame)
         delay = 0;
     }
 
-    int64_t out_pts = ConvertTimeStamp(_in_pts_when_send_frame - delay,
-                                       AVRational{1, 90000},
-                                       _out_frame_infos.TimeBase());
+    base::Fraction out_pts = (_in_pts_when_send_frame - delay) *
+                             base::Fraction{1, 90000} /
+                             video::AVRationalToFraction(_out_frame_infos.TimeBase());
 
-    output_frame.SetPts(out_pts);
+    output_frame.SetPts(static_cast<int64_t>(out_pts));
     output_frame.SetTimeBase(_out_frame_infos.TimeBase());
     return ret;
 }

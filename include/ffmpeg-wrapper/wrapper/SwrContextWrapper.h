@@ -30,7 +30,7 @@ namespace video
         /// @note _in_pts_when_send_frame 相当于未来的时间戳。只要将重采样缓冲区中的采样点播放完，
         /// 重采样器输出端的时间戳就会真正变成 _in_pts_when_send_frame。也就是输入端的时间戳
         /// 和输出端的时间戳不仅时间基不一样，还存在时间差。
-        int64_t _in_pts_when_send_frame = 0;
+        base::Fraction _in_pts_when_send_frame = 0;
 
         int ReadFrameInFlushingMode(AVFrameWrapper &output_frame);
         int ReadFrameInNonFlushingMode(AVFrameWrapper &output_frame);
