@@ -32,8 +32,8 @@ namespace video
         /// 和输出端的时间戳不仅时间基不一样，还存在时间差。
         int64_t _in_pts_when_send_frame = 0;
 
-        int read_frame_in_flushing_mode(AVFrameWrapper &output_frame);
-        int read_frame_in_non_flushing_mode(AVFrameWrapper &output_frame);
+        int ReadFrameInFlushingMode(AVFrameWrapper &output_frame);
+        int ReadFrameInNonFlushingMode(AVFrameWrapper &output_frame);
 
     public:
         /// @brief 使用 IAudioStreamInfoCollection 接口初始化重采样器。

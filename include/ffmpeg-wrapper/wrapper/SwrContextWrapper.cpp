@@ -93,12 +93,12 @@ int video::SwrContextWrapper::ReadData(AVFrameWrapper &output_frame)
     if (_flushed)
     {
         // 冲洗模式
-        ret = read_frame_in_flushing_mode(output_frame);
+        ret = ReadFrameInFlushingMode(output_frame);
     }
     else
     {
         // 非冲洗模式
-        ret = read_frame_in_non_flushing_mode(output_frame);
+        ret = ReadFrameInNonFlushingMode(output_frame);
     }
 
     /* 在送入帧的时候记录了当时的 pts，为 _pts_when_send_frame。现在已经读取出 output_frame 了，
@@ -125,7 +125,7 @@ int video::SwrContextWrapper::ReadData(AVFrameWrapper &output_frame)
     return ret;
 }
 
-int SwrContextWrapper::read_frame_in_flushing_mode(AVFrameWrapper &output_frame)
+int SwrContextWrapper::ReadFrameInFlushingMode(AVFrameWrapper &output_frame)
 {
     int count = swr_convert(_wrapped_obj,
                             output_frame->extended_data,
@@ -152,7 +152,7 @@ int SwrContextWrapper::read_frame_in_flushing_mode(AVFrameWrapper &output_frame)
     return static_cast<int>(ErrorCode::eof);
 }
 
-int SwrContextWrapper::read_frame_in_non_flushing_mode(AVFrameWrapper &output_frame)
+int SwrContextWrapper::ReadFrameInNonFlushingMode(AVFrameWrapper &output_frame)
 {
     if (CanFillOutputFrame(output_frame))
     {
