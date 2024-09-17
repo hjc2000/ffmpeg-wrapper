@@ -39,11 +39,11 @@ void FpsAdjustPipe::ReadAndSendFrame()
                 // 下轮循环继续读取
                 break;
             }
-        case (int)ErrorCode::output_is_temporarily_unavailable:
+        case static_cast<int>(ErrorCode::output_is_temporarily_unavailable):
             {
                 return;
             }
-        case (int)ErrorCode::eof:
+        case static_cast<int>(ErrorCode::eof):
             {
                 FlushEachConsumer();
                 return;
