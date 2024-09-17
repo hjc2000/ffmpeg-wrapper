@@ -63,7 +63,8 @@ namespace video
         /// 也会产生延迟。此函数用来获取所有的这些延迟。
         ///
         /// @param base 延迟的基。
-        /// @note 不是时间基，base 是时间基的倒数。详见 https://www.yuque.com/qiaodangyi/yrin4p/ica2heo5g3kyre9t
+        /// @note 不是时间基，base 是时间基的倒数。
+        /// 详见 https://www.yuque.com/qiaodangyi/yrin4p/ica2heo5g3kyre9t
         /// @note 使用时间基的倒数是因为 ffmpeg 默认你会取一个 (0, 1] 内的，并且很接近 0 的数作为时间基，因为
         /// 这样精度才高。整型无法表示这种数，所以取了倒数。不用 double 是因为 double 在表示很小的数，例如
         /// 1 / 90000 时精度不能满足要求。这种时候用整型可以没有误差。time_base = 1 / 90000，则 base = 90000。
@@ -123,10 +124,5 @@ namespace video
         /// 		则会将输出帧后面没被填充的空隙填充为静音。此时也是返回 0
         /// 	@li 如果重采样器内部没有数据，则返回 ErrorCode::eof，表示到达文件尾。
         int ReadData(AVFrameWrapper &output_frame);
-
-        /// @brief 向重采样器中送入指定数量的静音采样点。
-        /// @param nb_samples 想要送入多少个静音采样点。
-        /// @return 成功返回 0，失败返回负数的错误代码。
-        int send_silence_samples(uint32_t nb_samples);
     };
 } // namespace video

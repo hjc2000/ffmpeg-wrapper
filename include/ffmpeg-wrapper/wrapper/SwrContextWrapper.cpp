@@ -176,45 +176,6 @@ int SwrContextWrapper::read_frame_in_non_flushing_mode(AVFrameWrapper &output_fr
     return (int)ErrorCode::output_is_temporarily_unavailable;
 }
 
-int SwrContextWrapper::send_silence_samples(uint32_t nb_samples)
-{
-    if (nb_samples == 0)
-    {
-        return 0;
-    }
-
-    if (!_silence_frame)
-    {
-        _silence_frame = std::shared_ptr<AVFrameWrapper>{new AVFrameWrapper{_in_stream_infos, 64}};
-        _silence_frame->Mute(0);
-    }
-
-    // 循环次数
-    uint32_t loop_times = nb_samples / _silence_frame->SampleCount();
-    for (uint32_t i = 0; i < loop_times; i++)
-    {
-        SendData(*_silence_frame);
-    }
-
-    // 求模，取余数，看用 _silence_frame 填充 loop_times 次后还会剩下几个采样点才能达到 nb_samples
-    uint32_t remain_nb_samples = nb_samples % _silence_frame->SampleCount();
-
-    int ret = swr_convert(_wrapped_obj,
-                          nullptr,
-                          0,
-                          (*_silence_frame)->extended_data,
-                          remain_nb_samples);
-
-    if (ret < 0)
-    {
-        // 失败返回负数的错误代码
-        return ret;
-    }
-
-    // 成功返回 0.
-    return 0;
-}
-
 int SwrContextWrapper::AvaliableSampleCount(int in_nb_samples)
 {
     int samples = swr_get_out_samples(_wrapped_obj, in_nb_samples);
