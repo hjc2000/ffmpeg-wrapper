@@ -38,7 +38,7 @@ int video::AudioSampler::ReadData(AVFrameWrapper &frame)
     {
         // 采样一次
         double sample_value = _signal_source->Sample();
-        _pts += SampleInterval() / AVRationalToFraction(TimeBase());
+        _pts += SampleInterval() / ToFraction(TimeBase());
 
         // 为每个声道填充相同的值
         for (int j = 0; j < ChannelLayout().nb_channels; j++)

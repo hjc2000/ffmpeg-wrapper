@@ -44,7 +44,7 @@ SwrContextWrapper::~SwrContextWrapper()
 void video::SwrContextWrapper::SendData(AVFrameWrapper &input_frame)
 {
     _in_pts_when_send_frame = base::Fraction{input_frame.Pts()} *
-                              video::AVRationalToFraction(input_frame.TimeBase()) /
+                              video::ToFraction(input_frame.TimeBase()) /
                               base::Fraction{1, 90000};
 
     // 非冲洗模式
@@ -119,7 +119,7 @@ int video::SwrContextWrapper::ReadData(AVFrameWrapper &output_frame)
 
     base::Fraction out_pts = (_in_pts_when_send_frame - delay) *
                              base::Fraction{1, 90000} /
-                             video::AVRationalToFraction(_out_frame_infos.TimeBase());
+                             video::ToFraction(_out_frame_infos.TimeBase());
 
     output_frame.SetPts(static_cast<int64_t>(out_pts));
     output_frame.SetTimeBase(_out_frame_infos.TimeBase());

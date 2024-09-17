@@ -183,7 +183,7 @@ bool video::AVFrameWrapper::IsWritable()
 
 void video::AVFrameWrapper::UpdateAudioFrameDuration()
 {
-    base::Fraction fraction_duration = SampleCount() * SampleInterval() / AVRationalToFraction(TimeBase());
+    base::Fraction fraction_duration = SampleCount() * SampleInterval() / ToFraction(TimeBase());
     int64_t duration = fraction_duration.Div();
     SetDuration(duration);
 }
