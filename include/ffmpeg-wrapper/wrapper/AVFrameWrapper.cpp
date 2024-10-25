@@ -338,7 +338,7 @@ void video::AVFrameWrapper::SetPixelFormat(AVPixelFormat value)
 
 #pragma endregion
 
-base::Json video::AVFrameWrapper::ToJson()
+base::Json video::AVFrameWrapper::ToJson() const
 {
     base::Json root{
         {"pts", _wrapped_obj->pts},

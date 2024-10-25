@@ -94,7 +94,7 @@ namespace video
             return _wrapped_obj->stream_index[index];
         }
 
-        std::string ToString() override
+        std::string ToString() const override
         {
             return _dic->ToString();
         }

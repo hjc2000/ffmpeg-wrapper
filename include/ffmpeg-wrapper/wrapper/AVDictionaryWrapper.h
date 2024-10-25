@@ -184,7 +184,7 @@ namespace video
 
 #pragma endregion
 
-        std::string ToString() override
+        std::string ToString() const override
         {
             std::stringstream sb;
             for (AVDictionaryEntry *entry : *this)
