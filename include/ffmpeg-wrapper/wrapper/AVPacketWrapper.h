@@ -52,7 +52,6 @@ namespace video
 
         /// @brief 包的 dts
         /// @note 包最好以 dts 为准，因为如果视频含有 B 帧，pts 可能会出现无效值。
-        ///
         /// @return
         int64_t Dts() const;
         void SetDts(int64_t value);
