@@ -72,11 +72,6 @@ namespace video
 
         ~SwsContextWrapper();
 
-        SwsContext *&WrappedObj() override
-        {
-            return _wrapped_obj;
-        }
-
         SwsContext *WrappedObj() const override
         {
             return _wrapped_obj;

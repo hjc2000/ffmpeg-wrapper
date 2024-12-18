@@ -25,11 +25,6 @@ namespace video
     public:
         VideoFilterGraph(IVideoStreamInfoCollection const &infos);
 
-        AVFilterGraph *&WrappedObj() override
-        {
-            return _wrapped_obj;
-        }
-
         AVFilterGraph *WrappedObj() const override
         {
             return _wrapped_obj;

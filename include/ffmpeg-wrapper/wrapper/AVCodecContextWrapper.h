@@ -27,11 +27,6 @@ namespace video
     public:
         ~AVCodecContextWrapper();
 
-        AVCodecContext *&WrappedObj() override
-        {
-            return _wrapped_obj;
-        }
-
         AVCodecContext *WrappedObj() const override
         {
             return _wrapped_obj;

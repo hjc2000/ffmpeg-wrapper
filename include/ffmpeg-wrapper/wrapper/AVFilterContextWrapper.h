@@ -17,11 +17,6 @@ namespace video
         AVFilterContextWrapper(AVFilterContextWrapper const &o);
         AVFilterContextWrapper &operator=(AVFilterContextWrapper const &o);
 
-        AVFilterContext *&WrappedObj() override
-        {
-            return _wrapped_obj;
-        }
-
         AVFilterContext *WrappedObj() const override
         {
             return _wrapped_obj;

@@ -37,11 +37,6 @@ namespace video
         InputFormat(std::shared_ptr<base::Stream> input_stream);
         ~InputFormat();
 
-        AVFormatContext *&WrappedObj() override
-        {
-            return _wrapped_obj;
-        }
-
         AVFormatContext *WrappedObj() const override
         {
             return _wrapped_obj;

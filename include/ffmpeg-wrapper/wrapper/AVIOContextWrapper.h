@@ -55,11 +55,6 @@ namespace video
 
         ~AVIOContextWrapper();
 
-        AVIOContext *&WrappedObj() override
-        {
-            return _wrapped_obj;
-        }
-
         AVIOContext *WrappedObj() const override
         {
             return _wrapped_obj;

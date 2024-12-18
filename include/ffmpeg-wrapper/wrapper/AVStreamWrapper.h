@@ -27,11 +27,6 @@ namespace video
         AVStreamWrapper(AVStream *p);
         AVStreamWrapper &operator=(AVStreamWrapper const &o);
 
-        AVStream *&WrappedObj() override
-        {
-            return _wrapped_obj;
-        }
-
         AVStream *WrappedObj() const override
         {
             return _wrapped_obj;

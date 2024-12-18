@@ -46,11 +46,6 @@ namespace video
             return *this;
         }
 
-        AVProgram *&WrappedObj() override
-        {
-            return _wrapped_obj;
-        }
-
         AVProgram *WrappedObj() const override
         {
             return _wrapped_obj;

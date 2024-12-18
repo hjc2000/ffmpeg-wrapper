@@ -62,7 +62,7 @@ void video::SptsEncodeMux::WriteHeader()
     option_dic.SetValueByKey("pat_period ", "1000");
     option_dic.SetValueByKey("pmt_period", "1000");
     option_dic.SetValueByKey("sdt_period", "1000");
-    _out_format->WriteHeader(option_dic);
+    _out_format->WriteHeader(&option_dic.WrappedObj());
     _out_format->DumpFormat();
 }
 

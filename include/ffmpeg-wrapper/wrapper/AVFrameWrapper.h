@@ -85,11 +85,6 @@ namespace video
 
 #pragma endregion
 
-        AVFrame *&WrappedObj() override
-        {
-            return _wrapped_obj;
-        }
-
         AVFrame *WrappedObj() const override
         {
             return _wrapped_obj;

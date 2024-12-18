@@ -59,7 +59,7 @@ namespace video
             FreeInnerDictionary();
         }
 
-        AVDictionary *&WrappedObj() override
+        AVDictionary *&WrappedObj()
         {
             return _wrapped_obj;
         }

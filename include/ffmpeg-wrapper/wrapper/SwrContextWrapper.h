@@ -46,11 +46,6 @@ namespace video
 
         ~SwrContextWrapper();
 
-        SwrContext *&WrappedObj() override
-        {
-            return _wrapped_obj;
-        }
-
         SwrContext *WrappedObj() const override
         {
             return _wrapped_obj;

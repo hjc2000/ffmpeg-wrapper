@@ -105,7 +105,7 @@ AVFilterContextWrapper VideoFilterGraph::alloc_fps_filter(AVRational FrameRate)
 
     AVDictionaryWrapper options;
     options.SetValueByKey("fps", base::ToString(FrameRate).c_str());
-    if (avfilter_init_dict(fps_ctx, options) < 0)
+    if (avfilter_init_dict(fps_ctx, &options.WrappedObj()) < 0)
     {
         throw std::runtime_error{"AVFilterContext 初始化失败"};
     }

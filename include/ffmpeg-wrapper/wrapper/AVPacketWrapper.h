@@ -29,11 +29,6 @@ namespace video
         ~AVPacketWrapper();
         AVPacketWrapper &operator=(AVPacketWrapper const &o);
 
-        AVPacket *&WrappedObj() override
-        {
-            return _wrapped_obj;
-        }
-
         AVPacket *WrappedObj() const override
         {
             return _wrapped_obj;

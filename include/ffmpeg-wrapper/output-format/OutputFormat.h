@@ -37,11 +37,6 @@ namespace video
     public:
         virtual ~OutputFormat() = default;
 
-        AVFormatContext *&WrappedObj() override
-        {
-            return _wrapped_obj;
-        }
-
         AVFormatContext *WrappedObj() const override
         {
             return _wrapped_obj;
