@@ -7,13 +7,13 @@ video::BestStreamDemuxDecoder::BestStreamDemuxDecoder(std::shared_ptr<InputForma
 {
     _input_format = input_format;
     AVStreamWrapper stream = _input_format->FindBestStream(AVMediaType::AVMEDIA_TYPE_VIDEO);
-    if (!stream.IsNull())
+    if (stream)
     {
         _video_decode_pipe = std::shared_ptr<ThreadDecoderPipe>{new ThreadDecoderPipe{stream}};
     }
 
     stream = _input_format->FindBestStream(AVMediaType::AVMEDIA_TYPE_AUDIO);
-    if (!stream.IsNull())
+    if (stream)
     {
         _audio_decode_pipe = std::shared_ptr<ThreadDecoderPipe>{new ThreadDecoderPipe{stream}};
     }
