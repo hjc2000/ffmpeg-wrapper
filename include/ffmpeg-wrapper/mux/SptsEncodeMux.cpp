@@ -76,7 +76,7 @@ std::shared_ptr<base::IConsumer<AVFrameWrapper>> video::SptsEncodeMux::AudioEnco
     return _audio_encode_pipe;
 }
 
-#include <base/stream/FileStream.h>
+#include <base/stream/IFileStream.h>
 #include <base/task/CancellationTokenSource.h>
 #include <ffmpeg-wrapper/demux/JoinedInputFormatDemuxDecoder.h>
 #include <ffmpeg-wrapper/factory/EncoderPipeFactoryManager.h>
@@ -127,7 +127,7 @@ void test_SptsEncodeMux()
     output_audio_stream_infos._sample_format = AVSampleFormat::AV_SAMPLE_FMT_FLTP;
     output_audio_stream_infos._sample_rate = 48000;
 
-    std::shared_ptr<base::Stream> out_fs = base::FileStream::CreateNewAnyway("mux_out.ts");
+    std::shared_ptr<base::Stream> out_fs = base::di::filesystem::CreateNewAnyway("mux_out.ts");
     std::shared_ptr<StreamOutputFormat> out_fmt_ctx{new StreamOutputFormat{".ts", out_fs}};
 
     std::shared_ptr<SptsEncodeMux> spts_encode_mux{
