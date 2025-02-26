@@ -1,4 +1,5 @@
 #include "AudioSampler.h"
+#include "base/unit/Seconds.h"
 
 video::AudioSampler::AudioSampler(std::shared_ptr<base::ISignalSource<double>> signal_source,
                                   video::IAudioFrameInfoCollection const &infos)
@@ -6,8 +7,7 @@ video::AudioSampler::AudioSampler(std::shared_ptr<base::ISignalSource<double>> s
     _signal_source = signal_source;
     _audio_frame_infos = infos;
     _audio_frame_infos.SetSampleFormat(AVSampleFormat::AV_SAMPLE_FMT_DBL);
-    _signal_source->SetSampleInterval(base::Fraction{1, SampleRate()});
-    _signal_source->Open();
+    _signal_source->Open(base::Seconds{base::Fraction{1, SampleRate()}});
 }
 
 void video::AudioSampler::Open()
@@ -157,12 +157,15 @@ void video::TestAudioSampler()
     audio_frame_infos.SetSampleRate(44100);
     audio_frame_infos.SetTimeBase(AVRational{1, 90000});
 
-    std::shared_ptr<AudioSampler> audio_sampler{
-        new AudioSampler{
-            std::shared_ptr<base::SinSignalSource>{new base::SinSignalSource{base::Fraction{1, 400}}},
-            audio_frame_infos,
-        },
-    };
+    auto signal_source = std::shared_ptr<base::SinSignalSource>{new base::SinSignalSource{
+        base::Seconds{base::Fraction{1, 400}},
+    }};
+
+    std::shared_ptr<AudioSampler> audio_sampler{new AudioSampler{
+        signal_source,
+        audio_frame_infos,
+    }};
+
     audio_sampler->Open();
 
     std::shared_ptr<video::FileOutputFormat> out_format{new video::FileOutputFormat{"sin_audio.ts"}};
