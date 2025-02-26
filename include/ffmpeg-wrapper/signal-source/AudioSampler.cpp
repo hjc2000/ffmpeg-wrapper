@@ -62,8 +62,6 @@ int video::AudioSampler::ReadData(AVFrameWrapper &frame)
     return 0;
 }
 
-#pragma region IAudioFrameInfoCollection
-
 AVRational video::AudioSampler::TimeBase() const
 {
     return _audio_frame_infos.TimeBase();
@@ -133,8 +131,6 @@ void video::AudioSampler::SetSampleCount(int value)
 
     _audio_frame_infos.SetSampleCount(value);
 }
-
-#pragma endregion
 
 #include <base/pipe/Pump.h>
 #include <base/signal/SinSignalSource.h>
