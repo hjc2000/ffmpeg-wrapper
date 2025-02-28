@@ -1,8 +1,6 @@
 #pragma once
 #include <base/stream/Stream.h>
 #include <ffmpeg-wrapper/base_include.h>
-#include <fstream>
-#include <memory>
 
 namespace video
 {
@@ -30,4 +28,4 @@ namespace video
 		/// 的首地址，然后将缓冲区当成一个长度为 _size 的一维数组写入到文件中。
 		int _size;
 	};
-}
+} // namespace video
