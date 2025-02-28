@@ -9,9 +9,9 @@
 
 namespace video
 {
-	class SwsPipe
-		: public base::IPipeSource<AVFrameWrapper>,
-		  public base::IConsumer<AVFrameWrapper>
+	class SwsPipe :
+		public base::IPipeSource<AVFrameWrapper>,
+		public base::IConsumer<AVFrameWrapper>
 	{
 	private:
 		base::List<std::shared_ptr<base::IConsumer<AVFrameWrapper>>> _consumer_list;
@@ -34,4 +34,4 @@ namespace video
 		void SendData(AVFrameWrapper &frame) override;
 		void Flush() override;
 	};
-}
+} // namespace video

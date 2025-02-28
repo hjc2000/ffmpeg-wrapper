@@ -5,7 +5,8 @@
 
 namespace video
 {
-	class SwsFpsEncoderPipe : public base::IConsumer<AVFrameWrapper>
+	class SwsFpsEncoderPipe :
+		public base::IConsumer<AVFrameWrapper>
 	{
 	private:
 		std::shared_ptr<SwsFpsPipe> _sws_fps_pipe;
@@ -21,4 +22,4 @@ namespace video
 
 		void Flush() override;
 	};
-}
+} // namespace video

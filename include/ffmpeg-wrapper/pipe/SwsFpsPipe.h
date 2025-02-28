@@ -9,9 +9,9 @@ namespace video
 	class SwsPipe;
 	class FpsAdjustPipe;
 
-	class SwsFpsPipe
-		: public base::IConsumer<AVFrameWrapper>,
-		  public base::IPipeSource<AVFrameWrapper>
+	class SwsFpsPipe :
+		public base::IConsumer<AVFrameWrapper>,
+		public base::IPipeSource<AVFrameWrapper>
 	{
 	private:
 		std::shared_ptr<SwsPipe> _sws_pipe;
@@ -25,4 +25,4 @@ namespace video
 		void SendData(AVFrameWrapper &frame) override;
 		void Flush() override;
 	};
-}
+} // namespace video
