@@ -44,44 +44,44 @@ void ReencodeDotNetVideoStream(DotNetStream *dotnet_video_stream)
 
 	int loop_times = 0;
 
-	auto get_input_format_func = [&](std::shared_ptr<video::InputFormat> &current_input_format)
-	{
-		if (loop_times > 2)
+	joined_input_format_demux_decoder->NeedInputFormatEvent().Subscribe(
+		[&](std::shared_ptr<video::InputFormat> &current_input_format)
 		{
-			return;
-		}
+			if (loop_times > 2)
+			{
+				return;
+			}
 
-		dotnet_video_stream->SetPosition(0);
-		std::shared_ptr<video::InputFormat> in_fmt_ctx{new video::InputFormat{dotnet_video_stream->ToSharePtr()}};
-		loop_times++;
-		current_input_format = in_fmt_ctx;
-	};
-	joined_input_format_demux_decoder->NeedInputFormatEvent().Subscribe(get_input_format_func);
+			dotnet_video_stream->SetPosition(0);
+			std::shared_ptr<video::InputFormat> in_fmt_ctx{new video::InputFormat{dotnet_video_stream->ToSharePtr()}};
+			loop_times++;
+			current_input_format = in_fmt_ctx;
+		});
 
 	// 解码管道
 	base::CancellationTokenSource cancel_pump_source;
 	base::TaskCompletionSignal pump_thread_exit{false};
 
-	auto thread_fun = [&]()
-	{
-		try
+	std::thread{
+		[&]()
 		{
-			joined_input_format_demux_decoder->PumpDataToConsumers(cancel_pump_source.Token());
-		}
-		catch (std::exception &e)
-		{
-			std::cerr << e.what() << std::endl;
-		}
-		catch (...)
-		{
-			std::cerr << "发生未知异常" << std::endl;
-		}
+			try
+			{
+				joined_input_format_demux_decoder->PumpDataToConsumers(cancel_pump_source.Token());
+			}
+			catch (std::exception &e)
+			{
+				std::cerr << e.what() << std::endl;
+			}
+			catch (...)
+			{
+				std::cerr << "发生未知异常" << std::endl;
+			}
 
-		std::cout << "线程退出" << std::endl;
-		pump_thread_exit.SetResult();
-	};
-
-	std::thread(thread_fun).detach();
+			std::cout << "线程退出" << std::endl;
+			pump_thread_exit.SetResult();
+		}}
+		.detach();
 
 	std::cin.get();
 	cancel_pump_source.Cancel();
