@@ -8,4 +8,4 @@ namespace video
 	/// @param str
 	/// @return
 	AVMediaType ParseAVMediaType(std::string str);
-}
+} // namespace video
