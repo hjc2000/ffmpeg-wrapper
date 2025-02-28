@@ -4,9 +4,9 @@
 
 namespace video
 {
-    /// @brief 将 AVRational 转为 base::Fraction
-    /// @param r
-    /// @return
-    base::Fraction ToFraction(AVRational const &r);
+	/// @brief 将 AVRational 转为 base::Fraction
+	/// @param r
+	/// @return
+	base::Fraction ToFraction(AVRational const &r);
 
 } // namespace video

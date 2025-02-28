@@ -2,5 +2,5 @@
 
 base::Fraction video::ToFraction(AVRational const &r)
 {
-    return base::Fraction{r.num, r.den};
+	return base::Fraction{r.num, r.den};
 }

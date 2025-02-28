@@ -53,7 +53,7 @@ namespace video
 			return ch_layout;
 		}
 	};
-}
+} // namespace video
 
 /// @brief 输出 AVChannelLayout 的描述信息字符串
 /// @param ostream
