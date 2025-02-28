@@ -8,7 +8,10 @@
 
 namespace video
 {
-	/// @brief 采样器。从信号源中采样，生成音频帧。
+	/**
+	 * @brief 采样器。从信号源中采样，生成音频帧。
+	 *
+	 */
 	class AudioSampler :
 		public base::ISource<AVFrameWrapper>,
 		public video::IAudioFrameInfoCollection
@@ -20,40 +23,50 @@ namespace video
 		bool _opened = false;
 
 	public:
-		/// @brief
-		/// @param signal_source 传入一个未打开的信号源。
-		/// @param infos
+		/**
+		 * @brief
+		 *
+		 * @param signal_source 传入一个未打开的信号源。
+		 * @param infos
+		 */
 		AudioSampler(std::shared_ptr<base::ISignalSource<double>> signal_source,
 					 video::IAudioFrameInfoCollection const &infos);
 
+	public:
 		void Open();
 		int ReadData(AVFrameWrapper &frame) override;
 
-#pragma region IAudioFrameInfoCollection
 		AVRational TimeBase() const override;
 		void SetTimeBase(AVRational value) override;
 
-		/// @brief 采样格式无法自定义，因为采样值是 double，并且只支持交错格式存放，
-		/// 所以只能是 AVSampleFormat::AV_SAMPLE_FMT_DBL
-		///
-		/// @return
+		/**
+		 * @brief 采样格式无法自定义，因为采样值是 double，并且只支持交错格式存放，
+		 * 所以只能是 AVSampleFormat::AV_SAMPLE_FMT_DBL
+		 *
+		 * @return AVSampleFormat
+		 */
 		AVSampleFormat SampleFormat() const override;
 
-		/// @brief 不支持设置采样格式，所以本函数是空函数。
-		/// @param value
+		/**
+		 * @brief 不支持设置采样格式，所以本函数是空函数。
+		 *
+		 * @param value
+		 */
 		void SetSampleFormat(AVSampleFormat value) override;
 
 		int SampleRate() const override;
 		void SetSampleRate(int value) override;
 
-		/// @brief 声道布局可以设置，但是所有声道都是相同的采样值。
-		/// @return
+		/**
+		 * @brief 声道布局可以设置，但是所有声道都是相同的采样值。
+		 *
+		 * @return AVChannelLayout
+		 */
 		AVChannelLayout ChannelLayout() const override;
 		void SetChannelLayout(AVChannelLayout value) override;
 
 		int SampleCount() const override;
 		void SetSampleCount(int value) override;
-#pragma endregion
 	};
 
 	/// @brief 测试函数
