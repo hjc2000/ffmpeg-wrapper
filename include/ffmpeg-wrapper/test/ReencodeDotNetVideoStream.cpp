@@ -21,7 +21,7 @@ void ReencodeDotNetVideoStream(DotNetStream *dotnet_video_stream)
 	output_audio_stream_infos._sample_rate = 48000;
 
 	// 编码封装管道
-	std::shared_ptr<base::Stream> out_fs = base::di::filesystem::CreateNewAnyway("mux_out.ts");
+	std::shared_ptr<base::Stream> out_fs = base::di::file::CreateNewAnyway("mux_out.ts");
 
 	std::shared_ptr<video::StreamOutputFormat> out_fmt_ctx{new video::StreamOutputFormat{
 		".ts",
