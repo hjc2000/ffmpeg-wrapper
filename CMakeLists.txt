@@ -27,7 +27,7 @@ target_import_pinvoke(${ProjectName} PUBLIC)
 
 # 添加测试程序
 if(1)
-	add_executable(test ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
+	add_executable(test ${CMAKE_CURRENT_SOURCE_DIR}/exe/main.cpp)
 	target_compile_definitions(test PRIVATE Predefine_ResourceDir="D:/video/视频开发测试")
 
 	target_link_libraries(${ProjectName} PUBLIC -Wl,--start-group)
