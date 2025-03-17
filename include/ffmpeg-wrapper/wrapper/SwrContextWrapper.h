@@ -2,12 +2,11 @@
 #include <atomic>
 #include <base/pipe/IConsumer.h>
 #include <base/pipe/ISource.h>
+#include <ffmpeg-wrapper/ffmpeg_headers.h>
 #include <ffmpeg-wrapper/info-collection/AudioFrameInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
-#include <ffmpeg-wrapper/pch.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
-
 
 namespace video
 {

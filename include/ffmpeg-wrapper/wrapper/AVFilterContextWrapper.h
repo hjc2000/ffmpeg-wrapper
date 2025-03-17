@@ -1,6 +1,6 @@
 #pragma once
 #include <base/Wrapper.h>
-#include <ffmpeg-wrapper/pch.h>
+#include <ffmpeg-wrapper/ffmpeg_headers.h>
 
 namespace video
 {

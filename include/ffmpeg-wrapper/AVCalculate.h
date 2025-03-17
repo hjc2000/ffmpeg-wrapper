@@ -1,6 +1,6 @@
 #pragma once
 #include <base/math/Fraction.h>
-#include <ffmpeg-wrapper/pch.h>
+#include <ffmpeg-wrapper/ffmpeg_headers.h>
 
 namespace video
 {

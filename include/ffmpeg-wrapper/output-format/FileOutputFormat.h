@@ -1,10 +1,9 @@
 #pragma once
+#include <ffmpeg-wrapper/ffmpeg_headers.h>
 #include <ffmpeg-wrapper/output-format/OutputFormat.h>
-#include <ffmpeg-wrapper/pch.h>
 #include <functional>
 #include <iostream>
 #include <string>
-
 
 namespace video
 {

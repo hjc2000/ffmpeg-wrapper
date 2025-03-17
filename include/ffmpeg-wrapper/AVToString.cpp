@@ -1,6 +1,6 @@
 #include <base/string/define.h>
 #include <ffmpeg-wrapper/AVToString.h>
-#include <ffmpeg-wrapper/pch.h>
+#include <ffmpeg-wrapper/ffmpeg_headers.h>
 #include <format>
 
 std::string base::ToString(AVRational const &value)
