@@ -6,9 +6,10 @@
 #include <base/Wrapper.h>
 #include <ffmpeg-wrapper/AVCalculate.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
-#include <ffmpeg-wrapper/ffmpeg_headers.h>
 #include <ffmpeg-wrapper/filter/VideoFilterGraph.h>
+#include <ffmpeg-wrapper/pch.h>
 #include <memory>
+
 
 namespace video
 {

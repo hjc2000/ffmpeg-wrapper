@@ -2,7 +2,7 @@
 #include <base/pipe/ISource.h>
 #include <base/Wrapper.h>
 #include <chrono>
-#include <ffmpeg-wrapper/ffmpeg_headers.h>
+#include <ffmpeg-wrapper/pch.h>
 #include <ffmpeg-wrapper/wrapper/AVIOContextWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVProgramWrapper.h>

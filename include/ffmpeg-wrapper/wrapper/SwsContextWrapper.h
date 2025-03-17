@@ -4,9 +4,10 @@
 #include <base/pipe/ISource.h>
 #include <base/Wrapper.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
-#include <ffmpeg-wrapper/ffmpeg_headers.h>
 #include <ffmpeg-wrapper/info-collection/VideoFrameInfoCollection.h>
+#include <ffmpeg-wrapper/pch.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
+
 
 namespace video
 {

@@ -1,6 +1,6 @@
 #include "AVStreamWrapper.h"
 #include <ffmpeg-wrapper/ErrorCode.h>
-#include <ffmpeg-wrapper/ffmpeg_headers.h>
+#include <ffmpeg-wrapper/pch.h>
 #include <ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h>
 #include <format>
 #include <memory>

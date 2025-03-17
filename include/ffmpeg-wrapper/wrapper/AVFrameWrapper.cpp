@@ -4,8 +4,9 @@
 #include <base/unit/Seconds.h>
 #include <ffmpeg-wrapper/AVToString.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
-#include <ffmpeg-wrapper/ffmpeg_headers.h>
 #include <ffmpeg-wrapper/ImageBuffer.h>
+#include <ffmpeg-wrapper/pch.h>
+
 
 using namespace video;
 

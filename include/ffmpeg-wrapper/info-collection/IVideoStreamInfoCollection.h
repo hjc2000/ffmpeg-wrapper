@@ -1,8 +1,9 @@
 #pragma once
 #include <base/math/Fraction.h>
 #include <ffmpeg-wrapper/AVCompare.h>
-#include <ffmpeg-wrapper/ffmpeg_headers.h>
 #include <ffmpeg-wrapper/info-collection/IVideoFrameInfoCollection.h>
+#include <ffmpeg-wrapper/pch.h>
+
 
 namespace video
 {

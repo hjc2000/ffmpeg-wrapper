@@ -2,7 +2,7 @@
 #include "AVCodecContextWrapper.h"
 #include <ffmpeg-wrapper/AVCalculate.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
-#include <ffmpeg-wrapper/ffmpeg_headers.h>
+#include <ffmpeg-wrapper/pch.h>
 #include <ffmpeg-wrapper/wrapper/AVDictionaryWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>

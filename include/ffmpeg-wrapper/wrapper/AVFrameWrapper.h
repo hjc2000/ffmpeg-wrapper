@@ -6,10 +6,11 @@
 #include <ffmpeg-wrapper/AVCalculate.h>
 #include <ffmpeg-wrapper/AVToString.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
-#include <ffmpeg-wrapper/ffmpeg_headers.h>
 #include <ffmpeg-wrapper/info-collection/AudioFrameInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/VideoFrameInfoCollection.h>
+#include <ffmpeg-wrapper/pch.h>
+
 
 namespace video
 {
