@@ -1,14 +1,14 @@
 #pragma once
-#include <ffmpeg-wrapper/base_include.h>
+#include <ffmpeg-wrapper/pch.h>
 #include <iostream>
 #include <string>
 
 namespace base
 {
-    std::string ToString(AVRational const &value);
-    std::string ToString(AVSampleFormat const &value);
-    std::string ToString(AVPixelFormat const &value);
-    std::string ToString(AVMediaType const &value);
+	std::string ToString(AVRational const &value);
+	std::string ToString(AVSampleFormat const &value);
+	std::string ToString(AVPixelFormat const &value);
+	std::string ToString(AVMediaType const &value);
 } // namespace base
 
 std::ostream &operator<<(std::ostream &ostream, AVMediaType const &right);

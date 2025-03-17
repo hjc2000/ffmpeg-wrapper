@@ -1,5 +1,5 @@
 #include "ffmpeg-wrapper/ImageBuffer.h"
-#include <ffmpeg-wrapper/base_include.h>
+#include <ffmpeg-wrapper/pch.h>
 #include <ffmpeg-wrapper/wrapper/AVFrameWrapper.h>
 #include <iostream>
 

@@ -1,5 +1,5 @@
 #pragma once
-#include <ffmpeg-wrapper/base_include.h>
+#include <ffmpeg-wrapper/pch.h>
 
 namespace video
 {
@@ -21,4 +21,4 @@ namespace video
 
 		bool operator==(IVideoFrameInfoCollection const &o) const;
 	};
-}
+} // namespace video

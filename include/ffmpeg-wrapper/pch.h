@@ -1,4 +1,6 @@
 #pragma once
+// IWYU pragma: begin_keep
+// IWYU pragma: begin_exports
 
 extern "C"
 {
@@ -21,3 +23,11 @@ extern "C"
 #include <libswresample/swresample.h>
 #include <libswscale/swscale.h>
 }
+
+#include <base/pch.h>
+
+#ifdef __cplusplus
+#endif
+
+// IWYU pragma: end_exports
+// IWYU pragma: end_keep

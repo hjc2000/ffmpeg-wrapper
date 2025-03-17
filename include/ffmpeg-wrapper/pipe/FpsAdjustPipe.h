@@ -5,10 +5,11 @@
 #include <base/Trigger.h>
 #include <base/Wrapper.h>
 #include <ffmpeg-wrapper/AVCalculate.h>
-#include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/filter/VideoFilterGraph.h>
+#include <ffmpeg-wrapper/pch.h>
 #include <memory>
+
 
 namespace video
 {

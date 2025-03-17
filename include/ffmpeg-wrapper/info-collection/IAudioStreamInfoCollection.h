@@ -1,6 +1,6 @@
 #pragma once
 #include <base/math/Fraction.h>
-#include <ffmpeg-wrapper/base_include.h>
+#include <ffmpeg-wrapper/pch.h>
 #include <string>
 
 namespace video
@@ -46,4 +46,4 @@ namespace video
 
 		bool operator==(IAudioStreamInfoCollection const &another) const;
 	};
-}
+} // namespace video

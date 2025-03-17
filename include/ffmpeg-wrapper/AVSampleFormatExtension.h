@@ -1,5 +1,5 @@
 #pragma once
-#include <ffmpeg-wrapper/base_include.h>
+#include <ffmpeg-wrapper/pch.h>
 #include <string>
 
 namespace video
@@ -39,7 +39,7 @@ namespace video
 		/// <returns></returns>
 		static int ParseRequiredSampleCount(std::string codec_name);
 	};
-}
+} // namespace video
 
 /// @brief 将 AVSampleFormat 变成字符串输出
 /// @param ostream

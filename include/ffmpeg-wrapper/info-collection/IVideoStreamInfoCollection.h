@@ -1,15 +1,15 @@
 #pragma once
 #include <base/math/Fraction.h>
 #include <ffmpeg-wrapper/AVCompare.h>
-#include <ffmpeg-wrapper/base_include.h>
 #include <ffmpeg-wrapper/info-collection/IVideoFrameInfoCollection.h>
+#include <ffmpeg-wrapper/pch.h>
+
 
 namespace video
 {
 	/// @brief 视频流信息集合接口。
 	/// @note 视频流比起视频帧多了 2 个信息：帧率，时间基。
-	class IVideoStreamInfoCollection
-		: public IVideoFrameInfoCollection
+	class IVideoStreamInfoCollection : public IVideoFrameInfoCollection
 	{
 	public:
 		virtual ~IVideoStreamInfoCollection() = default;
@@ -28,4 +28,4 @@ namespace video
 		using IVideoFrameInfoCollection::operator==;
 		bool operator==(IVideoStreamInfoCollection const &another) const;
 	};
-}
+} // namespace video
