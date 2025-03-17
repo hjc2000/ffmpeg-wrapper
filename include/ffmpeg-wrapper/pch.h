@@ -2,11 +2,8 @@
 // IWYU pragma: begin_keep
 // IWYU pragma: begin_exports
 
-#ifdef __cplusplus
 extern "C"
 {
-#endif
-
 #include <libavcodec/avcodec.h>
 #include <libavfilter/buffersink.h>
 #include <libavfilter/buffersrc.h>
@@ -25,10 +22,9 @@ extern "C"
 #include <libavutil/timestamp.h>
 #include <libswresample/swresample.h>
 #include <libswscale/swscale.h>
-
-#ifdef __cplusplus
 }
-#endif
+
+#include <base/pch.h>
 
 // IWYU pragma: end_exports
 // IWYU pragma: end_keep
