@@ -1,5 +1,6 @@
 #include "SptsEncodeMux.h"
-#include <ffmpeg-wrapper/AVChannelLayoutExtension.h>
+#include "base/task/task.h"
+#include "ffmpeg-wrapper/AVChannelLayoutExtension.h"
 
 using namespace video;
 
@@ -147,7 +148,7 @@ void test_SptsEncodeMux()
 	base::CancellationTokenSource cancel_pump;
 	base::TaskCompletionSignal pump_thread_exit{false};
 
-	std::thread{
+	base::task::Run(
 		[&]()
 		{
 			try
@@ -165,8 +166,7 @@ void test_SptsEncodeMux()
 
 			std::cout << "线程退出" << std::endl;
 			pump_thread_exit.SetResult();
-		}}
-		.detach();
+		});
 
 	std::cin.get();
 	cancel_pump.Cancel();
