@@ -131,16 +131,14 @@ void test_SptsEncodeMux()
 	std::shared_ptr<base::Stream> out_fs = base::file::CreateNewAnyway("mux_out.ts");
 	std::shared_ptr<StreamOutputFormat> out_fmt_ctx{new StreamOutputFormat{".ts", out_fs}};
 
-	std::shared_ptr<SptsEncodeMux> spts_encode_mux{
-		new SptsEncodeMux{
-			out_fmt_ctx,
-			output_video_stream_infos,
-			"hevc_amf",
-			-1,
-			output_audio_stream_infos,
-			"eac3",
-		},
-	};
+	std::shared_ptr<SptsEncodeMux> spts_encode_mux{new SptsEncodeMux{
+		out_fmt_ctx,
+		output_video_stream_infos,
+		"hevc_amf",
+		-1,
+		output_audio_stream_infos,
+		"eac3",
+	}};
 
 	joined_input_format_demux_decoder->AddVideoFrameConsumer(spts_encode_mux->VideoEncodePipe());
 	joined_input_format_demux_decoder->AddAudioFrameConsumer(spts_encode_mux->AudioEncodePipe());
