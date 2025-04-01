@@ -12,11 +12,6 @@ if(1)
 	set(CMAKE_C_STANDARD 17)
 endif()
 
-include(target_import_ffmpeg)
-include(target_import_base)
-include(target_import_pinvoke)
-
-
 
 # 编译为动态库
 add_library(${ProjectName})
