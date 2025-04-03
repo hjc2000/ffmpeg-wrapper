@@ -7,7 +7,6 @@
 #include <ffmpeg-wrapper/ImageBuffer.h>
 #include <ffmpeg-wrapper/pch.h>
 
-
 using namespace video;
 
 void AVFrameWrapper::GetBuffer(int align)
@@ -185,7 +184,7 @@ bool video::AVFrameWrapper::IsWritable()
 void video::AVFrameWrapper::UpdateAudioFrameDuration()
 {
 	base::Fraction fraction_duration = SampleCount() * SampleInterval() / ToFraction(TimeBase());
-	int64_t duration = fraction_duration.Div();
+	int64_t duration{fraction_duration.Div()};
 	SetDuration(duration);
 }
 

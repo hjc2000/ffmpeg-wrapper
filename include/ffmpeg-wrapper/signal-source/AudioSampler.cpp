@@ -1,5 +1,6 @@
 #include "AudioSampler.h"
 #include "base/unit/Seconds.h"
+#include <cstdint>
 
 video::AudioSampler::AudioSampler(std::shared_ptr<base::ISignalSource<double>> signal_source,
 								  video::IAudioFrameInfoCollection const &infos)
@@ -28,7 +29,7 @@ int video::AudioSampler::ReadData(AVFrameWrapper &frame)
 	}
 
 	frame = AVFrameWrapper{_audio_frame_infos};
-	frame.SetPts(_pts.Div());
+	frame.SetPts(static_cast<int64_t>(_pts.Div()));
 	frame.UpdateAudioFrameDuration();
 
 	double *channel_buffer = reinterpret_cast<double *>(frame->extended_data[0]);
