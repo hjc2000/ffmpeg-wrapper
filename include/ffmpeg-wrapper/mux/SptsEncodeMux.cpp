@@ -146,25 +146,24 @@ void test_SptsEncodeMux()
 	base::CancellationTokenSource cancel_pump;
 	base::TaskCompletionSignal pump_thread_exit{false};
 
-	base::task::Run(
-		[&]()
-		{
-			try
-			{
-				joined_input_format_demux_decoder->PumpDataToConsumers(cancel_pump.Token());
-			}
-			catch (std::exception &e)
-			{
-				std::cerr << e.what() << std::endl;
-			}
-			catch (...)
-			{
-				std::cerr << "发生未知异常" << std::endl;
-			}
+	base::task::run([&]()
+					{
+						try
+						{
+							joined_input_format_demux_decoder->PumpDataToConsumers(cancel_pump.Token());
+						}
+						catch (std::exception &e)
+						{
+							std::cerr << e.what() << std::endl;
+						}
+						catch (...)
+						{
+							std::cerr << "发生未知异常" << std::endl;
+						}
 
-			std::cout << "线程退出" << std::endl;
-			pump_thread_exit.SetResult();
-		});
+						std::cout << "线程退出" << std::endl;
+						pump_thread_exit.SetResult();
+					});
 
 	std::cin.get();
 	cancel_pump.Cancel();
