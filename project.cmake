@@ -1,5 +1,5 @@
 # 编译为动态库
-add_library(${ProjectName})
+add_library(${ProjectName} STATIC)
 target_import_src(${ProjectName})
 target_import_ffmpeg(${ProjectName} PUBLIC)
 target_import_base(${ProjectName} PUBLIC)
