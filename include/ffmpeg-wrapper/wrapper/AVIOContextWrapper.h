@@ -1,8 +1,9 @@
 #pragma once
+#include "ffmpeg-wrapper/ffmpeg.h"
 #include <base/stream/Stream.h>
 #include <base/Wrapper.h>
-#include <ffmpeg-wrapper/pch.h>
 #include <memory>
+
 
 namespace video
 {

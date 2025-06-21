@@ -1,11 +1,12 @@
 #include "ffmpeg-wrapper/wrapper/AVFrameWrapper.h"
 #include "AVFrameWrapper.h"
+#include "ffmpeg-wrapper/ffmpeg.h"
 #include <base/math/Fraction.h>
 #include <base/unit/Seconds.h>
 #include <ffmpeg-wrapper/AVToString.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/ImageBuffer.h>
-#include <ffmpeg-wrapper/pch.h>
+
 
 using namespace video;
 

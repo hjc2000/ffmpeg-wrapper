@@ -1,5 +1,5 @@
 #pragma once
-#include <ffmpeg-wrapper/pch.h>
+#include "ffmpeg-wrapper/ffmpeg.h"
 
 namespace video
 {

@@ -1,14 +1,15 @@
 #pragma once
+#include "ffmpeg-wrapper/ffmpeg.h"
 #include <base/pipe/ISource.h>
 #include <base/Wrapper.h>
 #include <chrono>
-#include <ffmpeg-wrapper/pch.h>
 #include <ffmpeg-wrapper/wrapper/AVIOContextWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVProgramWrapper.h>
 #include <functional>
 #include <memory>
 #include <string>
+
 
 namespace video
 {

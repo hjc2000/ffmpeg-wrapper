@@ -1,7 +1,8 @@
 #include "ThreadDecoderPipe.h"
-#include <base/Guard.h>
-#include <ffmpeg-wrapper/ErrorCode.h>
+#include "base/Guard.h"
+#include "ffmpeg-wrapper/ErrorCode.h"
 #include <iostream>
+#include <thread>
 
 void video::ThreadDecoderPipe::InitDecodeThread()
 {

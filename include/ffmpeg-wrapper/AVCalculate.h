@@ -1,6 +1,6 @@
 #pragma once
-#include <base/math/Fraction.h>
-#include <ffmpeg-wrapper/pch.h>
+#include "base/math/Fraction.h"
+#include "ffmpeg-wrapper/ffmpeg.h" // IWYU pragma: keep
 
 namespace video
 {

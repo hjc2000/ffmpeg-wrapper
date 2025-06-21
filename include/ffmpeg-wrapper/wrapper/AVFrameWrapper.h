@@ -1,4 +1,5 @@
 #pragma once
+#include "ffmpeg-wrapper/ffmpeg.h"
 #include <base/stream/Stream.h>
 #include <base/string/Json.h>
 #include <base/Wrapper.h>
@@ -9,8 +10,6 @@
 #include <ffmpeg-wrapper/info-collection/AudioFrameInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
 #include <ffmpeg-wrapper/info-collection/VideoFrameInfoCollection.h>
-#include <ffmpeg-wrapper/pch.h>
-
 
 namespace video
 {

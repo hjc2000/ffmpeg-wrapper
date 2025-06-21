@@ -1,9 +1,9 @@
 #pragma once
+#include "ffmpeg-wrapper/ffmpeg.h"
 #include <base/container/List.h>
 #include <base/delegate/Delegate.h>
 #include <base/pipe/IConsumer.h>
 #include <base/Wrapper.h>
-#include <ffmpeg-wrapper/pch.h>
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVProgramWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
@@ -11,6 +11,7 @@
 #include <memory>
 #include <mutex>
 #include <thread>
+
 
 namespace video
 {

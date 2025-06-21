@@ -1,7 +1,6 @@
 #pragma once
+#include "ffmpeg-wrapper/ffmpeg.h"
 #include <ffmpeg-wrapper/info-collection/IAudioStreamInfoCollection.h>
-#include <ffmpeg-wrapper/pch.h>
-
 
 namespace video
 {

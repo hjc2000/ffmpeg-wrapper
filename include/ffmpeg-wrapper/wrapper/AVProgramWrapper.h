@@ -1,10 +1,11 @@
 #pragma once
+#include "ffmpeg-wrapper/ffmpeg.h"
 #include <base/container/List.h>
 #include <base/string/ICanToString.h>
 #include <base/Wrapper.h>
-#include <ffmpeg-wrapper/pch.h>
 #include <ffmpeg-wrapper/wrapper/AVDictionaryWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
+
 
 namespace video
 {

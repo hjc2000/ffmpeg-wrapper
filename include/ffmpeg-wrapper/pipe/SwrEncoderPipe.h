@@ -1,9 +1,8 @@
 #pragma once
+#include "ffmpeg-wrapper/ffmpeg.h"
 #include <ffmpeg-wrapper/output-format/OutputFormat.h>
-#include <ffmpeg-wrapper/pch.h>
 #include <ffmpeg-wrapper/pipe/SwrPipe.h>
 #include <string>
-
 
 namespace video
 {

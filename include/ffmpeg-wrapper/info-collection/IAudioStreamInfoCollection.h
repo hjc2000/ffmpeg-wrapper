@@ -1,7 +1,8 @@
 #pragma once
+#include "ffmpeg-wrapper/ffmpeg.h"
 #include <base/math/Fraction.h>
-#include <ffmpeg-wrapper/pch.h>
 #include <string>
+
 
 namespace video
 {

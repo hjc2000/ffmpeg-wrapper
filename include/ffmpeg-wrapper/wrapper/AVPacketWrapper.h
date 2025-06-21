@@ -1,7 +1,8 @@
 #pragma once
+#include "ffmpeg-wrapper/ffmpeg.h"
 #include <base/Wrapper.h>
 #include <ffmpeg-wrapper/AVCalculate.h>
-#include <ffmpeg-wrapper/pch.h>
+
 
 namespace video
 {
