@@ -60,7 +60,7 @@ void ReencodeDotNetVideoStream(DotNetStream *dotnet_video_stream)
 
 	// 解码管道
 	base::CancellationTokenSource cancel_pump_source;
-	base::TaskCompletionSignal pump_thread_exit{false};
+	base::task::TaskCompletionSignal pump_thread_exit{false};
 
 	std::thread{
 		[&]()

@@ -144,7 +144,7 @@ void test_SptsEncodeMux()
 	joined_input_format_demux_decoder->AddAudioFrameConsumer(spts_encode_mux->AudioEncodePipe());
 
 	base::CancellationTokenSource cancel_pump;
-	base::TaskCompletionSignal pump_thread_exit{false};
+	base::task::TaskCompletionSignal pump_thread_exit{false};
 
 	base::task::run([&]()
 					{

@@ -15,7 +15,7 @@ namespace video
 	private:
 		std::shared_ptr<IDecoderPipe> _decoder_pipe;
 		base::PipeBlockingQueue<AVPacketWrapper> _packet_queue{};
-		base::TaskCompletionSignal _decode_thread_exit{true};
+		base::task::TaskCompletionSignal _decode_thread_exit{true};
 		std::atomic_bool _do_not_flush_consumer = false;
 		std::atomic_bool _disposed = false;
 

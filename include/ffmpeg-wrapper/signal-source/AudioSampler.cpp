@@ -175,7 +175,7 @@ void video::TestAudioSampler()
 	out_format->DumpFormat();
 
 	base::CancellationTokenSource cancel_pump;
-	base::TaskCompletionSignal pump_thread_exit{false};
+	base::task::TaskCompletionSignal pump_thread_exit{false};
 	base::Pump<AVFrameWrapper> pump{audio_sampler};
 	pump.ConsumerList().Add(encoder_pipe);
 
