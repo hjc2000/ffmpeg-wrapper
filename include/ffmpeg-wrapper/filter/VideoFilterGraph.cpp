@@ -1,4 +1,5 @@
 #include "ffmpeg-wrapper/filter/VideoFilterGraph.h"
+#include "ffmpeg-wrapper/wrapper/AVDictionaryWrapper.h"
 #include "VideoFilterGraph.h"
 
 video::VideoFilterGraph::VideoFilterGraph(IVideoStreamInfoCollection const &infos)
