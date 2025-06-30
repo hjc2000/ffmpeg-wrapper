@@ -57,7 +57,7 @@ namespace video
 
 		void config_graph();
 
-		int ReadData(AVFrameWrapper &frame) override;
+		bool TryReadData(AVFrameWrapper &frame) override;
 		void SendData(AVFrameWrapper &frame) override;
 
 		void Flush() override;

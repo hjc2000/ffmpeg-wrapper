@@ -87,6 +87,6 @@ namespace video
 		/// @brief 读出帧。
 		/// @param frame
 		/// @return
-		int ReadData(AVFrameWrapper &frame) override;
+		bool TryReadData(AVFrameWrapper &frame) override;
 	};
 } // namespace video

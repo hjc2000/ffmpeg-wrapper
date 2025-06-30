@@ -121,9 +121,15 @@ void video::VideoFilterGraph::config_graph()
 	}
 }
 
-int video::VideoFilterGraph::ReadData(AVFrameWrapper &frame)
+bool video::VideoFilterGraph::TryReadData(AVFrameWrapper &frame)
 {
-	return av_buffersink_get_frame(_buffer_sink_filter, frame);
+	int result = av_buffersink_get_frame(_buffer_sink_filter, frame);
+	if (result < 0)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 void video::VideoFilterGraph::SendData(AVFrameWrapper &frame)

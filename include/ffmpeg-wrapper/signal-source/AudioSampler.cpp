@@ -21,7 +21,7 @@ void video::AudioSampler::Open()
 	_opened = true;
 }
 
-int video::AudioSampler::ReadData(AVFrameWrapper &frame)
+bool video::AudioSampler::TryReadData(AVFrameWrapper &frame)
 {
 	if (!_opened)
 	{
@@ -60,7 +60,7 @@ int video::AudioSampler::ReadData(AVFrameWrapper &frame)
 	}
 
 	// 返回 0 表示读取帧成功
-	return 0;
+	return true;
 }
 
 AVRational video::AudioSampler::TimeBase() const

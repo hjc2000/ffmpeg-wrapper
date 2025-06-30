@@ -19,30 +19,13 @@ void video::SwrPipe::ReadAndSendFrame()
 {
 	while (1)
 	{
-		int ret = _swr->ReadData(_swr_out_frame);
-		switch (ret)
+		bool result = _swr->TryReadData(_swr_out_frame);
+		if (!result)
 		{
-		case 0:
-			{
-				SendDataToEachConsumer(_swr_out_frame);
-
-				// 下轮循环继续读取
-				break;
-			}
-		case (int)ErrorCode::output_is_temporarily_unavailable:
-			{
-				return;
-			}
-		case (int)ErrorCode::eof:
-			{
-				FlushEachConsumer();
-				return;
-			}
-		default:
-			{
-				throw std::runtime_error{base::ToString((ErrorCode)ret)};
-			}
+			return;
 		}
+
+		SendDataToEachConsumer(_swr_out_frame);
 	}
 }
 
@@ -50,29 +33,13 @@ void video::SwrPipe::ReadAndSendFrameWithoutFlushingConsumer()
 {
 	while (1)
 	{
-		int ret = _swr->ReadData(_swr_out_frame);
-		switch (ret)
+		bool result = _swr->TryReadData(_swr_out_frame);
+		if (!result)
 		{
-		case 0:
-			{
-				SendDataToEachConsumer(_swr_out_frame);
-
-				// 下轮循环继续读取
-				break;
-			}
-		case (int)ErrorCode::output_is_temporarily_unavailable:
-			{
-				return;
-			}
-		case (int)ErrorCode::eof:
-			{
-				return;
-			}
-		default:
-			{
-				throw std::runtime_error{base::ToString((ErrorCode)ret)};
-			}
+			return;
 		}
+
+		SendDataToEachConsumer(_swr_out_frame);
 	}
 }
 
@@ -121,4 +88,5 @@ void video::SwrPipe::Flush()
 	ReadAndSendFrame();
 	_swr->Flush();
 	ReadAndSendFrame();
+	FlushEachConsumer();
 }

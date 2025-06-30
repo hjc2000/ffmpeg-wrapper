@@ -34,7 +34,7 @@ namespace video
 
 	public:
 		void Open();
-		int ReadData(AVFrameWrapper &frame) override;
+		bool TryReadData(AVFrameWrapper &frame) override;
 
 		AVRational TimeBase() const override;
 		void SetTimeBase(AVRational value) override;

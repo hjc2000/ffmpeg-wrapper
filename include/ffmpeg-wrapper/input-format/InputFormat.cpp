@@ -8,7 +8,6 @@
 #include <iostream>
 #include <string>
 
-
 using namespace video;
 
 video::InputFormat::InputFormat(std::string url)
@@ -114,16 +113,17 @@ AVStreamWrapper InputFormat::FindBestStream(AVMediaType type)
 	return AVStreamWrapper{_wrapped_obj->streams[result]};
 }
 
-int InputFormat::ReadData(AVPacketWrapper &data)
+bool InputFormat::TryReadData(AVPacketWrapper &data)
 {
-	int ret = av_read_frame(_wrapped_obj, data);
-	if (ret == 0)
+	int result = av_read_frame(_wrapped_obj, data);
+	if (result < 0)
 	{
-		// 读取成功
-		data->time_base = _wrapped_obj->streams[data->stream_index]->time_base;
+		return false;
 	}
 
-	return ret;
+	// 读取成功
+	data->time_base = _wrapped_obj->streams[data->stream_index]->time_base;
+	return true;
 }
 
 std::chrono::seconds video::InputFormat::DurationInSeconds()

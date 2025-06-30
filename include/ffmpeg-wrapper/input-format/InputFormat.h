@@ -6,10 +6,8 @@
 #include <ffmpeg-wrapper/wrapper/AVIOContextWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
 #include <ffmpeg-wrapper/wrapper/AVProgramWrapper.h>
-#include <functional>
 #include <memory>
 #include <string>
-
 
 namespace video
 {
@@ -57,7 +55,7 @@ namespace video
 		/// @brief 从封装中读取包。
 		/// @param data 读取到的包会写入这里。
 		/// @return 成功返回 0，失败返回错误代码
-		int ReadData(AVPacketWrapper &data) override;
+		bool TryReadData(AVPacketWrapper &data) override;
 
 		/// @brief 获取本格式的播放时长
 		/// @return

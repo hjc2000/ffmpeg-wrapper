@@ -30,8 +30,8 @@ void video::ThreadDecoderPipe::DecodeThreadFunc()
 		AVPacketWrapper packet;
 		while (true)
 		{
-			int read_packet_result = _packet_queue.ReadData(packet);
-			if (read_packet_result < 0)
+			bool result = _packet_queue.TryReadData(packet);
+			if (!result)
 			{
 				if (_do_not_flush_consumer)
 				{

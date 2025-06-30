@@ -3,24 +3,13 @@
 void video::SwsPipe::ReadAndSendFrame()
 {
 	// 因为 sws 内没有比较深的队列，它只会储存 1 帧，所以不用在循环里 read_frame
-	int ret = _sws_context->ReadData(_sws_out_frame);
-	switch (ret)
+	bool result = _sws_context->TryReadData(_sws_out_frame);
+	if (!result)
 	{
-	case 0:
-		{
-			SendDataToEachConsumer(_sws_out_frame);
-			break;
-		}
-	case (int)ErrorCode::output_is_temporarily_unavailable:
-		{
-			return;
-		}
-	case (int)ErrorCode::eof:
-		{
-			FlushEachConsumer();
-			return;
-		}
+		return;
 	}
+
+	SendDataToEachConsumer(_sws_out_frame);
 }
 
 void video::SwsPipe::ReplaceSws()
@@ -67,4 +56,5 @@ void video::SwsPipe::Flush()
 	// 冲洗模式
 	_sws_context->Flush();
 	ReadAndSendFrame();
+	FlushEachConsumer();
 }

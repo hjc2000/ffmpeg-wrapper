@@ -8,45 +8,33 @@ void video::FpsAdjustPipe::ReadAndSendFrame()
 
 	while (true)
 	{
-		int ret = _graph.ReadData(frame);
+		bool result = _graph.TryReadData(frame);
+		if (!result)
+		{
+			return;
+		}
+
 		frame.SetTimeBase(AVRational{_desired_out_fps.den, _desired_out_fps.num});
 		frame.ChangeTimeBase(AVRational{1, 90000});
-		switch (ret)
+
+		// 将读取的帧的时间戳与 _ref_pts 对齐。
+		if (!have_synced)
 		{
-		case 0:
-			{
-				// 将读取的帧的时间戳与 _ref_pts 对齐。
-				if (!have_synced)
-				{
-					int64_t ref_pts = _trigger.GetOutput();
+			int64_t ref_pts = _trigger.GetOutput();
 
-					/* 将触发器的输出更新到输入。
-					 * 从 fps 滤镜输出端读取帧成功的那一刻，fps 滤镜输入端送入的那个帧就是下一次
-					 * 读取成功时要同步 pts 的对象。
-					 */
-					_trigger.UpdateOutput();
-					delta_pts = ref_pts - frame.Pts();
-					have_synced = true;
-				}
-
-				// 滤镜出来的 pts 与输入端的 pts 有误差，则本轮循环读取的每一个帧的 pts 都要加上 delta_pts。
-				frame.SetPts(frame.Pts() + delta_pts);
-				frame.ChangeTimeBase(_input_video_stream_infos.TimeBase());
-				SendDataToEachConsumer(frame);
-
-				// 下轮循环继续读取
-				break;
-			}
-		case static_cast<int>(ErrorCode::output_is_temporarily_unavailable):
-			{
-				return;
-			}
-		case static_cast<int>(ErrorCode::eof):
-			{
-				FlushEachConsumer();
-				return;
-			}
+			/* 将触发器的输出更新到输入。
+			 * 从 fps 滤镜输出端读取帧成功的那一刻，fps 滤镜输入端送入的那个帧就是下一次
+			 * 读取成功时要同步 pts 的对象。
+			 */
+			_trigger.UpdateOutput();
+			delta_pts = ref_pts - frame.Pts();
+			have_synced = true;
 		}
+
+		// 滤镜出来的 pts 与输入端的 pts 有误差，则本轮循环读取的每一个帧的 pts 都要加上 delta_pts。
+		frame.SetPts(frame.Pts() + delta_pts);
+		frame.ChangeTimeBase(_input_video_stream_infos.TimeBase());
+		SendDataToEachConsumer(frame);
 	}
 }
 
@@ -95,4 +83,5 @@ void video::FpsAdjustPipe::Flush()
 	ReadAndSendFrame();
 	_graph.Flush();
 	ReadAndSendFrame();
+	FlushEachConsumer();
 }
