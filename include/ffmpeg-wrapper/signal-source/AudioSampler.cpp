@@ -133,15 +133,14 @@ void video::AudioSampler::SetSampleCount(int value)
 	_audio_frame_infos.SetSampleCount(value);
 }
 
-#include <base/pipe/Pump.h>
-#include <base/signal/SinSignalSource.h>
-#include <base/task/CancellationTokenSource.h>
-#include <base/task/TaskCompletionSignal.h>
-#include <ffmpeg-wrapper/AVChannelLayoutExtension.h>
-#include <ffmpeg-wrapper/AVSampleFormatExtension.h>
-#include <ffmpeg-wrapper/factory/EncoderPipeFactoryManager.h>
-#include <ffmpeg-wrapper/output-format/FileOutputFormat.h>
-#include <ffmpeg-wrapper/pipe/SwrEncoderPipe.h>
+#include "base/pipe/Pump.h"
+#include "base/signal/SinSignalSource.h"
+#include "base/task/CancellationTokenSource.h"
+#include "base/task/TaskCompletionSignal.h"
+#include "ffmpeg-wrapper/AVChannelLayoutExtension.h"
+#include "ffmpeg-wrapper/AVSampleFormatExtension.h"
+#include "ffmpeg-wrapper/output-format/FileOutputFormat.h"
+#include "ffmpeg-wrapper/pipe/SwrEncoderPipe.h"
 #include <iostream>
 
 void video::TestAudioSampler()
