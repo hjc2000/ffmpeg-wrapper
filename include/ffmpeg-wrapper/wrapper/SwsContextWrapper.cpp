@@ -54,7 +54,7 @@ void video::SwsContextWrapper::Flush()
 	_flushed = true;
 }
 
-bool video::SwsContextWrapper::TryReadData(AVFrameWrapper &frame)
+bool video::SwsContextWrapper::ReadData(AVFrameWrapper &frame)
 {
 	if (_flushed && !_out_frame_avaliable)
 	{

@@ -7,19 +7,17 @@ video::SwrPipe::SwrPipe(IAudioFrameInfoCollection &desired_out_frame_infos)
 	// 先假设输入流和输出流是一样的，随后反正可以重新构造重采样器
 	_in_stream_infos = desired_out_frame_infos;
 	_desired_out_frame_infos = desired_out_frame_infos;
-	_swr = std::shared_ptr<SwrContextWrapper>{
-		new SwrContextWrapper{
-			_in_stream_infos,
-			_desired_out_frame_infos,
-		},
-	};
+	_swr = std::shared_ptr<SwrContextWrapper>{new SwrContextWrapper{
+		_in_stream_infos,
+		_desired_out_frame_infos,
+	}};
 }
 
 void video::SwrPipe::ReadAndSendFrame()
 {
 	while (1)
 	{
-		bool result = _swr->TryReadData(_swr_out_frame);
+		bool result = _swr->ReadData(_swr_out_frame);
 		if (!result)
 		{
 			return;
@@ -33,7 +31,7 @@ void video::SwrPipe::ReadAndSendFrameWithoutFlushingConsumer()
 {
 	while (1)
 	{
-		bool result = _swr->TryReadData(_swr_out_frame);
+		bool result = _swr->ReadData(_swr_out_frame);
 		if (!result)
 		{
 			return;
@@ -52,12 +50,10 @@ void video::SwrPipe::ReplaceSwr()
 	ReadAndSendFrameWithoutFlushingConsumer();
 
 	// 构造新的重采样器
-	_swr = std::shared_ptr<SwrContextWrapper>{
-		new SwrContextWrapper{
-			_in_stream_infos,
-			_desired_out_frame_infos,
-		},
-	};
+	_swr = std::shared_ptr<SwrContextWrapper>{new SwrContextWrapper{
+		_in_stream_infos,
+		_desired_out_frame_infos,
+	}};
 }
 
 void video::SwrPipe::SendData(AVFrameWrapper &frame)

@@ -43,7 +43,7 @@ bool video::AVMixer::ReadVideoPacketOnce(std::shared_ptr<base::CancellationToken
 			return false;
 		}
 
-		bool result = _input_video_format->TryReadData(_temp_packet);
+		bool result = _input_video_format->ReadData(_temp_packet);
 		if (!result)
 		{
 			return false;
@@ -78,7 +78,7 @@ bool video::AVMixer::ReadAudioPacketOnce(std::shared_ptr<base::CancellationToken
 			return false;
 		}
 
-		bool result = _input_audio_format->TryReadData(_temp_packet);
+		bool result = _input_audio_format->ReadData(_temp_packet);
 		if (!result)
 		{
 			return false;

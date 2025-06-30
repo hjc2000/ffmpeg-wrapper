@@ -86,7 +86,7 @@ void video::SwrContextWrapper::Flush()
 	}
 }
 
-bool video::SwrContextWrapper::TryReadData(AVFrameWrapper &output_frame)
+bool video::SwrContextWrapper::ReadData(AVFrameWrapper &output_frame)
 {
 	output_frame = AVFrameWrapper{_out_frame_infos};
 

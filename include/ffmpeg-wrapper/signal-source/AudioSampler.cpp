@@ -21,7 +21,7 @@ void video::AudioSampler::Open()
 	_opened = true;
 }
 
-bool video::AudioSampler::TryReadData(AVFrameWrapper &frame)
+bool video::AudioSampler::ReadData(AVFrameWrapper &frame)
 {
 	if (!_opened)
 	{

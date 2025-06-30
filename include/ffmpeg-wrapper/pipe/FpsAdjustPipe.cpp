@@ -8,7 +8,7 @@ void video::FpsAdjustPipe::ReadAndSendFrame()
 
 	while (true)
 	{
-		bool result = _graph.TryReadData(frame);
+		bool result = _graph.ReadData(frame);
 		if (!result)
 		{
 			return;

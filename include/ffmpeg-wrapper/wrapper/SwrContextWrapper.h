@@ -118,6 +118,6 @@ namespace video
 		/// 	@li 如果重采样器内有数据，则有多少拿多少，直到填充满输出帧或者拿完了。如果拿完后仍然不够填满输出帧，
 		/// 		则会将输出帧后面没被填充的空隙填充为静音。此时也是返回 0
 		/// 	@li 如果重采样器内部没有数据，则返回 ErrorCode::eof，表示到达文件尾。
-		bool TryReadData(AVFrameWrapper &output_frame);
+		bool ReadData(AVFrameWrapper &output_frame) override;
 	};
 } // namespace video

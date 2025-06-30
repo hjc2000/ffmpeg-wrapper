@@ -113,7 +113,7 @@ AVStreamWrapper InputFormat::FindBestStream(AVMediaType type)
 	return AVStreamWrapper{_wrapped_obj->streams[result]};
 }
 
-bool InputFormat::TryReadData(AVPacketWrapper &data)
+bool InputFormat::ReadData(AVPacketWrapper &data)
 {
 	int result = av_read_frame(_wrapped_obj, data);
 	if (result < 0)

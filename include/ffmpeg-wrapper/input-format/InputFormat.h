@@ -55,7 +55,7 @@ namespace video
 		/// @brief 从封装中读取包。
 		/// @param data 读取到的包会写入这里。
 		/// @return 成功返回 0，失败返回错误代码
-		bool TryReadData(AVPacketWrapper &data) override;
+		bool ReadData(AVPacketWrapper &data) override;
 
 		/// @brief 获取本格式的播放时长
 		/// @return
