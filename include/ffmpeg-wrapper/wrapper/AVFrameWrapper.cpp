@@ -7,7 +7,6 @@
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/ImageBuffer.h>
 
-
 using namespace video;
 
 void AVFrameWrapper::GetBuffer(int align)
@@ -192,7 +191,7 @@ void video::AVFrameWrapper::UpdateAudioFrameDuration()
 std::chrono::milliseconds AVFrameWrapper::PtsToMilliseconds()
 {
 	base::Fraction time_base{TimeBase().num, TimeBase().den};
-	base::Seconds seconds{Pts() * time_base};
+	base::unit::Seconds seconds{Pts() * time_base};
 	return static_cast<std::chrono::milliseconds>(seconds);
 }
 
