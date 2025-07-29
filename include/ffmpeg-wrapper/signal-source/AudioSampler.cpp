@@ -1,5 +1,5 @@
 #include "AudioSampler.h"
-#include "base/unit/Seconds.h"
+#include "base/unit/Second.h"
 #include <cstdint>
 
 video::AudioSampler::AudioSampler(std::shared_ptr<base::ISignalSource<double>> signal_source,
@@ -8,7 +8,7 @@ video::AudioSampler::AudioSampler(std::shared_ptr<base::ISignalSource<double>> s
 	_signal_source = signal_source;
 	_audio_frame_infos = infos;
 	_audio_frame_infos.SetSampleFormat(AVSampleFormat::AV_SAMPLE_FMT_DBL);
-	_signal_source->Open(base::unit::Seconds{base::Fraction{1, SampleRate()}});
+	_signal_source->Open(base::unit::Second{base::Fraction{1, SampleRate()}});
 }
 
 void video::AudioSampler::Open()
@@ -154,7 +154,7 @@ void video::TestAudioSampler()
 	audio_frame_infos.SetTimeBase(AVRational{1, 90000});
 
 	auto signal_source = std::shared_ptr<base::SinSignalSource>{new base::SinSignalSource{
-		base::unit::Seconds{base::Fraction{1, 400}},
+		base::unit::Second{base::Fraction{1, 400}},
 	}};
 
 	std::shared_ptr<AudioSampler> audio_sampler{new AudioSampler{

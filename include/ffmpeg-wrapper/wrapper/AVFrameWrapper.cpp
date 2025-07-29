@@ -2,7 +2,7 @@
 #include "AVFrameWrapper.h"
 #include "ffmpeg-wrapper/ffmpeg.h"
 #include <base/math/Fraction.h>
-#include <base/unit/Seconds.h>
+#include <base/unit/Second.h>
 #include <ffmpeg-wrapper/AVToString.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
 #include <ffmpeg-wrapper/ImageBuffer.h>
@@ -191,7 +191,7 @@ void video::AVFrameWrapper::UpdateAudioFrameDuration()
 std::chrono::milliseconds AVFrameWrapper::PtsToMilliseconds()
 {
 	base::Fraction time_base{TimeBase().num, TimeBase().den};
-	base::unit::Seconds seconds{Pts() * time_base};
+	base::unit::Second seconds{Pts() * time_base};
 	return static_cast<std::chrono::milliseconds>(seconds);
 }
 
