@@ -1,7 +1,7 @@
 #pragma once
 #include <base/container/List.h>
 #include <base/container/Queue.h>
-#include <base/file/IFileStream.h>
+#include <base/filesystem/IFileStream.h>
 #include <ffmpeg-wrapper/demux/JoinedInputFormatDemuxDecoder.h>
 #include <ffmpeg-wrapper/input-format/InputFormat.h>
 #include <ffmpeg-wrapper/mux/SptsEncodeMux.h>
