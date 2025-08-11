@@ -77,7 +77,7 @@ std::shared_ptr<base::IConsumer<AVFrameWrapper>> video::SptsEncodeMux::AudioEnco
 	return _audio_encode_pipe;
 }
 
-#include <base/filesystem/IFileStream.h>
+#include <base/filesystem/file.h>
 #include <base/task/CancellationTokenSource.h>
 #include <ffmpeg-wrapper/demux/JoinedInputFormatDemuxDecoder.h>
 #include <ffmpeg-wrapper/factory/EncoderPipeFactoryManager.h>
