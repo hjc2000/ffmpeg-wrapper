@@ -1,4 +1,3 @@
-#include "ffmpeg-wrapper/wrapper/AVCodecContextWrapper.h"
 #include "AVCodecContextWrapper.h"
 #include "ffmpeg-wrapper/ErrorCode.h"
 #include "ffmpeg-wrapper/ffmpeg.h"
