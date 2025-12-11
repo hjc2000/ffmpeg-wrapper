@@ -37,12 +37,10 @@ video::AVCodecContextWrapper::~AVCodecContextWrapper()
 
 std::shared_ptr<video::AVCodecContextWrapper> video::AVCodecContextWrapper::CreateDecoder(AVStreamInfoCollection stream)
 {
-	std::shared_ptr<AVCodecContextWrapper> context_wrapper{
-		new AVCodecContextWrapper{
-			stream._codec,
-			stream._codec_params,
-		},
-	};
+	std::shared_ptr<AVCodecContextWrapper> context_wrapper{new AVCodecContextWrapper{
+		stream._codec,
+		stream._codec_params,
+	}};
 
 	context_wrapper->SetTimeBase(stream.TimeBase());
 	context_wrapper->SetFrameRate(stream.FrameRate());
