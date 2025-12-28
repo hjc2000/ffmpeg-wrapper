@@ -38,7 +38,7 @@ bool video::AVMixer::ReadVideoPacketOnce(std::shared_ptr<base::CancellationToken
 {
 	while (true)
 	{
-		if (cancel_pump->IsCancellationRequested())
+		if (base::is_cancellation_requested(cancel_pump))
 		{
 			return false;
 		}
@@ -73,7 +73,7 @@ bool video::AVMixer::ReadAudioPacketOnce(std::shared_ptr<base::CancellationToken
 {
 	while (true)
 	{
-		if (cancel_pump->IsCancellationRequested())
+		if (base::is_cancellation_requested(cancel_pump))
 		{
 			return false;
 		}
@@ -134,9 +134,10 @@ void video::AVMixer::PumpDataToConsumers(std::shared_ptr<base::CancellationToken
 {
 	_out_format->WriteHeader();
 	_out_format->DumpFormat();
+
 	while (true)
 	{
-		if (cancel_pump->IsCancellationRequested())
+		if (base::is_cancellation_requested(cancel_pump))
 		{
 			return;
 		}
