@@ -20,7 +20,7 @@ void video::FpsAdjustPipe::ReadAndSendFrame()
 		// 将读取的帧的时间戳与 _ref_pts 对齐。
 		if (!have_synced)
 		{
-			int64_t ref_pts = _trigger.GetOutput();
+			int64_t ref_pts = _trigger.Output();
 
 			/* 将触发器的输出更新到输入。
 			 * 从 fps 滤镜输出端读取帧成功的那一刻，fps 滤镜输入端送入的那个帧就是下一次

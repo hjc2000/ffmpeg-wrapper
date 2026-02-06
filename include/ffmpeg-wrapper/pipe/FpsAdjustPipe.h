@@ -1,9 +1,9 @@
 #pragma once
+#include "base/digital_circuit/MasterSlaveFlipFlop.h"
 #include "ffmpeg-wrapper/ffmpeg.h"
 #include <base/container/List.h>
 #include <base/container/Queue.h>
 #include <base/pipe/IPipeSource.h>
-#include <base/Trigger.h>
 #include <base/Wrapper.h>
 #include <ffmpeg-wrapper/AVCalculate.h>
 #include <ffmpeg-wrapper/ErrorCode.h>
@@ -23,7 +23,7 @@ namespace video
 		VideoStreamInfoCollection _input_video_stream_infos;
 		VideoFilterGraph _graph;
 		AVRational _desired_out_fps;
-		base::Trigger<int64_t> _trigger;
+		base::digital_circuit::MasterSlaveFlipFlop<int64_t> _trigger;
 
 		void ReadAndSendFrame();
 
