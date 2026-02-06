@@ -62,7 +62,8 @@ void video::FpsAdjustPipe::SendData(AVFrameWrapper &frame)
 
 	ReadAndSendFrame();
 	frame.ChangeTimeBase(AVRational{1, 90000});
-	_trigger.UpdateInput(frame.Pts());
+	_trigger.Input(frame.Pts());
+
 	if (_trigger.HaveNotUpdateOutput())
 	{
 		// 第一次输入数据，让输入的数据直通到输出端
