@@ -1,5 +1,5 @@
 # 编译为动态库
-add_library(${ProjectName} STATIC)
+add_library(${ProjectName} OBJECT)
 target_import_src(${ProjectName})
 target_import_ffmpeg(${ProjectName} PUBLIC)
 target_import_base(${ProjectName} PUBLIC)
@@ -15,7 +15,5 @@ if(1)
 
 	target_compile_definitions(${test_exe_target_name} PUBLIC Predefine_ResourceDir="D:/video/视频开发测试")
 
-	target_link_libraries(${ProjectName} PUBLIC -Wl,--start-group)
 	target_link_libraries(${test_exe_target_name} PUBLIC ${ProjectName})
-	target_link_libraries(${ProjectName} PUBLIC -Wl,--end-group)
 endif()
