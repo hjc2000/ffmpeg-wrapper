@@ -9,7 +9,7 @@ target_import_base_filesystem(${ProjectName} PUBLIC)
 
 # 添加测试程序
 if(1)
-	set(test_exe_target_name "test")
+	set(test_exe_target_name "${ProjectName}-test")
 	add_executable(${test_exe_target_name})
 	target_import_test(${test_exe_target_name})
 
