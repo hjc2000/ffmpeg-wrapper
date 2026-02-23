@@ -123,7 +123,9 @@ void video::VideoFilterGraph::config_graph()
 
 bool video::VideoFilterGraph::ReadData(AVFrameWrapper &frame)
 {
-	int result = av_buffersink_get_frame(_buffer_sink_filter, frame);
+	int result = av_buffersink_get_frame(_buffer_sink_filter.WrappedObj(),
+										 frame.WrappedObj());
+
 	if (result < 0)
 	{
 		return false;
@@ -135,8 +137,8 @@ bool video::VideoFilterGraph::ReadData(AVFrameWrapper &frame)
 void video::VideoFilterGraph::SendData(AVFrameWrapper &frame)
 {
 	// 非冲洗模式
-	int ret = av_buffersrc_add_frame_flags(_buffer_filter,
-										   frame,
+	int ret = av_buffersrc_add_frame_flags(_buffer_filter.WrappedObj(),
+										   frame.WrappedObj(),
 										   AV_BUFFERSRC_FLAG_KEEP_REF);
 
 	if (ret < 0)
@@ -148,7 +150,7 @@ void video::VideoFilterGraph::SendData(AVFrameWrapper &frame)
 void video::VideoFilterGraph::Flush()
 {
 	// 冲洗模式
-	int ret = av_buffersrc_add_frame_flags(_buffer_filter,
+	int ret = av_buffersrc_add_frame_flags(_buffer_filter.WrappedObj(),
 										   nullptr,
 										   AV_BUFFERSRC_FLAG_KEEP_REF);
 

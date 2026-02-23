@@ -4,6 +4,7 @@
 #include <ffmpeg-wrapper/AVChannelLayoutExtension.h>
 #include <ffmpeg-wrapper/factory/EncoderPipeFactoryManager.h>
 #include <ffmpeg-wrapper/info-collection/VideoStreamInfoCollection.h>
+#include <thread>
 
 void ReencodeDotNetVideoStream(DotNetStream *dotnet_video_stream)
 {

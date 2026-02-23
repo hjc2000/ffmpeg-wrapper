@@ -1,23 +1,15 @@
 #pragma once
+#include "base/delegate/Delegate.h"
+#include "base/pipe/IConsumer.h"
 #include "ffmpeg-wrapper/ffmpeg.h"
-#include <base/container/List.h>
-#include <base/delegate/Delegate.h>
-#include <base/pipe/IConsumer.h>
-#include <base/Wrapper.h>
-#include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
-#include <ffmpeg-wrapper/wrapper/AVProgramWrapper.h>
-#include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
-#include <functional>
-#include <memory>
+#include "ffmpeg-wrapper/wrapper/AVPacketWrapper.h"
+#include "ffmpeg-wrapper/wrapper/AVStreamWrapper.h"
 #include <mutex>
-#include <thread>
-
 
 namespace video
 {
 	/// @brief 输出格式的基类。
 	class OutputFormat :
-		public base::Wrapper<AVFormatContext>,
 		public base::IConsumer<AVPacketWrapper>
 	{
 	private:
@@ -38,7 +30,7 @@ namespace video
 	public:
 		virtual ~OutputFormat() = default;
 
-		AVFormatContext *WrappedObj() const override
+		AVFormatContext *WrappedObj() const
 		{
 			return _wrapped_obj;
 		}

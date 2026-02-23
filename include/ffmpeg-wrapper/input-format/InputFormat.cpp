@@ -41,7 +41,7 @@ video::InputFormat::InputFormat(std::shared_ptr<AVIOContextWrapper> io_context)
 	_url = "costom io context";
 	_io_context = io_context;
 	_wrapped_obj = avformat_alloc_context();
-	_wrapped_obj->pb = *_io_context;
+	_wrapped_obj->pb = _io_context->WrappedObj();
 	_wrapped_obj->flags |= AVFMT_FLAG_CUSTOM_IO;
 	int ret = avformat_open_input(&_wrapped_obj, nullptr, nullptr, nullptr);
 	if (ret < 0)
@@ -115,14 +115,14 @@ AVStreamWrapper InputFormat::FindBestStream(AVMediaType type)
 
 bool InputFormat::ReadData(AVPacketWrapper &data)
 {
-	int result = av_read_frame(_wrapped_obj, data);
+	int result = av_read_frame(_wrapped_obj, data.WrappedObj());
 	if (result < 0)
 	{
 		return false;
 	}
 
 	// 读取成功
-	data->time_base = _wrapped_obj->streams[data->stream_index]->time_base;
+	data.WrappedObj()->time_base = _wrapped_obj->streams[data.WrappedObj()->stream_index]->time_base;
 	return true;
 }
 

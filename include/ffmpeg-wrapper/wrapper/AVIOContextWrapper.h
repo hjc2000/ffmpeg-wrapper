@@ -1,9 +1,7 @@
 #pragma once
 #include "ffmpeg-wrapper/ffmpeg.h"
 #include <base/stream/Stream.h>
-#include <base/Wrapper.h>
 #include <memory>
-
 
 namespace video
 {
@@ -26,8 +24,7 @@ namespace video
 		}
 	};
 
-	class AVIOContextWrapper :
-		public base::Wrapper<AVIOContext>
+	class AVIOContextWrapper
 	{
 	private:
 		AVIOContext *_wrapped_obj = nullptr;
@@ -52,9 +49,10 @@ namespace video
 
 		~AVIOContextWrapper();
 
-		AVIOContext *WrappedObj() const override
+		AVIOContext *WrappedObj() const
 		{
 			return _wrapped_obj;
 		}
 	};
+
 } // namespace video

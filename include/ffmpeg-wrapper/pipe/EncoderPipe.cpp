@@ -48,7 +48,7 @@ video::EncoderPipe::EncoderPipe(std::string codec_name,
 	if (out_bit_rate_in_bps > 0)
 	{
 		// 如果传入了有效值，则设置 bit_rate 字段。
-		(*_encoder_ctx)->bit_rate = out_bit_rate_in_bps;
+		_encoder_ctx->WrappedObj()->bit_rate = out_bit_rate_in_bps;
 	}
 
 	//// 设置色彩空间为 Rec.2020

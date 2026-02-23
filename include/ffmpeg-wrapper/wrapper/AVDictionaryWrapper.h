@@ -1,12 +1,10 @@
 #pragma once
+#include "base/string/ICanToString.h"
 #include "ffmpeg-wrapper/ffmpeg.h"
-#include <base/string/ICanToString.h>
-#include <base/Wrapper.h>
 #include <format>
 #include <iostream>
 #include <sstream>
 #include <string>
-
 
 namespace video
 {
@@ -40,7 +38,6 @@ namespace video
 
 	/// @brief AVDictionary 是类似于链表的存在，有可能是二叉树之类的。
 	class AVDictionaryWrapper :
-		public base::Wrapper<AVDictionary>,
 		public base::ICanToString
 	{
 	private:
@@ -65,7 +62,7 @@ namespace video
 			return _wrapped_obj;
 		}
 
-		AVDictionary *WrappedObj() const override
+		AVDictionary *WrappedObj() const
 		{
 			return _wrapped_obj;
 		}

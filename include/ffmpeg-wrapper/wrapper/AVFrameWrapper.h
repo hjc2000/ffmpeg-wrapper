@@ -1,22 +1,20 @@
 #pragma once
+#include "base/stream/Stream.h"
+#include "base/string/Json.h"
+#include "ffmpeg-wrapper/AVCalculate.h"
+#include "ffmpeg-wrapper/AVToString.h"
+#include "ffmpeg-wrapper/ErrorCode.h"
 #include "ffmpeg-wrapper/ffmpeg.h"
-#include <base/stream/Stream.h>
-#include <base/string/Json.h>
-#include <base/Wrapper.h>
+#include "ffmpeg-wrapper/info-collection/AudioFrameInfoCollection.h"
+#include "ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h"
+#include "ffmpeg-wrapper/info-collection/VideoFrameInfoCollection.h"
 #include <chrono>
-#include <ffmpeg-wrapper/AVCalculate.h>
-#include <ffmpeg-wrapper/AVToString.h>
-#include <ffmpeg-wrapper/ErrorCode.h>
-#include <ffmpeg-wrapper/info-collection/AudioFrameInfoCollection.h>
-#include <ffmpeg-wrapper/info-collection/AudioStreamInfoCollection.h>
-#include <ffmpeg-wrapper/info-collection/VideoFrameInfoCollection.h>
 
 namespace video
 {
 	class ImageBuffer;
 
 	class AVFrameWrapper :
-		public base::Wrapper<AVFrame>,
 		public IAudioFrameInfoCollection,
 		public IVideoFrameInfoCollection,
 		public base::IJsonSerializable
@@ -85,7 +83,7 @@ namespace video
 
 #pragma endregion
 
-		AVFrame *WrappedObj() const override
+		AVFrame *WrappedObj() const
 		{
 			return _wrapped_obj;
 		}

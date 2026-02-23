@@ -32,7 +32,8 @@ void AVFrameWrapper::GetBuffer(int align)
 void AVFrameWrapper::Ref(AVFrameWrapper const &o)
 {
 	Unref();
-	int result = av_frame_ref(_wrapped_obj, o);
+	int result = av_frame_ref(_wrapped_obj, o.WrappedObj());
+
 	if (result < 0)
 	{
 		std::string error_message = std::format(

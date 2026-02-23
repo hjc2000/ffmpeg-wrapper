@@ -1,11 +1,10 @@
 #pragma once
+#include "base/pipe/ISource.h"
 #include "ffmpeg-wrapper/ffmpeg.h"
-#include <base/pipe/ISource.h>
-#include <base/Wrapper.h>
+#include "ffmpeg-wrapper/wrapper/AVIOContextWrapper.h"
+#include "ffmpeg-wrapper/wrapper/AVPacketWrapper.h"
+#include "ffmpeg-wrapper/wrapper/AVProgramWrapper.h"
 #include <chrono>
-#include <ffmpeg-wrapper/wrapper/AVIOContextWrapper.h>
-#include <ffmpeg-wrapper/wrapper/AVPacketWrapper.h>
-#include <ffmpeg-wrapper/wrapper/AVProgramWrapper.h>
 #include <memory>
 #include <string>
 
@@ -17,7 +16,6 @@ namespace video
 
 	/// @brief 输入格式
 	class InputFormat :
-		public base::Wrapper<AVFormatContext>,
 		public base::ISource<AVPacketWrapper>
 	{
 	private:
@@ -36,7 +34,7 @@ namespace video
 		InputFormat(std::shared_ptr<base::Stream> input_stream);
 		~InputFormat();
 
-		AVFormatContext *WrappedObj() const override
+		AVFormatContext *WrappedObj() const
 		{
 			return _wrapped_obj;
 		}

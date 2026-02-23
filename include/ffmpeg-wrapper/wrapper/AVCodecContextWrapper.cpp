@@ -68,11 +68,11 @@ std::shared_ptr<video::AVCodecContextWrapper> video::AVCodecContextWrapper::Crea
 	};
 
 	// 设置编码器参数
-	(*context_wrapper)->codec_type = AVMediaType::AVMEDIA_TYPE_AUDIO;
-	(*context_wrapper)->ch_layout = infos.ChannelLayout();
-	(*context_wrapper)->sample_fmt = infos.SampleFormat();
-	(*context_wrapper)->sample_rate = infos.SampleRate();
-	(*context_wrapper)->time_base = infos.TimeBase();
+	context_wrapper->WrappedObj()->codec_type = AVMediaType::AVMEDIA_TYPE_AUDIO;
+	context_wrapper->WrappedObj()->ch_layout = infos.ChannelLayout();
+	context_wrapper->WrappedObj()->sample_fmt = infos.SampleFormat();
+	context_wrapper->WrappedObj()->sample_rate = infos.SampleRate();
+	context_wrapper->WrappedObj()->time_base = infos.TimeBase();
 
 	if (set_global_header)
 	{
@@ -102,16 +102,16 @@ std::shared_ptr<video::AVCodecContextWrapper> video::AVCodecContextWrapper::Crea
 	std::shared_ptr<AVCodecContextWrapper> context_wrapper{new AVCodecContextWrapper{codec}};
 
 	// 设置编码器参数
-	(*context_wrapper)->codec_type = AVMediaType::AVMEDIA_TYPE_VIDEO;
+	context_wrapper->WrappedObj()->codec_type = AVMediaType::AVMEDIA_TYPE_VIDEO;
 
-	(*context_wrapper)->width = infos.Width();
-	(*context_wrapper)->height = infos.Height();
-	(*context_wrapper)->pix_fmt = infos.PixelFormat();
+	context_wrapper->WrappedObj()->width = infos.Width();
+	context_wrapper->WrappedObj()->height = infos.Height();
+	context_wrapper->WrappedObj()->pix_fmt = infos.PixelFormat();
 
-	(*context_wrapper)->time_base = infos.TimeBase();
-	(*context_wrapper)->framerate = infos.FrameRate();
+	context_wrapper->WrappedObj()->time_base = infos.TimeBase();
+	context_wrapper->WrappedObj()->framerate = infos.FrameRate();
 
-	(*context_wrapper)->gop_size = infos.FrameRate().num / infos.FrameRate().den;
+	context_wrapper->WrappedObj()->gop_size = infos.FrameRate().num / infos.FrameRate().den;
 	//(*ctx)->max_b_frames = 10;
 	if (set_global_header)
 	{
@@ -164,7 +164,7 @@ void video::AVCodecContextWrapper::SendFrame(AVFrameWrapper *frame)
 			frame->ChangeTimeBase(TimeBase());
 		}
 
-		ret = ::avcodec_send_frame(_wrapped_obj, *frame);
+		ret = ::avcodec_send_frame(_wrapped_obj, frame->WrappedObj());
 	}
 	else
 	{
@@ -184,7 +184,8 @@ void video::AVCodecContextWrapper::SendFrame(AVFrameWrapper *frame)
 
 int video::AVCodecContextWrapper::ReadPacket(AVPacketWrapper &packet)
 {
-	int ret = ::avcodec_receive_packet(_wrapped_obj, packet);
+	int ret = ::avcodec_receive_packet(_wrapped_obj, packet.WrappedObj());
+
 	if (!ret)
 	{
 		packet.SetTimeBase(TimeBase());
@@ -206,7 +207,7 @@ void video::AVCodecContextWrapper::SendPacket(AVPacketWrapper *packet)
 		 * 包的时间基都当作这个时间基。从封装中读出来的包不含有时间基信息（时间基字段为：0 / 1 ，是个无效值），
 		 * 只含有 pst 和 dts。
 		 */
-		ret = avcodec_send_packet(_wrapped_obj, *packet);
+		ret = avcodec_send_packet(_wrapped_obj, packet->WrappedObj());
 	}
 	else
 	{
@@ -223,7 +224,7 @@ void video::AVCodecContextWrapper::SendPacket(AVPacketWrapper *packet)
 int video::AVCodecContextWrapper::ReadFrame(AVFrameWrapper &frame)
 {
 	// avcodec_receive_frame 内部在执行工作之前会先调用 av_frame_unref
-	int ret = avcodec_receive_frame(_wrapped_obj, frame);
+	int ret = avcodec_receive_frame(_wrapped_obj, frame.WrappedObj());
 	if (!ret)
 	{
 		// 解码出来的帧会被设置时间戳，但是时间基不会被设置。这里补充设置。

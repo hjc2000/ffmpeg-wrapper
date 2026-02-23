@@ -1,6 +1,7 @@
 #include "SptsEncodeMux.h"
 #include "base/task/task.h"
 #include "ffmpeg-wrapper/AVChannelLayoutExtension.h"
+#include "ffmpeg-wrapper/wrapper/AVDictionaryWrapper.h"
 
 using namespace video;
 

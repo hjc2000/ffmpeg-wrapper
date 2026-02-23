@@ -1,11 +1,8 @@
 #pragma once
+#include "base/string/ICanToString.h"
 #include "ffmpeg-wrapper/ffmpeg.h"
-#include <base/container/List.h>
-#include <base/string/ICanToString.h>
-#include <base/Wrapper.h>
-#include <ffmpeg-wrapper/wrapper/AVDictionaryWrapper.h>
-#include <ffmpeg-wrapper/wrapper/AVStreamWrapper.h>
-
+#include "ffmpeg-wrapper/wrapper/AVDictionaryWrapper.h"
+#include <memory>
 
 namespace video
 {
@@ -16,7 +13,6 @@ namespace video
 	/// @note AVProgramWrapper 析构的时候不会释放有关 AVProgram 的资源。
 	/// 这是由 AVFormatContext 的 avformat_free_context 函数负责释放的。
 	class AVProgramWrapper :
-		public base::Wrapper<AVProgram>,
 		public base::ICanToString
 	{
 	private:
@@ -47,7 +43,7 @@ namespace video
 			return *this;
 		}
 
-		AVProgram *WrappedObj() const override
+		AVProgram *WrappedObj() const
 		{
 			return _wrapped_obj;
 		}
@@ -65,13 +61,13 @@ namespace video
 		void set_service_name(char const *service_name)
 		{
 			_dic->SetValueByKey("service_name", service_name);
-			_wrapped_obj->metadata = *_dic;
+			_wrapped_obj->metadata = _dic->WrappedObj();
 		}
 
 		void set_service_provider(char const *service_provider)
 		{
 			_dic->SetValueByKey("service_provider", service_provider);
-			_wrapped_obj->metadata = *_dic;
+			_wrapped_obj->metadata = _dic->WrappedObj();
 		}
 
 		/// @brief 本节目中有多少个流索引。

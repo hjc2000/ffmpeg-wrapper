@@ -12,7 +12,6 @@ namespace video
 {
 	/// @brief 重采样器。
 	class SwrContextWrapper :
-		public base::Wrapper<SwrContext>,
 		public base::IConsumer<AVFrameWrapper>,
 		public base::ISource<AVFrameWrapper>
 	{
@@ -46,7 +45,7 @@ namespace video
 
 		~SwrContextWrapper();
 
-		SwrContext *WrappedObj() const override
+		SwrContext *WrappedObj() const
 		{
 			return _wrapped_obj;
 		}

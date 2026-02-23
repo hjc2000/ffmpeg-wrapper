@@ -1,16 +1,13 @@
 #pragma once
 #include "ffmpeg-wrapper/ffmpeg.h"
-#include <base/Wrapper.h>
 #include <ffmpeg-wrapper/AVCalculate.h>
-
 
 namespace video
 {
 	class AVFrameWrapper;
 	class AVCodecContextWrapper;
 
-	class AVPacketWrapper :
-		public base::Wrapper<AVPacket>
+	class AVPacketWrapper
 	{
 	private:
 		AVPacket *_wrapped_obj = nullptr;
@@ -30,7 +27,7 @@ namespace video
 		~AVPacketWrapper();
 		AVPacketWrapper &operator=(AVPacketWrapper const &o);
 
-		AVPacket *WrappedObj() const override
+		AVPacket *WrappedObj() const
 		{
 			return _wrapped_obj;
 		}

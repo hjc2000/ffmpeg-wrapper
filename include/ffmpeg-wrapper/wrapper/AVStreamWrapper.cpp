@@ -5,7 +5,6 @@
 #include <format>
 #include <memory>
 
-
 using namespace video;
 
 AVStreamWrapper::AVStreamWrapper()
@@ -59,7 +58,9 @@ void video::AVStreamWrapper::SetCodecParams(AVCodecContextWrapper const &codec_c
 	_wrapped_obj->avg_frame_rate = codec_ctx.FrameRate();
 
 	// 将码器的参数设置到本流
-	int result = avcodec_parameters_from_context(_wrapped_obj->codecpar, codec_ctx);
+	int result = avcodec_parameters_from_context(_wrapped_obj->codecpar,
+												 codec_ctx.WrappedObj());
+
 	if (result < 0)
 	{
 		throw std::runtime_error{

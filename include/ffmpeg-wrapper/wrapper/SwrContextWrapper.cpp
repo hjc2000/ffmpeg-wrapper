@@ -56,7 +56,7 @@ void video::SwrContextWrapper::SendData(AVFrameWrapper &input_frame)
 	int ret = swr_convert(_wrapped_obj,
 						  nullptr,
 						  0,
-						  input_frame->extended_data,
+						  input_frame.WrappedObj()->extended_data,
 						  input_frame.SampleCount());
 
 	if (ret < 0)
@@ -129,7 +129,7 @@ bool video::SwrContextWrapper::ReadData(AVFrameWrapper &output_frame)
 int SwrContextWrapper::ReadFrameInFlushingMode(AVFrameWrapper &output_frame)
 {
 	int count = swr_convert(_wrapped_obj,
-							output_frame->extended_data,
+							output_frame.WrappedObj()->extended_data,
 							output_frame.SampleCount(),
 							nullptr,
 							0);
@@ -159,7 +159,7 @@ int SwrContextWrapper::ReadFrameInNonFlushingMode(AVFrameWrapper &output_frame)
 	{
 		// 可以填充一个完整的帧
 		int count = swr_convert(_wrapped_obj,
-								output_frame->extended_data,
+								output_frame.WrappedObj()->extended_data,
 								output_frame.SampleCount(),
 								nullptr,
 								0);

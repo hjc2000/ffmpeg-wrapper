@@ -1,8 +1,6 @@
 #pragma once
-#include <base/Wrapper.h>
-#include <ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h>
-#include <ffmpeg-wrapper/info-collection/IAudioFrameInfoCollection.h>
-#include <ffmpeg-wrapper/info-collection/IVideoStreamInfoCollection.h>
+#include "ffmpeg-wrapper/info-collection/AVStreamInfoCollection.h"
+#include "ffmpeg-wrapper/info-collection/IVideoStreamInfoCollection.h"
 #include <memory>
 
 namespace video
@@ -13,7 +11,6 @@ namespace video
 	/// @brief 编解码器上下文的封装
 	/// @note 本类通过工厂函数创建，构造函数都是私有的。
 	class AVCodecContextWrapper :
-		public base::Wrapper<AVCodecContext>,
 		public IAudioStreamInfoCollection,
 		public IVideoStreamInfoCollection
 	{
@@ -27,7 +24,7 @@ namespace video
 	public:
 		~AVCodecContextWrapper();
 
-		AVCodecContext *WrappedObj() const override
+		AVCodecContext *WrappedObj() const
 		{
 			return _wrapped_obj;
 		}

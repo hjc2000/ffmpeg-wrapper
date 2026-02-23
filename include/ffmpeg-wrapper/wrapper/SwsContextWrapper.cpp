@@ -73,12 +73,12 @@ bool video::SwsContextWrapper::ReadData(AVFrameWrapper &frame)
 	frame.SetPts(_in_frame.Pts());
 
 	sws_scale(_wrapped_obj,
-			  _in_frame->data,
-			  _in_frame->linesize,
+			  _in_frame.WrappedObj()->data,
+			  _in_frame.WrappedObj()->linesize,
 			  0,
-			  _in_frame->height,
-			  frame->data,
-			  frame->linesize);
+			  _in_frame.WrappedObj()->height,
+			  frame.WrappedObj()->data,
+			  frame.WrappedObj()->linesize);
 
 	return true;
 }

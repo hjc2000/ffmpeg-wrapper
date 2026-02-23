@@ -1,13 +1,8 @@
 #pragma once
+#include "base/container/List.h"
 #include "base/digital_circuit/MasterSlaveFlipFlop.h"
-#include "ffmpeg-wrapper/ffmpeg.h"
-#include <base/container/List.h>
-#include <base/container/Queue.h>
-#include <base/pipe/IPipeSource.h>
-#include <base/Wrapper.h>
-#include <ffmpeg-wrapper/AVCalculate.h>
-#include <ffmpeg-wrapper/ErrorCode.h>
-#include <ffmpeg-wrapper/filter/VideoFilterGraph.h>
+#include "base/pipe/IPipeSource.h"
+#include "ffmpeg-wrapper/filter/VideoFilterGraph.h"
 #include <memory>
 
 namespace video
@@ -50,4 +45,5 @@ namespace video
 
 		void Flush() override;
 	};
+
 } // namespace video

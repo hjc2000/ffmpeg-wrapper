@@ -1,6 +1,7 @@
 #include "AudioSampler.h"
 #include "base/unit/Second.h"
 #include <cstdint>
+#include <thread>
 
 video::AudioSampler::AudioSampler(std::shared_ptr<base::ISignalSource<double>> signal_source,
 								  video::IAudioFrameInfoCollection const &infos)
@@ -32,7 +33,7 @@ bool video::AudioSampler::ReadData(AVFrameWrapper &frame)
 	frame.SetPts(static_cast<int64_t>(_pts.Div()));
 	frame.UpdateAudioFrameDuration();
 
-	double *channel_buffer = reinterpret_cast<double *>(frame->extended_data[0]);
+	double *channel_buffer = reinterpret_cast<double *>(frame.WrappedObj()->extended_data[0]);
 
 	// 一个音频帧有 SampleCount 个采样点
 	for (int i = 0; i < SampleCount(); i++)
@@ -196,6 +197,7 @@ void video::TestAudioSampler()
 		std::cout << "线程退出" << std::endl;
 		pump_thread_exit.SetResult();
 	};
+
 	std::thread(pump_thread_func).detach();
 
 	std::cin.get();

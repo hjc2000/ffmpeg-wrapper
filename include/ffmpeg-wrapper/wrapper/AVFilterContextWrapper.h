@@ -1,13 +1,10 @@
 #pragma once
 #include "ffmpeg-wrapper/ffmpeg.h"
-#include <base/Wrapper.h>
-
 
 namespace video
 {
 	/// @brief 滤镜上下文
-	class AVFilterContextWrapper :
-		public base::Wrapper<AVFilterContext>
+	class AVFilterContextWrapper
 	{
 	private:
 		AVFilterContext *_wrapped_obj = nullptr;
@@ -18,7 +15,7 @@ namespace video
 		AVFilterContextWrapper(AVFilterContextWrapper const &o);
 		AVFilterContextWrapper &operator=(AVFilterContextWrapper const &o);
 
-		AVFilterContext *WrappedObj() const override
+		AVFilterContext *WrappedObj() const
 		{
 			return _wrapped_obj;
 		}
