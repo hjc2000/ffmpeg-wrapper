@@ -4,7 +4,7 @@ target_import_src(${ProjectName})
 target_import_ffmpeg(${ProjectName} PUBLIC)
 target_import_base(${ProjectName} PUBLIC)
 target_import_pinvoke(${ProjectName} PUBLIC)
-target_import_base_filesystem(${ProjectName} PUBLIC)
+target_import_platform_base(${ProjectName} PUBLIC)
 
 
 # 添加测试程序
